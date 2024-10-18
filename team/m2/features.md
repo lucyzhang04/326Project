@@ -1,6 +1,6 @@
 # Application Features
 
-# Theme of the Day
+## Theme of the Day
 
 Assigned to:
 
