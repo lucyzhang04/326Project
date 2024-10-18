@@ -13,7 +13,7 @@ On the website's landing page, users can search for a song or podcast using a se
 After uploading a song or podcast, the user will be brought to the dashboard. This dashboard will contain a section describing daily analytics as well as widgets that represent individual responses. This will allow users to see the most popular contributions and further explore podcast series and/or albums. 
 
 ### Daily Analytics
-Above the recommendation feed, users can view the top 5 songs or podcasts of the day, along with the number of people who recommended each one. Each song or podcast will be represented by an image icon (either an album cover or podcast cover). This helps users discover popular or trending content, which can lead to better recommendations. 
+Above the widgets of individual user responses, a user can view the top 5 songs or podcasts of the day, along with the number of people who recommended each one. Each song or podcast will be represented by an image icon (either an album cover or podcast cover). This helps users discover popular or trending content, which can lead to better recommendations. 
 
 **Assigned to:**
 
