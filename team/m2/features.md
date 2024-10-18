@@ -20,6 +20,6 @@ Above the recommendation feed, users can view the top 5 songs or podcasts of the
 **Assigned to:**
 
 ## Widgets of User Responses
-These widgets represent individual contributions; these will contain an image (likely an album cover or podcast cover image) as well as an identifier (ie: the user's name that is entered when uploading their response). 
+These widgets represent individual contributions; these will contain an image (likely an album cover or podcast cover image) as well as an identifier (ie: the user's name that is entered when uploading their response). This will allow users to visualize the activity and see updates as other users contribute.
 
 **Assigned to:**
