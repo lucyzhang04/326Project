@@ -10,16 +10,14 @@ On the website's landing page, users can search for a song or podcast using a se
 **Assigned to:**
 
 ## Recommendation Feed
-After uploading a song or podcast, the user will be brought to the dashboard. This dashboard will contain a section describing the top 5 songs/podcasts that users contributed, as well as widgets that represent individual responses. This will allow users to see the most popular contributions and further explore podcast series and/or albums. 
+After uploading a song or podcast, the user will be brought to the dashboard. This dashboard will contain a section describing daily analytics as well as widgets that represent individual responses. This will allow users to see the most popular contributions and further explore podcast series and/or albums. 
+
+### Daily Analytics
+Above the recommendation feed, users can view the top 5 songs or podcasts of the day, along with the number of people who recommended each one. Each song or podcast will be represented by an image icon (either an album cover or podcast cover). This helps users discover popular or trending content, which can lead to better recommendations. 
 
 **Assigned to:**
 
-## Daily Analytics
-Above the recommendation feed, users can view the top 5 songs or podcasts of the day, along with the number of people who recommended each one. This helps users discover popular or trending content, which can lead to better recommendations. 
-
-**Assigned to:**
-
-## Widgets of User Responses
+### Widgets of User Responses
 These widgets represent individual contributions; these will contain an image (likely an album cover or podcast cover image) as well as an identifier (ie: the user's name that is entered when uploading their response). This will allow users to visualize the activity and see updates as other users contribute.
 
 **Assigned to:**
