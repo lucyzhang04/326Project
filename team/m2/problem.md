@@ -5,11 +5,11 @@ Today, there are numerous social platforms that allow users to interact with eac
 To help facilitate the interaction between users, we will prompt users to respond with a song or podcast that they feel connects to our daily quote/theme. Additionally, the application will not allow users to access their own feed or what songs/podcasts are currently trending in relation to the daily prompt. We do this to ensure that we promote connection & collaboration, boost user engagement, and avoid the harmful, addictive side effects of social media.
 
 To accomplish this, these are our key features:
-1. **Daily quote display**.
-2. **- Upload of song/podcast**.
-3. **- Daily analytics**.
-4. **- Recommendation feed from other users**.
-5. **- Daily refresh of feed**.
+1. **Daily quote display**
+2. **Upload of song/podcast**
+3. **Daily analytics**
+4. **Recommendation feed from other users**
+5. **Daily refresh of feed**
 
 ## Why This Matters
 This application and along with its features will encourage a collaborative and interactive environment between users revolving around a shared passion and love for music and podcasts. Furthermore, we add the aspect of necessary daily contribution and a refresh of a user's feed daily so that users can constantly explore and discover new music and podcasts, giving them a reason to hop on remind.me daily. 
