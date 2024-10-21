@@ -1,8 +1,8 @@
 # Problem Statement 
-Today, there are numerous social platforms that allow users to interact with each other, connect, & find common ground. However, these social platforms typically revolve around sharing images, career updates, & personal content. Music is an integral part of people's daily lives, and one does not need to be immersed in the world of music to find comfort in it. We want to allow users to connect with each other through the shared love of music and podcasts. 
+Today, there are numerous social platforms that allow users to interact, connect, and find common ground. However, these social platforms typically revolve around sharing images, career updates, and personal content. Music and podcasts are an integral part of people's daily lives, and one does not need to be immersed in the world of music to find comfort in it. We want to allow users to connect with each other through the shared love of music and podcasts. 
 
 ## Proposed Solution 
-To help facilitate the interaction between users, we will prompt users to respond with a song or podcast that they feel connects to our daily quote/theme. Additionally, the application will not allow users to access their own feed or what songs/podcasts are currently trending in relation to the daily prompt. We do this to ensure that we promote connection & collaboration, boost user engagement, and avoid the harmful, addictive side effects of social media.
+To help facilitate the interaction between users, we will prompt users to respond with a song or podcast that they feel connects to our daily quote/theme. Additionally, the application will not allow users to access the recommendation feed or daily trends before sharing their own recommendation. We do this to ensure that we promote connection and collaboration, boost user engagement, and avoid the harmful, addictive side effects of social media.
 
 To accomplish this, these are our key features:
 1. **Daily quote display**
