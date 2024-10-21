@@ -17,7 +17,7 @@
 ## Neha Aryasomayajula - Quality Control 
 - **Role**: Responsible for overseeing files submitted by team, verifying that all submitted work is clear, organized, and free of errors. Neha will ensure that all individual work done by members is cohesive across all aspects of the project and presented as a coordinated submission. 
 - **Top 3 Commits**: 
-  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/f0497f90c98bff78ae780aa6a6900193348122ba): Revised `users.md` file for clarity by improving the structure and content of each paragraph.
+  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/f0497f90c98bff78ae780aa6a6900193348122ba): Revised `users.md` file by improving the structure and content of each paragraph.
   2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/fce4f7e91f7c5419b22231294d6055ebf69ddcc2): Revised `problem.md` by resolving grammar issues and improving word choice.
   4. [Commit 3](https://github.com/lucyzhang04/326Project/commit/4513288ed88d9c91738060b23736fbe83b2dca9a): Revised `ui-diagrams.md` by resolving grammar issues and improving word choice.
 
