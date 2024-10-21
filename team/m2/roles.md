@@ -31,9 +31,9 @@
 ## Cynthia Rajeshkanna - Task Manager 
 - **Role**: Responsible for detailing tasks and to-dos for each feature. Cynthia will ensure that tasks are broken down fairly and assigned to team members logically, allowing for the team to collaborate on the project in an organized and timely manner. 
 - **Top 3 Commits**:
-  1. [Commit 1]():
-  2. [Commit 2]():
-  3. [Commit 3]():
+  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/57dc111fa108fc483e893f14b9e8f744e2a51db9): Added the daily theme/quote display feature and accompanying description to `features.md`.
+  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/eb10cbc9383eef8efe2accc1fa0106da59809e56): Revised `features.md` to include the daily refresh of feed feature mentioned in `problem.md` and other files (wrote a brief description describing functionality and purpose). 
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/6ad6e1a9d22148850758988de9bc468f8e86af71): Closely monitored progress on all tasks and set an internal deadline to keep everyone on track. Ultimately, finalized all milestone 2 documents and files before submission (the commit linked is one such final revision - consistency across files, particularly `problem.md`).
 
 ## Mai Chi Le - Communications Lead
 - **Role**: Ensures that team communicates thoroughly regarding project tasks and receives meeting summaries. Mai is responsible for ensuring that team members are informed of major project developments, upcoming team meetings and enables overall communication between team members. 
