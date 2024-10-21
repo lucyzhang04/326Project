@@ -10,9 +10,9 @@
 ## Saadhvi Raghav - Note-Taker
 - **Role**: Responsible for documenting team meetings, ensuring that members have a way to clearly reference their responsibilities and tasks for the upcoming weeks as discussed. 
 - **Top 3 Commits**:
-  1. [Commit 1]():
-  2. [Commit 2]():
-  3. [Commit 3]():
+  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/7dda4d8e98c22ed799d4c76ddd859c7f91ea19bb): Created drive folder to organize meeting minutes by date, and shared notes folder with team members. 
+  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/5a9e98c18e8c725ad3a37e7b0a8144631b13d514): Updated `roles.md` file with roles and responsibilities discussed during team meeting. Filled out roles and completed summary description of each role.
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/2d1d44eaec9b320e3c0150f8207bcc173abf3adb): Created UI diagrams of main feed screen and trending chart screen of application as discussed during team meeting. Also completed descriptions/summaries of the diagrams in `ui-diagrams.md`.
 
 ## Neha Aryasomayajula - Quality Control 
 - **Role**: Responsible for overseeing files submitted by team, verifying that all submitted work is clear, organized, and free of errors. Neha will ensure that all individual work done by members is cohesive across all aspects of the project and presented as a coordinated submission. 
