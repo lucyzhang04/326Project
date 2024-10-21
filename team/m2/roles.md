@@ -38,9 +38,9 @@
 ## Mai Chi Le - Communications Lead
 - **Role**: Ensures that team communicates thoroughly regarding project tasks and receives meeting summaries. Mai is responsible for ensuring that team members are informed of major project developments, upcoming team meetings and enables overall communication between team members. 
 - **Top 3 Commits**:
-  1. [Commit 1](): 
-  2. [Commit 2]():
-  3. [Commit 3]():
+  1. [Commit 1](): Communicated on groupchat, set and suggested times to work on assigned tasks/code and times to review code
+  2. [Commit 2](): Made sure that everyone was aware of meeting times as well as deadlines for their portions of the work by monitoring responses on groupchat
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/dab73481ae91a9e9e54e9ce149338812e51c980e): Updated users.md to effectively establish and communicate the intended audience of the app to all team members
 
 ## Marie Shvakel - Timekeeper
 - **Role**: Marie is responsible for ensuring that the team is on track to meet project deadlines, as well as internal deadlines set for individual tasks given by the Task Manager. 
