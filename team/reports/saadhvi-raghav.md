@@ -27,3 +27,8 @@
 - **Task**: Filled out and formatted `roles.md` file. 
 - **Details**: Assigned discussed roles to each team member, writing descriptions for each role and outlining individual responsibilities and contributions to project. 
 - **Commit**: [Commit to roles.md](https://github.com/lucyzhang04/326Project/commit/5a9e98c18e8c725ad3a37e7b0a8144631b13d514 )
+
+### October 21, 2024 
+- **Task**: Added use cases to description summary of UI diagrams. 
+- **Details**: Described use cases for the prompt and upload screen, the feed screen, and the trenching chart screen, explaining how the pages interact and connect with one another and add to the user experience. 
+- **Commit**: [Commit to ui-diagrams.md](https://github.com/lucyzhang04/326Project/commit/6f306e52c952325e08097dd024e0bf4026e1155e)
