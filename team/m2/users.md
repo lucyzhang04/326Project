@@ -10,8 +10,8 @@ All humans benefit from feeling socially connected. Teenagers, in particular, fa
 Similarly, young adults and adults often struggle to maintain social connections due to busy work schedules and the distance that comes with relocating for jobs. They need ways to stay connected with friends they rarely see due to conflicting schedules, as well as those who live far away. Like teenagers, they look for tools that are easy to use, enjoyable, and help them stay in touch across different devices, effortlessly blending into their busy lives.
 
 ## Why These Users Matter
-These user groups are vital to the success of Connect.me because they are at key life stages where social connection plays an important role. For teenagers, feeling connected is crucial for their development and has a positive impact on their mental health.
+These user groups are crucial to the success of Connect.me because they are at pivotal life stages where social connection is vital. For teenagers, feeling connected is key to their emotional development, fostering a sense of belonging and positively impacting their mental health by reducing loneliness and building self-esteem.
 
-Similarly, young adults and adults benefit from social connection, which significantly improves their mental health, long-term happiness, and overall quality of life.
+For young adults and adults, maintaining connections becomes more challenging due to busy work schedules and life changes, yet social interaction remains essential for mental well-being. Staying connected helps reduce stress, improve happiness, and enhance quality of life.
 
-By catering to the unique needs of these groups, Connect.me aims to provide both short-term and long-term solutions that help users stay connected with friends, peers, and even strangers throughout different phases of life, making the app both relevant and impactful.
+By addressing the unique needs of these groups, Connect.me offers both short-term and long-term value, supporting users in building meaningful connections with friends, peers, and even strangers. This makes the app not only relevant but impactful at different stages of life.
