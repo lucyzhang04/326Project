@@ -14,4 +14,4 @@ These user groups are crucial to the success of **Remind.me** because they are a
 
 For young adults and adults, maintaining connections becomes more challenging due to busy work schedules and life changes, yet social interaction remains essential for mental well-being. Staying connected helps reduce stress, improve happiness, and enhance quality of life.
 
-By addressing the unique needs of these groups, Connect.me offers both short-term and long-term value, supporting users in building meaningful connections with friends, peers, and even strangers. This makes the app not only relevant but impactful at different stages of life.
+By addressing the unique needs of these groups, **Remind.me** offers both short-term and long-term value, supporting users in building meaningful connections with friends, peers, and even strangers. This makes the app not only relevant but impactful at different stages of life.
