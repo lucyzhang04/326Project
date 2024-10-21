@@ -5,8 +5,8 @@ Today, there are numerous social platforms that allow users to interact, connect
 To help facilitate the interaction between users, we will prompt users to respond with a song or podcast that they feel connects to our daily quote/theme. Additionally, the application will not allow users to access the recommendation feed or daily trends before sharing their own recommendation. We do this to ensure that we promote connection and collaboration, boost user engagement, and avoid the harmful, addictive side effects of social media.
 
 To accomplish this, these are our key features:
-1. **Daily quote display**
-2. **Upload of song/podcast**
+1. **Daily theme/quote display**
+2. **Song/podcast upload**
 3. **Daily analytics**
 4. **Recommendation feed from other users**
 5. **Daily refresh of feed**
