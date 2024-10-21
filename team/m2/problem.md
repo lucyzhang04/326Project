@@ -7,9 +7,10 @@ To help facilitate the interaction between users, we will prompt users to respon
 To accomplish this, these are our key features:
 1. **Daily theme/quote display**
 2. **Song/podcast upload**
-3. **Daily analytics**
-4. **Recommendation feed from other users**
-5. **Daily refresh of feed**
+3. **Recommendation feed from other users**
+4. **Daily analytics**
+5. **Widgets of user responses**
+6. **Daily refresh of feed**
 
 ## Why This Matters
 This application and along with its features will encourage a collaborative and interactive environment between users revolving around a shared passion and love for music and podcasts. Furthermore, we add the aspect of necessary daily contribution and a refresh of a user's feed daily so that users can constantly explore and discover new music and podcasts, giving them a reason to hop on remind.me daily. 
