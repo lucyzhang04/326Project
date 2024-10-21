@@ -19,7 +19,7 @@
 - **Top 3 Commits**: 
   1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/f0497f90c98bff78ae780aa6a6900193348122ba): Revised `users.md` file by improving the structure and content of each paragraph.
   2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/fce4f7e91f7c5419b22231294d6055ebf69ddcc2): Revised `problem.md` by resolving grammar issues and improving word choice.
-  4. [Commit 3](https://github.com/lucyzhang04/326Project/commit/4513288ed88d9c91738060b23736fbe83b2dca9a): Revised `ui-diagrams.md` by resolving grammar issues and improving word choice.
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/4513288ed88d9c91738060b23736fbe83b2dca9a): Revised `ui-diagrams.md` by resolving grammar issues and improving word choice.
 
 ## Elijah Sippel - Documentation Lead
 - **Role**: Responsible for overseeing documentation of team project. Elijah verifies that all of the project documentation is accurate and clearly reflects the "state" of project. Elijah ensures that team members can easily understand to-dos as well as completed features for easy integration of new work/code. 
