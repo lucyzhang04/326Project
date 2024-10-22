@@ -4,8 +4,8 @@
 - **Role**: Responsible for ensuring that team is on track with regards to implementation goals. Lucy will ensure that individual contributions are cohesive and line up with the timeline set up and agreed upon by members.
 - **Top 3 Commits**:
   1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/21481955929fd3581f0bfbd72674aced16f492b3): Created initial GitHub repository and set up project structure, including the `team/m2` folder and the corresponding project files.
-  2. [Commit 2]():
-  3. [Commit 3]():
+  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/431b6617e75f72058c958108f6b8096055bb3239): Revised `features.md` to describe the recommendation feed and widget features. Assigned individuals to corresponding features
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/5ce4f5b49073bbbfb0a850f8003dd1b93dbe6f10): Set up multiple files for Milestone 2, such as `roles.md`. Created headers to be consistent with example files. 
 
 ## Saadhvi Raghav - Note-Taker
 - **Role**: Responsible for documenting team meetings, ensuring that members have a way to clearly reference their responsibilities and tasks for the upcoming weeks as discussed. 
