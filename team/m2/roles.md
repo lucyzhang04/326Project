@@ -24,9 +24,9 @@
 ## Elijah Sippel - Documentation Lead
 - **Role**: Responsible for overseeing documentation of team project. Elijah verifies that all of the project documentation is accurate and clearly reflects the "state" of project. Elijah ensures that team members can easily understand to-dos as well as completed features for easy integration of new work/code. 
 - **Top 3 Commits**:
-  1. [Commit 1]():
-  2. [Commit 2]():
-  3. [Commit 3]():
+  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/f5aecdb38a0f25b50722f764cbb87b11d29f1976): Updated `data.md` to reflect our teams new plan plan for Spotify API authentication (from OAuth user authentication to client authentication with an API key).
+  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/d2fd263c6408982cffacd38e6d3867b7ebb79ff9): Created/moved folder for `team/reports` to ensure proper navigation of our markdown files.
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/bcef01828d09df5b240cb843decd0f1062fc3a55): Document the plan for data usage and storage for the project, including clarifying information to help the team move forward with implementing features in the future. 
 
 ## Cynthia Rajeshkanna - Task Manager 
 - **Role**: Responsible for detailing tasks and to-dos for each feature. Cynthia will ensure that tasks are broken down fairly and assigned to team members logically, allowing for the team to collaborate on the project in an organized and timely manner. 
