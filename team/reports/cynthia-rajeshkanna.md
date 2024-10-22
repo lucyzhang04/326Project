@@ -30,5 +30,3 @@
 - **Task**: Coordinated final review of milestone 2 submission
 - **Details**: Organized a zoom meeting with available team members to conduct a final review of milestone 2 submission materials, making various final edits. Also noted all missing components (unfinished individual team member responsibilities) and delegated remaining tasks. 
 - **Commit**: [Commit to log entry](https://github.com/lucyzhang04/326Project/commit/6ad6e1a9d22148850758988de9bc468f8e86af71) 
-
-- **Details**: Assigned discussed roles to each team member, writing descriptions for ea
