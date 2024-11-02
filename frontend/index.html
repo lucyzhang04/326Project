@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remind.me</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <script>
+        fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+            
+            const navLinkEls = document.querySelectorAll('.nav__link');
+            const windowPathname = window.location.pathname;
+
+            navLinkEls.forEach(navLinkEl => {
+                if (navLinkEl.href.includes(windowPathname)) {
+                    navLinkEl.classList.add('active');
+                }
+            });
+          })
+          .catch(error => console.error('Error loading navbar:', error));
+    </script>
+  </body>
+</html>
