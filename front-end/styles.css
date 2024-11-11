@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+}
+
+.topnav {
+    background-color: #c1c4c7;
+    overflow: hidden;
+    padding: 20px 10px; 
+    display: flex;
+    align-items: center; /* Center items vertically */
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+    display: flex; /* Use flexbox for horizontal layout */
+}
+
+.topnav li {
+    margin-left: 10px; /* Space between list items */
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+    border-radius: 25px;
+    color: #5f83b3;
+    text-align: center;
+    padding: 10px 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #5f83b3;
+    color: white;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #5f83b3;
+    color: white;
+}
+
+.logo {
+    color: #5f83b3; 
+    font-size: 20px; 
+    font-weight: bold;
+    margin-right: auto; /* Pushes navigation items to the right */
+    line-height: 2;
+}
+
+.header{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #5f83b3; 
+    font-size: 30px; 
+    text-align: center;
+    font-weight: bold;
+}
