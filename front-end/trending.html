@@ -9,8 +9,11 @@
   <body>
     <div id="navbar"></div>
     <p class="header">Trending</p>
-    <script>
-        fetch('navbar.html')
+    
+    <div id = "trending-list" class="trending-list"></div>
+
+    <script src="./trending-script.js">
+        /*fetch('navbar.html')
           .then(response => response.text())
           .then(data => {
             document.getElementById('navbar').innerHTML = data;
@@ -24,7 +27,7 @@
                 }
             });
           })
-          .catch(error => console.error('Error loading navbar:', error));
+          .catch(error => console.error('Error loading navbar:', error));*/
     </script>
   </body>
 </html>
