@@ -9,22 +9,11 @@
   <body>
     <div id="navbar"></div>
     <p class="header">Trending</p>
-    <script>
-        fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-            
-            const navLinkEls = document.querySelectorAll('.nav__link');
-            const windowPathname = window.location.pathname;
+    
+    <div id = "trending-list" class="trending-list"></div>
 
-            navLinkEls.forEach(navLinkEl => {
-                if (navLinkEl.href.includes(windowPathname)) {
-                    navLinkEl.classList.add('active');
-                }
-            });
-          })
-          .catch(error => console.error('Error loading navbar:', error));
+    <script src="./trending-script.js">
+        
     </script>
   </body>
 </html>
