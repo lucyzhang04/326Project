@@ -31,33 +31,39 @@
           .catch(error => console.error('Error loading navbar:', error));
 
           function loadQuote() {
+            let currentDay = new Date().toLocaleDateString();
+            let prevUpdate = localStorage.getItem('prevUpdate');
+
             fetch('quotes.json')
               .then(res => res.json())
               .then(data => {
-                renderQuote(data);
+                let quoteIndex = parseInt(localStorage.getItem('index'));
+
+                if(currentDay !== prevUpdate) {
+                  if (isNaN(quoteIndex) || quoteIndex === null || quoteIndex >= data.length - 1) {
+                    localStorage.setItem('index', 0);
+                    quoteIndex = 0;
+                  } else {
+                    quoteIndex++;
+                    localStorage.setItem('index', quoteIndex);
+                  }
+                  localStorage.setItem('prevUpdate', currentDay);
+                }
+                renderQuote(data[quoteIndex]);
               })
               .catch(error => console.error('Error loading quote:', error));
           }
 
           function renderQuote(data) {
-            let quoteIndex = parseInt(localStorage.getItem('index'));
-            if (isNaN(quoteIndex) || quoteIndex === null || quoteIndex >= data.length - 1) {
-              localStorage.setItem('index', 0);
-              quoteIndex = 0;
-            } else {
-              quoteIndex++;
-              localStorage.setItem('index', quoteIndex);
-            }
+            let quoteDisplay = document.createElement('div');
 
-            const quoteDisplay = document.createElement('div');
-
-            const dailyQuote = document.createElement('p');
+            let dailyQuote = document.createElement('p');
             dailyQuote.classList.add("quote");
-            dailyQuote.textContent = `"${data[quoteIndex].quote}"`;
+            dailyQuote.textContent = `"${data.quote}"`;
 
-            const quoter = document.createElement('p');
+            let quoter = document.createElement('p');
             quoter.classList.add("person");
-            quoter.textContent = data[quoteIndex].person;
+            quoter.textContent = data.person;
 
             quoteDisplay.appendChild(dailyQuote);
             quoteDisplay.appendChild(quoter);
