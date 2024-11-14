@@ -41,13 +41,12 @@
 
           function renderQuote(data) {
             let quoteIndex = parseInt(localStorage.getItem('index'));
-            if (quoteIndex === null || quoteIndex >= data.length) {
+            if (isNaN(quoteIndex) || quoteIndex === null || quoteIndex >= data.length - 1) {
               localStorage.setItem('index', 0);
               quoteIndex = 0;
-            }
-            else {
-              localStorage.setItem('index', quoteIndex + 1);
+            } else {
               quoteIndex++;
+              localStorage.setItem('index', quoteIndex);
             }
 
             const quoteDisplay = document.createElement('div');
