@@ -133,6 +133,34 @@ body {
     border-radius: 25px;
 }
 
+<<<<<<< Updated upstream
+=======
+.info-container{
+    height: 125px;
+    width: 250px;
+    border-top: 1px solid #b8b8b8;
+    position: relative;
+    top: 60%;
+}
+
+.info-list{
+    list-style-type: none;
+    padding-left: 7%;
+    padding-top: 0;
+    margin-bottom: 0;
+    
+}
+
+.list-element{
+    font-size: larger;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: italic;
+    color: #7a7a7a;
+    padding-bottom: 7px;
+}
+
+
+/*styling for heart button*/
 .heart-button{
     background-color: black;
     border: 1px solid black;
@@ -142,6 +170,10 @@ body {
     position: relative;
     top: 79%;
     left: 76%;
+=======
+    top: 0%;
+    left: 75%;
+>>>>>>> Stashed changes
     color: white;
     font-size: larger;
 }
