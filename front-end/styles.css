@@ -46,7 +46,7 @@ body {
 }
 
 .logo {
-    color: #5f83b3; 
+    color: 5f83b3#; 
     font-size: 20px; 
     font-weight: bold;
     margin-right: auto; /* Pushes navigation items to the right */
@@ -114,4 +114,20 @@ body {
 
 .like-btn:hover{
     background-color: #ff4d4d;
+}
+
+.quote-box{
+    background-color: #d1dded;
+    border-radius: 15px;
+    margin: 30px;
+    padding: 10%;
+    min-width: 50%;
+}
+
+.daily-quote{
+    padding: 5%;
+}
+
+.song-upload-box{
+    
 }
