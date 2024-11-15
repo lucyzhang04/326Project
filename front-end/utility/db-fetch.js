@@ -1,33 +1,19 @@
 
- export function fetch(url, _options = {}) {
+ export function mock_fetch(url, _options = {}) {
+
     return new Promise((resolve, reject) => {
-      // Define a delay to simulate network latency (e.g., 1 second)
-      const delay = 1000;
-  
+      const delay = 500;
       setTimeout(() => {
-        // Define a mock response object
         const mockResponse = {
           ok: true,
           status: 200,
           statusText: "OK",
           url,
-          json: async () => ([{ 
-                name: "Podcast 1",
-                host : "Jane Doe",
-                image: "This is a mock response", 
-                url 
-            },
-            { 
-                name: "Podcast 2",
-                host : "John Deere",
-                image: "This is a mock response", 
-                url 
-            }
-            ]),
+          test: () => "this is a test",
+          json: async () => make_response(),
           text: async () => "This is a mock response",
         };
-  
-        // Use the URL to simulate failure or success
+
         if (url.includes("error")) {
           reject(new Error("Network error"));
         } else {
@@ -36,4 +22,59 @@
       }, delay);
     });
   }
+
+  function make_response(){
+    return ([
+      { 
+          "name": "The Rest is History",
+          "host" : "Jane Doe\n",
+          "image": "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp", 
+      }, 
+      { 
+          "name": "The Daily",
+          "host" : "New York Times",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04154511/Free-Stock-Photos-06.jpg"
+      },
+      { 
+          "name": "How to Save the Planet",
+          "host" : "Jane Doe",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04141642/Free-Stock-Photos-01.jpg", 
+      },
+      { 
+          "name": "Podcast 1\n",
+          "host" : "Jack & Jill",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04160429/Free-Stock-Photos-07.jpg", 
+      },
+      { 
+          "name": "How to Save the Planet",
+          "host" : "Jane Doe",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04141642/Free-Stock-Photos-01.jpg", 
+      },
+      { 
+          "name": "The Rest is History",
+          "host" : "Jane Doe\n",
+          "image": "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp", 
+      }, 
+      { 
+          "name": "The Daily",
+          "host" : "New York Times",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04154511/Free-Stock-Photos-06.jpg"
+      },
+      { 
+          "name": "How to Save the Planet",
+          "host" : "Jane Doe",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04141642/Free-Stock-Photos-01.jpg", 
+      },
+      { 
+          "name": "Podcast 1\n",
+          "host" : "Jack & Jill",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04160429/Free-Stock-Photos-07.jpg", 
+      },
+      { 
+          "name": "The Daily",
+          "host" : "New York Times",
+          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04154511/Free-Stock-Photos-06.jpg"
+      }
+    ]);
+}
   
