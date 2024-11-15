@@ -1,6 +1,7 @@
 import Service from "./Service.js";
 import { mock_trending_fetch } from "../../utility/mock_trending_fetch.js";
 import { Events } from "../eventhub/Events.js";
+import { mock_submission_fetch } from "../../utility/submission-fetch.js";
 
 export class DatabaseFakeService extends Service {
   constructor() {
@@ -18,6 +19,12 @@ export class DatabaseFakeService extends Service {
     //console.log(data);
     return data;
   }
+
+  async getSubmissions() {
+    return mock_submission_fetch("http://127.0.0.1:5500/front-end/feed.html")
+    .then(response => response.ok ? response.json() : Promise.reject("Could not retrieve submissions correctly"))
+    .catch(error => "Error"); 
+}
 
 
   addSubscriptions() {
