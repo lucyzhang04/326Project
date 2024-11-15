@@ -13,7 +13,7 @@
         <div class="quote-box" id="quote-box"></div>
       </div>
 
-      <script>
+      <script type="module">
         fetch('navbar.html')
           .then(response => response.text())
           .then(data => {
@@ -30,28 +30,45 @@
           })
           .catch(error => console.error('Error loading navbar:', error));
 
-          function loadQuote() {
+         import {TaskDatabase} from './database.js';
+         let db = new TaskDatabase('quotesDB');
+
+
+         async function loadQuote() {
             let currentDay = new Date().toLocaleDateString();
-            let prevUpdate = localStorage.getItem('prevUpdate');
+            let dbTasks = await db.getTasks();
 
-            fetch('quotes.json')
-              .then(res => res.json())
-              .then(data => {
-                let quoteIndex = parseInt(localStorage.getItem('index'));
+            let quoteIndex = 0;
+            let prevUpdate = null;
 
+            for (let i = 0; i < dbTasks.length; i++) {
+              if (dbTasks[i].id === "prevUpdate") {
+                prevUpdate = dbTasks[i].value;
+              }
+              if (dbTasks[i].id === 'index') {
+                quoteIndex = dbTasks[i].value;
+              }
+            }
+
+            try {
+              let quotes = await fetch('quotes.json')
+              .then(res => res.json());
+              
                 if(currentDay !== prevUpdate) {
-                  if (isNaN(quoteIndex) || quoteIndex === null || quoteIndex >= data.length - 1) {
-                    localStorage.setItem('index', 0);
+                  if (quoteIndex === null || quoteIndex >= quotes.length - 1) {
+                    await db.addTask({id: 'index', value: 0});
                     quoteIndex = 0;
                   } else {
                     quoteIndex++;
-                    localStorage.setItem('index', quoteIndex);
+                    await db.addTask({id: 'index', value: quoteIndex});
                   }
-                  localStorage.setItem('prevUpdate', currentDay);
+                  await db.addTask({id: 'prevUpdate', value: currentDay});
                 }
-                renderQuote(data[quoteIndex]);
-              })
-              .catch(error => console.error('Error loading quote:', error));
+              renderQuote(quotes[quoteIndex]);
+            }
+            catch (error) {
+              console.error('Error loading navbar:', error);
+            } 
           }
 
           function renderQuote(data) {
@@ -78,14 +95,18 @@
             let nextDay = new Date(currDay.getFullYear(), currDay.getMonth(), currDay.getDate() + 1, 0, 0, 0);
             let remainingTime = nextDay.getTime() - currDay.getTime();
 
-            setTimeout(() => {
-              loadQuote();
+            setTimeout(async () => {
+              await loadQuote();
               dailyUpdate();
             }, remainingTime);
           }
 
-          loadQuote();
-          dailyUpdate();
+          async function start() {
+            await loadQuote();
+            dailyUpdate();
+          }
+          
+          start();
     </script>
     
   </body>
