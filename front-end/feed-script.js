@@ -1,9 +1,8 @@
 
-
-import { mock_fetch} from "./utility/db-fetch.js";
+import { DatabaseFakeService } from "./source/services/DatabaseFakeService.js";
 
 const grid = document.getElementById("widget-grid"); 
-
+/*
 const getSubmissions = async () => {
     return mock_fetch("http://127.0.0.1:5500/front-end/feed.html")
     .then(response => response.ok ? response.json() : Promise.reject("Could not retrieve submission correctly"))
@@ -14,6 +13,7 @@ const getSubmissions = async () => {
         alert("There was an error fetching submissions -- please try again later!");
     }); 
 }
+*/
 
 
 const buildWidget = (submission) => {
@@ -57,8 +57,12 @@ const buildWidget = (submission) => {
 
 }
 
+const render = () => {
+    const db = new DatabaseFakeService();
+    db.getSubmissions().then(submissions => submissions.forEach(sub => buildWidget(sub))).catch(error => {
+        alert("There was an error fetching submissions -- please try again later!");
+    }); 
+}
 
-getSubmissions();
+render();
 
-
-//build(); 

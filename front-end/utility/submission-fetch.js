@@ -1,5 +1,5 @@
 
- export function mock_fetch(url, _options = {}) {
+ export function mock_submission_fetch(url, _options = {}) {
 
     return new Promise((resolve, reject) => {
       const delay = 500;
@@ -74,7 +74,12 @@
           "name": "The Daily",
           "host" : "New York Times",
           "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04154511/Free-Stock-Photos-06.jpg"
-      }
+      },
+      { 
+        "name": "The Rest is History",
+        "host" : "Jane Doe\n",
+        "image": "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp", 
+      },
     ]);
 }
   
