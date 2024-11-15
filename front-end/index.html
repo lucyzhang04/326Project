@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div id="navbar"></div>
-    <script>
+      <div id="navbar"></div>
+      <div class="daily-quote">
+        <h1 class="headerLeftAlign">Today's Quote is...</h1>
+        <div class="quote-box" id="quote-box"></div>
+      </div>
+
+      <script>
         fetch('navbar.html')
           .then(response => response.text())
           .then(data => {
@@ -24,6 +29,64 @@
             });
           })
           .catch(error => console.error('Error loading navbar:', error));
+
+          function loadQuote() {
+            let currentDay = new Date().toLocaleDateString();
+            let prevUpdate = localStorage.getItem('prevUpdate');
+
+            fetch('quotes.json')
+              .then(res => res.json())
+              .then(data => {
+                let quoteIndex = parseInt(localStorage.getItem('index'));
+
+                if(currentDay !== prevUpdate) {
+                  if (isNaN(quoteIndex) || quoteIndex === null || quoteIndex >= data.length - 1) {
+                    localStorage.setItem('index', 0);
+                    quoteIndex = 0;
+                  } else {
+                    quoteIndex++;
+                    localStorage.setItem('index', quoteIndex);
+                  }
+                  localStorage.setItem('prevUpdate', currentDay);
+                }
+                renderQuote(data[quoteIndex]);
+              })
+              .catch(error => console.error('Error loading quote:', error));
+          }
+
+          function renderQuote(data) {
+            let quoteDisplay = document.createElement('div');
+
+            let dailyQuote = document.createElement('p');
+            dailyQuote.classList.add("quote");
+            dailyQuote.textContent = `"${data.quote}"`;
+
+            let quoter = document.createElement('p');
+            quoter.classList.add("person");
+            quoter.textContent = data.person;
+
+            quoteDisplay.appendChild(dailyQuote);
+            quoteDisplay.appendChild(quoter);
+
+            let quoteBox = document.getElementById("quote-box");
+            quoteBox.innerHTML = "";
+            quoteBox.appendChild(quoteDisplay);
+          }
+
+          function dailyUpdate() {
+            let currDay = new Date();
+            let nextDay = new Date(currDay.getFullYear(), currDay.getMonth(), currDay.getDate() + 1, 0, 0, 0);
+            let remainingTime = nextDay.getTime() - currDay.getTime();
+
+            setTimeout(() => {
+              loadQuote();
+              dailyUpdate();
+            }, remainingTime);
+          }
+
+          loadQuote();
+          dailyUpdate();
     </script>
+    
   </body>
 </html>
