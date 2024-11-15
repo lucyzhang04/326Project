@@ -17,24 +17,32 @@
       <div class="song-input-header">
         Share a song or podcast that makes you think of today's quote!
       </div>
-      <form id="user-form">
-        <div>
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required />
+      <div class="input-area">
+        <form id="user-form">
+          <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+          </div>
+          <br />
+          <div>
+            <label for="podcast-song">Podcast/Song:</label>
+            <input type="text" id="podcast-song" name="podcast-song" required />
+          </div>
+          <br />
+          <div>
+            <button type="submit">Search</button>
+          </div>
+        </form>
+        <div class="results" id="results">
+          <h3 class="results-header">Results</h3>
+          <div id="results-list"></div>
         </div>
-        <br />
-        <div>
-          <label for="podcast-song">Podcast/Song:</label>
-          <input type="text" id="podcast-song" name="podcast-song" required />
-        </div>
-        <br />
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+        <script type="module" src="search-song.js"></script>
+      </div>
     </div>
 
     <script>
+      console.log("hello");
       fetch("navbar.html")
         .then((response) => response.text())
         .then((data) => {
