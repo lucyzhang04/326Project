@@ -1,5 +1,5 @@
 import Service from "./Service.js";
-import { fetch } from "../utility/fetch.js";
+import { fetch } from "../../utility/fetch.js";
 
 export class SpotifyAPIFakeService extends Service {
   constructor() {

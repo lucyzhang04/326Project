@@ -1,6 +1,7 @@
 console.log("Loading Exercise...");
 
-export class TaskDatabase {
+export class SongDatabase {
+  
   constructor(dbName) {
     this.dbName = dbName;
   }
@@ -16,8 +17,8 @@ export class TaskDatabase {
       let request = indexedDB.open(this.dbName, 1);
       request.onupgradeneeded = function (event) {
         let db = event.target.result;
-        if (!db.objectStoreNames.contains("tasks")) {
-          db.createObjectStore("tasks", { keyPath: "id" });
+        if (!db.objectStoreNames.contains("song")) {
+          db.createObjectStore("song", { keyPath: "id" });
         }
       };
       request.onsuccess = function (event) {
@@ -30,27 +31,27 @@ export class TaskDatabase {
   }
 
   // Method to add a task-- will be used to add a liked song to DB
-  async addTask(task) {
+  async addSong(song) {
     const db = await this.openDatabase();
-    const tx = db.transaction("tasks", "readwrite");
-    const store = tx.objectStore("tasks");
-    store.add(task);
+    const tx = db.transaction("song", "readwrite");
+    const store = tx.objectStore("song");
+    store.add(song);
 
     return new Promise((resolve, reject) => {
       tx.oncomplete = function () {
-        resolve("Task added successfully!");
+        resolve("Song added successfully!");
       };
       tx.onerror = function () {
-        reject("Failed to add task.");
+        reject("Failed to add song.");
       };
     });
   }
 
   // Method to get all tasks-- will be used to display liked songs
-  async getTasks() {
+  async getSong() {
     const db = await this.openDatabase();
-    const tx = db.transaction("tasks");
-    const store = tx.objectStore("tasks");
+    const tx = db.transaction("song");
+    const store = tx.objectStore("song");
     const request = store.getAll();
 
     return new Promise((resolve, reject) => {
@@ -59,24 +60,24 @@ export class TaskDatabase {
         resolve(tasks);
       }
       request.onerror = () => {
-        reject("Failed to get all tasks.");
+        reject("Failed to get all song.");
       }
     });
   }
 
   // Method to clear all tasks-- will be used to reset liked songs every 24 hours
-  async clearAllTasks() {
+  async clearAllSongs() {
     const db = await this.openDatabase();
-    const tx = db.transaction("tasks", "readwrite");
-    const store = tx.objectStore("tasks");
+    const tx = db.transaction("song", "readwrite");
+    const store = tx.objectStore("song");
     const request = store.clear();
 
     return new Promise((resolve, reject) => {
       request.onsuccess = () => {
-        resolve("Tasks cleared successfully!");
+        resolve("Songs cleared successfully!");
       }
       request.onerror = () => {
-        reject("Failed to clear tasks");
+        reject("Failed to clear songs");
       }
     });
   }
