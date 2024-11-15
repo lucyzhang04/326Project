@@ -1,86 +1,117 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Remind.me</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-      <div id="navbar"></div>
-      <div class="daily-quote">
-        <h1 class="headerLeftAlign">Today's Quote is...</h1>
-        <div class="quote-box" id="quote-box"></div>
+    <div id="navbar"></div>
+    <div class="daily-quote">
+      <h1 class="headerLeftAlign">Today's Quote is...</h1>
+      <div class="quote-box" id="quote-box"></div>
+    </div>
+
+    <div class="user-input">
+      <div class="song-input-header">
+        Share a song or podcast that makes you think of today's quote!
       </div>
+      <form id="user-form">
+        <div>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <br />
+        <div>
+          <label for="podcast-song">Podcast/Song:</label>
+          <input type="text" id="podcast-song" name="podcast-song" required />
+        </div>
+        <br />
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
 
-      <script>
-        fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-            
-            const navLinkEls = document.querySelectorAll('.nav__link');
-            const windowPathname = window.location.pathname;
+    <script>
+      fetch("navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
 
-            navLinkEls.forEach(navLinkEl => {
-                if (navLinkEl.href.includes(windowPathname)) {
-                    navLinkEl.classList.add('active');
-                }
-            });
-          })
-          .catch(error => console.error('Error loading navbar:', error));
+          const navLinkEls = document.querySelectorAll(".nav__link");
+          const windowPathname = window.location.pathname;
 
-          function loadQuote() {
-            fetch('quotes.json')
-              .then(res => res.json())
-              .then(data => {
-                renderQuote(data);
-              })
-              .catch(error => console.error('Error loading quote:', error));
-          }
-
-          function renderQuote(data) {
-            let quoteIndex = parseInt(localStorage.getItem('index'));
-            if (isNaN(quoteIndex) || quoteIndex === null || quoteIndex >= data.length - 1) {
-              localStorage.setItem('index', 0);
-              quoteIndex = 0;
-            } else {
-              quoteIndex++;
-              localStorage.setItem('index', quoteIndex);
+          navLinkEls.forEach((navLinkEl) => {
+            if (navLinkEl.href.includes(windowPathname)) {
+              navLinkEl.classList.add("active");
             }
+          });
+        })
+        .catch((error) => console.error("Error loading navbar:", error));
 
-            const quoteDisplay = document.createElement('div');
+      function loadQuote() {
+        fetch("quotes.json")
+          .then((res) => res.json())
+          .then((data) => {
+            renderQuote(data);
+          })
+          .catch((error) => console.error("Error loading quote:", error));
+      }
 
-            const dailyQuote = document.createElement('p');
-            dailyQuote.classList.add("quote");
-            dailyQuote.textContent = `"${data[quoteIndex].quote}"`;
+      function renderQuote(data) {
+        let quoteIndex = parseInt(localStorage.getItem("index"));
+        if (
+          isNaN(quoteIndex) ||
+          quoteIndex === null ||
+          quoteIndex >= data.length - 1
+        ) {
+          localStorage.setItem("index", 0);
+          quoteIndex = 0;
+        } else {
+          quoteIndex++;
+          localStorage.setItem("index", quoteIndex);
+        }
 
-            const quoter = document.createElement('p');
-            quoter.classList.add("person");
-            quoter.textContent = data[quoteIndex].person;
+        const quoteDisplay = document.createElement("div");
 
-            quoteDisplay.appendChild(dailyQuote);
-            quoteDisplay.appendChild(quoter);
+        const dailyQuote = document.createElement("p");
+        dailyQuote.classList.add("quote");
+        dailyQuote.textContent = `"${data[quoteIndex].quote}"`;
 
-            let quoteBox = document.getElementById("quote-box");
-            quoteBox.innerHTML = "";
-            quoteBox.appendChild(quoteDisplay);
-          }
+        const quoter = document.createElement("p");
+        quoter.classList.add("person");
+        quoter.textContent = data[quoteIndex].person;
 
-          function dailyUpdate() {
-            let currDay = new Date();
-            let nextDay = new Date(currDay.getFullYear(), currDay.getMonth(), currDay.getDate() + 1, 0, 0, 0);
-            let remainingTime = nextDay.getTime() - currDay.getTime();
+        quoteDisplay.appendChild(dailyQuote);
+        quoteDisplay.appendChild(quoter);
 
-            setTimeout(() => {
-              loadQuote();
-              dailyUpdate();
-            }, remainingTime);
-          }
+        let quoteBox = document.getElementById("quote-box");
+        quoteBox.innerHTML = "";
+        quoteBox.appendChild(quoteDisplay);
+      }
 
+      function dailyUpdate() {
+        let currDay = new Date();
+        let nextDay = new Date(
+          currDay.getFullYear(),
+          currDay.getMonth(),
+          currDay.getDate() + 1,
+          0,
+          0,
+          0,
+        );
+        let remainingTime = nextDay.getTime() - currDay.getTime();
+
+        setTimeout(() => {
           loadQuote();
           dailyUpdate();
+        }, remainingTime);
+      }
+
+      loadQuote();
+      dailyUpdate();
     </script>
-    
   </body>
 </html>

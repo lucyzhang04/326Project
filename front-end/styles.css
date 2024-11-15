@@ -1,154 +1,178 @@
 body {
-    margin: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .topnav {
-    background-color: #c1c4c7;
-    overflow: hidden;
-    padding: 20px 10px; 
-    display: flex;
-    align-items: center; /* Center items vertically */
-    font-family: Arial, Helvetica, sans-serif;
+  background-color: #c1c4c7;
+  overflow: hidden;
+  padding: 20px 10px;
+  display: flex;
+  align-items: center; /* Center items vertically */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .topnav ul {
-    list-style-type: none; /* Remove default list styling */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Remove default margin */
-    display: flex; /* Use flexbox for horizontal layout */
+  list-style-type: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+  display: flex; /* Use flexbox for horizontal layout */
 }
 
 .topnav li {
-    margin-left: 10px; /* Space between list items */
+  margin-left: 10px; /* Space between list items */
 }
 
 /* Style the links inside the navigation bar */
 .topnav a {
-    border-radius: 25px;
-    color: #5f83b3;
-    text-align: center;
-    padding: 10px 30px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 20px;
+  border-radius: 25px;
+  color: #5f83b3;
+  text-align: center;
+  padding: 10px 30px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-    background-color: #5f83b3;
-    color: white;
+  background-color: #5f83b3;
+  color: white;
 }
 
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #5f83b3;
-    color: white;
+  background-color: #5f83b3;
+  color: white;
 }
 
-.logo{
-    color: 5f83b3#; 
-    font-size: 20px; 
-    font-weight: bold;
-    margin-right: auto; /* Pushes navigation items to the right */
-    line-height: 2;
+.logo {
+  color: 5f83b3#;
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: auto; /* Pushes navigation items to the right */
+  line-height: 2;
 }
 
-.header{
-    font-family: Arial, Helvetica, sans-serif;
-    color: #5f83b3; 
-    font-size: 30px; 
-    text-align: center;
-    font-weight: bold;
+.header {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #5f83b3;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
 }
 
-.headerLeftAlign{
-    font-family: Arial, Helvetica, sans-serif;
-    color: #5f83b3; 
-    font-size: 30px; 
-    text-align: left;
-    margin-left: 8%;
-    font-weight: bold;
+.headerLeftAlign {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #5f83b3;
+  font-size: 30px;
+  text-align: left;
+  margin-left: 8%;
+  font-weight: bold;
 }
 
 .trending-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.trending-song{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    align-items: center;
-    background-color: #d3d3d3;
-    padding: 15px;
-    border-radius: 8px;
-    gap: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    justify-content: space-between;
+.trending-song {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: center;
+  background-color: #d3d3d3;
+  padding: 15px;
+  border-radius: 8px;
+  gap: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  justify-content: space-between;
 }
 
-.trending-song:nth-child(even){
-    background-color: #ffffff;
+.trending-song:nth-child(even) {
+  background-color: #ffffff;
 }
 
-.song-title{
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #4a4a4a;
+.song-title {
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #4a4a4a;
 }
 
-.song-artist{
-    color: #6d6d6d;
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: italic;
+.song-artist {
+  color: #6d6d6d;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: italic;
 }
 
-.song-shares{
-    color: #4a4a4a;
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: italic;
+.song-shares {
+  color: #4a4a4a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: italic;
 }
 
-.like-btn{
-    background-color: #ff6666;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
+.like-btn {
+  background-color: #ff6666;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.like-btn:hover{
-    background-color: #ff4d4d;
+.like-btn:hover {
+  background-color: #ff4d4d;
 }
 
-.quote-box{
-    background-color: #d1dded;
-    border-radius: 15px;
-    margin: 30px;
-    padding: 4%;
-    min-width: 50%;
+.quote-box {
+  background-color: #d1dded;
+  border-radius: 15px;
+  margin: 30px;
+  padding: 4%;
+  min-width: 50%;
 }
 
-.daily-quote{
-    padding: 5%;
+.daily-quote {
+  padding: 5%;
 }
 
-.quote{
-    font-family: Arial, Helvetica, sans-serif;
-    color: black; 
-    font-size: 20px; 
-    text-align: center;
-    font-weight: bold;
+.quote {
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
 }
 
-.person{
-    font-family: Arial, Helvetica, sans-serif;
-    color: #4a4a4a; 
-    font-size: 18px; 
-    text-align: center;
-    font-style: italic;
+.person {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #4a4a4a;
+  font-size: 18px;
+  text-align: center;
+  font-style: italic;
 }
+
+.song-input-header {
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 15px;
+  background-color: #7a7a7a;
+  color: white;
+  padding: 15px;
+  width: fit-content;
+}
+
+#user-form {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: right;
+  width: fit-content;
+}
+
