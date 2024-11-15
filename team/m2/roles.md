@@ -29,8 +29,12 @@
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/bcef01828d09df5b240cb843decd0f1062fc3a55): Document the plan for data usage and storage for the project, including clarifying information to help the team move forward with implementing features in the future. 
 
 ## Cynthia Rajeshkanna - Task Manager 
-- **Role**: Responsible for detailing tasks and to-dos for each feature. Cynthia will ensure that tasks are broken down fairly and assigned to team members logically, allowing for the team to collaborate on the project in an organized and timely manner. 
-- **Top 3 Commits**:
+- **Role**: Responsible for detailing tasks and to-dos for each feature. Cynthia will ensure that tasks are broken down fairly and assigned to team members logically, allowing for the team to collaborate on the project in an organized and timely manner.
+- - **Top 3 Commits [Milestone 3]**:
+  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/ccc49189f2763900fcca56640807afc1043c0782): Implemented the basic quote generation & display feature in `index.html`. Developed the UI for the initial page of the Remind.me site on which users can view the daily quote. Also created mock data in `quotes.json`, which is pulled and displayed on the page accordingly.
+  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/a54a37dbd9e473d738376512ab191ac9d071b179): Updated script in `index.html` to change the quote every 24 hours at midnight, while also keeping track of the current quote. In essence, implemented logic to keep track of a given day's quote, only updating with a new quote every 24 hours at 12 am EST.
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/e19a3fa4abf1f71ff7ae17ee7dc5e13b388aa618): Created originalDatabase.js with general methods to interface with indexedDB. Modified `index.html` to use these methods and thus utilized indexedDB for keeping track of quotes and updating them, as opposed to prior implementation with localStorage.
+- **Top 3 Commits [Milestone 2]**:
   1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/57dc111fa108fc483e893f14b9e8f744e2a51db9): Added the daily theme/quote display feature and accompanying description to `features.md`.
   2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/eb10cbc9383eef8efe2accc1fa0106da59809e56): Revised `features.md` to include the daily refresh of feed feature mentioned in `problem.md` and other files (wrote a brief description describing functionality and purpose). 
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/6ad6e1a9d22148850758988de9bc468f8e86af71): Closely monitored progress on all tasks and set an internal deadline to keep everyone on track. Ultimately, finalized all milestone 2 documents and files before submission (the commit linked is one such final revision - consistency across files, particularly `problem.md`).
