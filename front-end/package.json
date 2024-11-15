@@ -14,5 +14,6 @@
   },
   "dependencies": {
     "http-server": "^14.1.1"
-  }
+  },
+  "type": "module"
 }
