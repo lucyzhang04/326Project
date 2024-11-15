@@ -30,12 +30,13 @@
           })
           .catch(error => console.error('Error loading navbar:', error));
 
-         import {TaskDatabase} from './database.js';
+         import { TaskDatabase } from './originalDatabase.js';
          let db = new TaskDatabase('quotesDB');
 
 
          async function loadQuote() {
             let currentDay = new Date().toLocaleDateString();
+            await db.openDatabase();
             let dbTasks = await db.getTasks();
 
             let quoteIndex = 0;
@@ -111,3 +112,4 @@
     
   </body>
 </html>
+
