@@ -1,6 +1,9 @@
 ```mermaid
 sequenceDiagram
 
+  index.html->>feed.html: User submits recommendation and and is brought to feed page.
+  feed.html->>trending.html: User clicks on the trending page.
+  trending.html->>trending-script.js: Trending page loads/runs script. 
   loop LoadBackground
     trending-script.js->>trending-script.js: Load background/navigation bar.
   end
