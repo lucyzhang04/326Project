@@ -96,9 +96,9 @@ Users can like songs or podcasts on the "Trending" and "Feed" pages. Any songs o
 - **Analytics Table:**
   - The user's liked songs/podcasts are retrieved from an IndexedDB instance. These cached results are displayed in an analytics table. The table updates dynamically when new songs/podcasts are added to the database (3 points).
   - Specific care is taken to avoid displaying duplicate songs on the Saved Page. This is done by enforcing a primary key constraint on the combination of a song/podcast title and the artist/host in the IndexedDB instance (2 points).
-- <ins>Point Value:</ins>: 5 points [3 points (medium feature) + 2 points (medium feature)]
+<ins>Point Value:</ins>: 5 points [3 points (medium feature) + 2 points (medium feature)]
   
-- <ins>Assigned To:</ins> Neha Aryasomayajula
+<ins>Assigned To:</ins> Neha Aryasomayajula
 
 
 - **Daily Reset of Saved Entries:**
