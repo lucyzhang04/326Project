@@ -80,6 +80,7 @@
 
     <script type="module">
         import { EventHub } from "./source/eventhub/EventHub.js";
+        import { Events } from "./source/eventhub/Events.js";
         import { TaskDatabase } from './originalDatabase.js';
 
       fetch("navbar.html")
@@ -156,10 +157,10 @@
           }
 
       //need to publish an event when the time ends, so that the trending/feed/saved pages can be cleared
-      /*function publishResetEvent(){
+      function publishResetEvent(){
         const hub = EventHub.getInstance();
         hub.publish(Events.Reset);
-      }*/
+      }
 
       function dailyUpdate() {
         let currDay = new Date();
@@ -175,7 +176,7 @@
 
             //added part such that when the time ends, other views will clear pages.
             setTimeout(async () => {
-              //publishResetEvent();
+              publishResetEvent();
               await loadQuote();
               dailyUpdate();
             }, remainingTime);

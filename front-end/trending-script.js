@@ -2,6 +2,7 @@
 import { DatabaseFakeService } from "./source/services/DatabaseFakeService.js";
 import { getSongDB } from "./databaseFactory.js";
 import { EventHub } from "./source/eventhub/EventHub.js";
+import { Events } from "./source/eventhub/Events.js";
 
 function loadBaseLayout(){
     fetch('navbar.html')
@@ -20,6 +21,10 @@ function loadBaseLayout(){
 
             //loadTrendingData();
 
+        })
+        .then(() => {
+            const hub = EventHub.getInstance();
+            hub.subscribe(Events.Reset, resetPage);
         })
         .then(() => {
             //call the loadingTrendingData every 5 sec.
