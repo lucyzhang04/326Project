@@ -72,4 +72,24 @@ Point Value: 2 points (medium feature)
 ## Saved Page
 This page displays a user's liked songs. Whenever the user likes a song from the trending or personal feed page, it will be added to the saved page. 
 
-**Assigned to:** Neha Aryasomayajula 
+**Assigned to:** Saadhvi Raghav
+
+### Saved Songs Page
+
+Users have the option to like songs/podcasts on the trending and feed pages. The "Saved" page will display songs that a user has liked on either of those pages through interacting with an IndexedDB instance.
+
+Point Value: 3 points (medium feature)
+**Assigned to:** Neha Aryasomayajula
+
+### Navigation Bar
+Users will be able to toggle between the "Feed", "Trending", and "Saved" pages by clicking on hyperlinks in the navigation bar. The navigation bar will provide visual feedback to the user by indicating which tab is active at any given moment and by including a hover effect. It will also respond appropriately to screen maximization.
+
+Point Value: 3 points (medium feature)
+**Assigned to:** Neha Aryasomayajula
+
+### Daily Refresh of Feed
+
+The theme is updated daily (tentatively at 12:00am EST) for all platform users. In turn, the "Feed", "Trending", and "Saved" pages will be refreshed as well, displaying the new user responses for the updated daily theme. Put simply, it will be cleared daily, accepting and populating entirely new responses/recommendations.
+
+Point value: 5 points (large feature)
+**Assigned to:** Cynthia Rajeshkanna, Neha Aryasomayajula, Saadhvi Raghav, Lucy Zhang
