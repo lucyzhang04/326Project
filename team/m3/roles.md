@@ -47,8 +47,12 @@
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/dab73481ae91a9e9e54e9ce149338812e51c980e): Updated users.md to effectively establish and communicate the intended audience of the app to all team members
 
 ## Marie Shvakel - Timekeeper
-- **Role**: Marie is responsible for ensuring that the team is on track to meet project deadlines, as well as internal deadlines set for individual tasks given by the Task Manager. 
-- **Top 3 Commits**:
+- **Role**: Marie is responsible for ensuring that the team is on track to meet project deadlines, as well as internal deadlines set for individual tasks given by the Task Manager.
+- **Top 3 Commits [Milestone 3]**:
+  1. [Commit 1] (https://github.com/lucyzhang04/326Project/commit/4613f8ee2e3acb4bfc1f7868e97f90f7715a81bb): Implemented Spotify Query using Spotify Web API that querys Spotify for requested songs, searches by song name, and returns list of songs and respective artists that match that request.
+  2. [Commit 2] (): Registered "remind.me" as a Web App in development in Spotify. Added team members as users with access. Created a redirect URI to display query results. 
+  3. [Commit 3] (https://github.com/lucyzhang04/326Project/commit/2ac5a9a9016f1bf49c3d169333ae94c4787e178b): Updated features.md to include & describe the Spotify Query feature that was implemented by me using the Spotify Web API & Express.js.
+- **Top 3 Commits [Milestone 2]**:
   1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/0a29e68af9bc31b76a237f0f180c646e49843342): Filled out `ui-diagrams.md` to explain the different aspects of the first screen, along with a picture of the diagram of the first screen made using figma.
   2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/f818ee9323554a6c8841683ab142f76b891f4c58):I described our problem statement, problem solution, and why it matters in `problem.md`.
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/27d275312719508b0f4037c4d6a0657357b18e25): Edited `marie-shvakel.md` to include timekeeper work and information
