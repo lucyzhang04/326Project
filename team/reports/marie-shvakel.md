@@ -12,7 +12,19 @@
 - **Commit** [Commit to marie-shvakel.md](https://github.com/lucyzhang04/326Project/commit/f20730d2a08f9eee28a94c06d2f1d444c9767b54)
 ##
 - **Task(s)**: Reminded team members of deadlines and organized meeting times. 
-- **Details**: We have had 4 meetings in order to discuss the project and coordinate between each other before milestone 2 is due. I have been reminding members about meeting times and coordinating betwen team members in order to find a time for us all to meet. Additionally, I have made sure everyone knows when the deadline for everyone's work to be done is. 
+- **Details**: We have had 4 meetings in order to discuss the project and coordinate between each other before milestone 2 is due. I have been reminding members about meeting times and coordinating betwen team members in order to find a time for us all to meet. Additionally, I have made sure everyone knows when the deadline for everyone's work to be done is.
+
+### November 11, 2024
+- **Tasks(s)**: Pushed folder & code for a Basic Spotify Query that used Spotify's Web API and Express.js. Registed "remind.me" as a web app in development.
+- **Commit** [Commit for Spotify Query](https://github.com/lucyzhang04/326Project/commit/f07ee3e7f8e5250653c85591f4df7761929cd794)
+### November 12, 2024
+- **Task(s)**: Accidentally nested the spotify query folder when pushing my commit on 11/11, so I unnested the spotify query folder.
+- **Commit** [Commit for Unnesting Query](https://github.com/lucyzhang04/326Project/commit/4613f8ee2e3acb4bfc1f7868e97f90f7715a81bb)
+### November 16, 2024
+- **Task(s)**: Updated features.md and roles.md to incorporate the work I did for the Spotify Query
+- **Commit** [Commit to features.md](https://github.com/lucyzhang04/326Project/commit/2ac5a9a9016f1bf49c3d169333ae94c4787e178b)
+- **Commit** [Commit to roles.md](https://github.com/lucyzhang04/326Project/commit/966fc374946b08eb07eb00986775b059ef73a997)
+
  
 
 
