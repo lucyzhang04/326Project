@@ -56,7 +56,7 @@ On the trending page, a user can view the top 5 songs or podcasts of the day, al
   
   This will display the top 5 shared songs/podcasts. The analytics bar interfaces with the server-side database and fetches the top songs/podcasts. 
 
-  Point Value: 3 points (medium feature)
+  <ins>Point Value:</ins> 3 points (medium feature)
   
   <ins>Assigned to:</ins> Lucy Zhang
 
@@ -66,14 +66,14 @@ On the trending page, a user can view the top 5 songs or podcasts of the day, al
 
   If the song is in the indexedDB instance, an alert will indicate that the song has been added to the saved respository. Otherwise, the song is already liked, and an alert will indicate that the song is already a liked        item. (2 points)
 
-  Point Value: 5 points [3 points (medium feature) + 2 points (medium feature)]
+  <ins>Point Value:</ins> 5 points [3 points (medium feature) + 2 points (medium feature)]
 
   <ins>Assigned to:</ins> Lucy Zhang 
 
 - **Daily Reset of Trending:**
   When the daily refresh of the quote/feed occurs, a Reset event will be published and the trending screen will reset--thereby clearing the table. 
 
-  Point Value: 2 points (medium feature)
+  <ins>Point Value:</ins> 2 points (medium feature)
 
   <ins>Assigned to:</ins> Lucy Zhang 
 
