@@ -37,6 +37,9 @@
       <!-- END LOGIN -->
 
       <script type="module">
+        import { EventHub } from "./eventhub/EventHub.js";
+        import { TaskDatabase } from './originalDatabase.js';
+
         fetch('navbar.html')
           .then(response => response.text())
           .then(data => {
@@ -52,10 +55,8 @@
             });
           })
           .catch(error => console.error('Error loading navbar:', error));
-
-         import { TaskDatabase } from './originalDatabase.js';
+         
          let db = new TaskDatabase('quotesDB');
-
 
          async function loadQuote() {
             let currentDay = new Date().toLocaleDateString();
@@ -114,12 +115,20 @@
             quoteBox.appendChild(quoteDisplay);
           }
 
+          //need to publish an event when the time ends, so that the trending/feed/saved pages can be cleared
+          function publishResetEvent(){
+            const hub = EventHub.getInstance();
+            hub.publish(Events.Reset);
+          }
+
           function dailyUpdate() {
             let currDay = new Date();
             let nextDay = new Date(currDay.getFullYear(), currDay.getMonth(), currDay.getDate() + 1, 0, 0, 0);
             let remainingTime = nextDay.getTime() - currDay.getTime();
 
+            //added part such that when the time ends, other views will clear pages.
             setTimeout(async () => {
+              publishResetEvent();
               await loadQuote();
               dailyUpdate();
             }, remainingTime);
