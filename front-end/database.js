@@ -35,6 +35,7 @@ export class SongDatabase {
     const db = await this.openDatabase();
     const tx = db.transaction("song", "readwrite");
     const store = tx.objectStore("song");
+    const songWithId = { ...song, id: `${song.title}-${song.artist}` };
     store.add(song);
 
     return new Promise((resolve, reject) => {
