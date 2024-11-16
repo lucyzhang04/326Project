@@ -7,7 +7,6 @@
 
     Later commits that update/modify this commit:
       - [Mock fetching trending data from database. Integrate into script for rendering purposes.](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848)
-
       - [Update trending script to support refresh with new data](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284)
 
   
@@ -15,7 +14,6 @@
   
     Later commits that update/modify this commit:
       - [Update trending script to support refresh with new data](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284)
-      
       - [Create mock fetch trending file](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848)
 
 
