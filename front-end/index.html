@@ -1,151 +1,195 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Remind.me</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-      <div id="navbar"></div>
-      <div class="daily-quote">
-        <h1 class="headerLeftAlign">Today's Quote is...</h1>
-        <div class="quote-box" id="quote-box"></div>
+    <div id="navbar"></div>
+    <div class="daily-quote">
+      <h1 class="headerLeftAlign">Today's Quote is...</h1>
+      <div class="quote-box" id="quote-box"></div>
+    </div>
+
+    <div class="user-input">
+      <div class="song-input-header">
+        Share a song or podcast that makes you think of today's quote!
       </div>
-
-      <!-- LOGIN -->
-      <button id="login-btn" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
-      <div id="id01" class="modal">
-        
-        <form class="modal-content animate" action="/action_page.php" method="post">
-
-          <div class="container">
-            <label for="uname"><b>User Name</b></label>
-            <input type="text" placeholder="User Name" name="uname" required>
-
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Password" name="psw" required>
-              
-            <button id="submit-btn" type="submit">Login</button>
+      <div class="input-area">
+        <form id="user-form">
+          <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
           </div>
-
-          <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancel-btn">Cancel</button>
+          <br />
+          <div>
+            <label for="podcast-song">Podcast/Song:</label>
+            <input type="text" id="podcast-song" name="podcast-song" required />
+          </div>
+          <br />
+          <div>
+            <button type="submit">Search</button>
           </div>
         </form>
+        <div class="results" id="results">
+          <h3 class="results-header">Results</h3>
+          <div id="results-list"></div>
+        </div>
+        <script type="module" src="search-song.js"></script>
       </div>
-      <!-- END LOGIN -->
+    </div>
 
-      <script type="module">
-        fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-            
-            const navLinkEls = document.querySelectorAll('.nav__link');
-            const windowPathname = window.location.pathname;
+    <!-- LOGIN -->
+    <button
+      id="login-btn"
+      onclick="document.getElementById('id01').style.display='block'"
+      style="width: auto"
+    >
+      Login
+    </button>
+    <div id="id01" class="modal">
+      <form
+        class="modal-content animate"
+        action="/action_page.php"
+        method="post"
+      >
+        <div class="container">
+          <label for="uname"><b>User Name</b></label>
+          <input type="text" placeholder="User Name" name="uname" required />
 
-            navLinkEls.forEach(navLinkEl => {
-                if (navLinkEl.href.includes(windowPathname)) {
-                    navLinkEl.classList.add('active');
-                }
-            });
-          })
-          .catch(error => console.error('Error loading navbar:', error));
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Password" name="psw" required />
 
-         import { TaskDatabase } from './originalDatabase.js';
-         let db = new TaskDatabase('quotesDB');
+          <button id="submit-btn" type="submit">Login</button>
+        </div>
 
+        <div class="container" style="background-color: #f1f1f1">
+          <button
+            type="button"
+            onclick="document.getElementById('id01').style.display='none'"
+            class="cancel-btn"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- END LOGIN -->
 
-         async function loadQuote() {
-            let currentDay = new Date().toLocaleDateString();
-            await db.openDatabase();
-            let dbTasks = await db.getTasks();
+    <script type="module">
+      fetch("navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
 
-            let quoteIndex = 0;
-            let prevUpdate = null;
+          const navLinkEls = document.querySelectorAll(".nav__link");
+          const windowPathname = window.location.pathname;
 
-            for (let i = 0; i < dbTasks.length; i++) {
-              if (dbTasks[i].id === "prevUpdate") {
-                prevUpdate = dbTasks[i].value;
-              }
-              if (dbTasks[i].id === 'index') {
-                quoteIndex = dbTasks[i].value;
-              }
+          navLinkEls.forEach((navLinkEl) => {
+            if (navLinkEl.href.includes(windowPathname)) {
+              navLinkEl.classList.add("active");
             }
+          });
+        })
+        .catch((error) => console.error("Error loading navbar:", error));
 
-            try {
-              let quotes = await fetch('quotes.json')
-              .then(res => res.json());
-              
-                if(currentDay !== prevUpdate) {
-                  if (quoteIndex === null || quoteIndex >= quotes.length - 1) {
-                    await db.addTask({id: 'index', value: 0});
-                    quoteIndex = 0;
-                  } else {
-                    quoteIndex++;
-                    await db.addTask({id: 'index', value: quoteIndex});
-                  }
-                  await db.addTask({id: 'prevUpdate', value: currentDay});
-                }
-              renderQuote(quotes[quoteIndex]);
+      import { TaskDatabase } from "./originalDatabase.js";
+      let db = new TaskDatabase("quotesDB");
+
+      async function loadQuote() {
+        let currentDay = new Date().toLocaleDateString();
+        await db.openDatabase();
+        let dbTasks = await db.getTasks();
+
+        let quoteIndex = 0;
+        let prevUpdate = null;
+
+        for (let i = 0; i < dbTasks.length; i++) {
+          if (dbTasks[i].id === "prevUpdate") {
+            prevUpdate = dbTasks[i].value;
+          }
+          if (dbTasks[i].id === "index") {
+            quoteIndex = dbTasks[i].value;
+          }
+        }
+
+        try {
+          let quotes = await fetch("quotes.json").then((res) => res.json());
+
+          if (currentDay !== prevUpdate) {
+            if (quoteIndex === null || quoteIndex >= quotes.length - 1) {
+              await db.addTask({ id: "index", value: 0 });
+              quoteIndex = 0;
+            } else {
+              quoteIndex++;
+              await db.addTask({ id: "index", value: quoteIndex });
             }
-            catch (error) {
-              console.error('Error loading quote:', error);
-            } 
+            await db.addTask({ id: "prevUpdate", value: currentDay });
           }
+          renderQuote(quotes[quoteIndex]);
+        } catch (error) {
+          console.error("Error loading quote:", error);
+        }
+      }
 
-          function renderQuote(data) {
-            let quoteDisplay = document.createElement('div');
+      function renderQuote(data) {
+        let quoteDisplay = document.createElement("div");
 
-            let dailyQuote = document.createElement('p');
-            dailyQuote.classList.add("quote");
-            dailyQuote.textContent = `"${data.quote}"`;
+        let dailyQuote = document.createElement("p");
+        dailyQuote.classList.add("quote");
+        dailyQuote.textContent = `"${data.quote}"`;
 
-            let quoter = document.createElement('p');
-            quoter.classList.add("person");
-            quoter.textContent = data.person;
+        let quoter = document.createElement("p");
+        quoter.classList.add("person");
+        quoter.textContent = data.person;
 
-            quoteDisplay.appendChild(dailyQuote);
-            quoteDisplay.appendChild(quoter);
+        quoteDisplay.appendChild(dailyQuote);
+        quoteDisplay.appendChild(quoter);
 
-            let quoteBox = document.getElementById("quote-box");
-            quoteBox.innerHTML = "";
-            quoteBox.appendChild(quoteDisplay);
-          }
+        let quoteBox = document.getElementById("quote-box");
+        quoteBox.innerHTML = "";
+        quoteBox.appendChild(quoteDisplay);
+      }
 
-          function dailyUpdate() {
-            let currDay = new Date();
-            let nextDay = new Date(currDay.getFullYear(), currDay.getMonth(), currDay.getDate() + 1, 0, 0, 0);
-            let remainingTime = nextDay.getTime() - currDay.getTime();
+      function dailyUpdate() {
+        let currDay = new Date();
+        let nextDay = new Date(
+          currDay.getFullYear(),
+          currDay.getMonth(),
+          currDay.getDate() + 1,
+          0,
+          0,
+          0
+        );
+        let remainingTime = nextDay.getTime() - currDay.getTime();
 
-            setTimeout(async () => {
-              await loadQuote();
-              dailyUpdate();
-            }, remainingTime);
-          }
+        setTimeout(async () => {
+          await loadQuote();
+          dailyUpdate();
+        }, remainingTime);
+      }
 
-          async function start() {
-            await loadQuote();
-            dailyUpdate();
-          }
+      async function start() {
+        await loadQuote();
+        dailyUpdate();
+      }
 
-          // LOGIN
-          // Get the modal
-          let modal = document.getElementById('id01');
+      // LOGIN
+      // Get the modal
+      let modal = document.getElementById("id01");
 
-          // When the user clicks anywhere outside of the modal, close it
-          window.onclick = function(event) {
-            if (event.target == modal) {
-              modal.style.display = "none";
-              document.body.style.backgroundColor = "white";
-            }
-          }
-        // END OF LOGIN
-          
-          start();
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          document.body.style.backgroundColor = "white";
+        }
+      };
+      // END OF LOGIN
+
+      start();
     </script>
-    
   </body>
 </html>
-
