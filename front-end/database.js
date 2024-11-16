@@ -36,7 +36,7 @@ export class SongDatabase {
     const tx = db.transaction("song", "readwrite");
     const store = tx.objectStore("song");
     const songWithId = { ...song, id: `${song.title}-${song.artist}` };
-    store.add(song);
+    store.add(songWithId);
 
     return new Promise((resolve, reject) => {
       tx.oncomplete = function () {
