@@ -3,6 +3,7 @@
 ## Daily Theme/Quote Display
 The landing page of the website will display a new daily theme, particularly a phrase, quote or sentence, for which users can upload a song or podcast that they feel best aligns with the daily theme. Every day, the theme will be updated (tentatively at 12:00am EST) for all platform users in order to inspire regular contributions and thereby boost user engagement. In a given day, users will upload media for the same theme, establishing a collaborative platform environment.
 
+**Point Value: 3 points (medium feature)**
 **Assigned to:** Cynthia Rajeshkanna
 
 ## Song/Podcast Upload
