@@ -4,13 +4,14 @@
 
 ```mermaid
 graph TD;
-    A[Login and song submission]-- podcast submission from user-->B[Feed Screen];
-    B--using navigation bar-->C[Trending Screen];
-    C--using navigation bar-->B;
-    B--Submission Data Retrieval to Render Feed -->D[Backend Server];
+    A[Login and song submission]-- Podcast submission-->B[Feed Screen];
+    B--Using navigation bar-->C[Trending Screen];
+    C--Using navigation bar-->B;
+    B--Query for Data Retrieval -->D[Backend Server];
+    D--Retrieved Submissions-->B;
     B--Saving Liked Submission to IndexedDB-->E[Indexed DB]; 
     E--Retrieving Liked Submissions-->B
-    B-- Subscribing to 24-Hour Reset Event-->F[EventBus]; 
+    B--Subscribing to 24-Hour Reset Event-->F[EventBus]; 
     A--Publishes 24-Hour Timeout Event-->F; 
     F--Sends 24-Hour Timeout Event -->B;
 ```
