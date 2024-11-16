@@ -5,6 +5,7 @@ import { EventHub } from "./source/eventhub/EventHub.js";
 import { Events } from "./source/eventhub/Events.js";
 
 const grid = document.getElementById("widget-grid"); 
+const noSubWindow = document.getElementById("no-sub-screen"); 
 let reset = false; 
 let idCount = 0; 
 /*
@@ -77,10 +78,8 @@ const buildWidget = (submission) => {
 }
 
 const noSubs = () => {
-    const msg = document.createElement("div"); 
-    msg.classList.add("no-sub-msg");
     const text = document.createTextNode("Currently no submissions..."); 
-    msg.appendChild(text); 
+    noSubWindow.appendChild(text); 
 }
 
 
@@ -97,6 +96,7 @@ const render = () => {
 }
 
 if(!reset){
+    noSubWindow.style.display = "none";
     render();
 }
 else{
