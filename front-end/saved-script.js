@@ -50,14 +50,9 @@ function render(data){
         songArtist.classList.add("song-artist");
         songArtist.textContent = likedSong.artist;
 
-        const songShares = document.createElement('span');
-        songShares.classList.add("song-shares");
-        songShares.textContent = `${likedSong.shares} shares`;
 
         likedSongElem.appendChild(songTitle);
         likedSongElem.appendChild(songArtist);
-        likedSongElem.appendChild(songShares);
-
         likedContElem.appendChild(likedSongElem);
     }
 
