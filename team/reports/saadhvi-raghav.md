@@ -32,3 +32,33 @@
 - **Task**: Added use cases to description summary of UI diagrams. 
 - **Details**: Described use cases for the prompt and upload screen, the feed screen, and the trenching chart screen, explaining how the pages interact and connect with one another and add to the user experience. 
 - **Commit**: [Commit to ui-diagrams.md](https://github.com/lucyzhang04/326Project/commit/6f306e52c952325e08097dd024e0bf4026e1155e)
+
+### November 13, 2024 
+- **Task**: Created feed-script.js and fleshed out basic UI components of feed page. 
+- **Details**: Initiated grid layout and basic structure of web page, as well as updated styles.css to reflect styling of added components. Added basic functionality for loading up a widget and displaying it on feed screen page. Added save button to each widget so each submission can be saved. 
+- **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/6e28b48b03ceee9c8033ab25f29697bd78c79472)
+
+### November 14, 2024 
+- **Task**: Added text display to widget submissions. 
+- **Details**: Added name and host text displays for submission widgets, pulling from fake submission JSON data. Updated grid functionality so that it could handle a variable number of submissions/widgets. Updated styles.css to make sure UI reflected UI diagram. 
+- **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/6bfffd73187d4b436f735bceed66e9206d5802cf)
+
+--- 
+- **Task**: Added text display to widget submissions. 
+- **Details**: Added name and host text displays for submission widgets, pulling from fake submission JSON data. Updated grid functionality so that it could handle a variable number of submissions/widgets. Updated styles.css to make sure UI reflected UI diagram. 
+- **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/6bfffd73187d4b436f735bceed66e9206d5802cf)
+
+---
+- **Task**: Added image display to widget submissions. 
+- **Details**: Added image displays for submission widgets, pulling from fake submission JSON data/image links. Updated styles.css to make sure UI reflected UI diagram. Also added basic event listener to save button, to show that songs could be saved to user's saved list. 
+- **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/a6ad3797353d55d553498947888d7ea5dda2a6aa)
+
+### November 15, 2024 
+- **Task**: Used mock fetch to mimic backend queries to a database to retrieve submission data. 
+- **Details**: Updated mock-fetch function, which returns submission data in a Promise and mimics the delay present when querying the backend. Updated feed-script.js to center around the asynchronous architecture, rendering widgets individually when the Promises are resolved. Also added basic error handling if there is an issue retrieving submissions. 
+- **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/66089587988f60d7d4a9e28e5588b06c650361a4)
+
+---
+- **Task**: Merged mocking functionality between trending screen and feed screen. 
+- **Details**: Added getSubmission function to DatabaseFakeService, combining the mocking for the backend for both UI screens. Updated feed-script.js to reflect new structure and work with an instance of the DatabaseFakeService.
+- **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/a624c9c25f2328953ffd1e6cd554fbbe21746b18)
