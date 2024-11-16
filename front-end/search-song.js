@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderResults(results) {
     console.log(results);
+    let savedTracks = []; // saved songs are stored here
+    resultsElem.innerHTML = ""; // clear the results list
     results.tracks.items.forEach((result) => {
       const resultElem = document.createElement("div");
       resultElem.classList.add("result");
@@ -52,6 +54,25 @@ document.addEventListener("DOMContentLoaded", () => {
       text.appendChild(title);
       text.appendChild(artist);
       resultElem.appendChild(text);
+
+      resultElem.addEventListener("click", () => {
+        const trackIndex = savedTracks.findIndex(
+          (track) => track.name === result.name && track.artists[0].name === result.artists[0].name
+        );
+        if(trackIndex !== -1) {
+          // Remove the track from the savedTracks array and unmark
+          savedTracks.splice(trackIndex, 1);
+          resultElem.style.backgroundColor = ""; // Reset background
+        } else {
+          // Add track to savedTracks array and mark
+          savedTracks.push(result);
+          resultElem.style.backgroundColor = "blue";
+        }
+
+        console.log("Saved Tracks:", savedTracks); // to remove
+      });
+
+      //TODO: Add widget with saved songs and save them using indexedDB
 
       resultsElem.appendChild(resultElem);
     });

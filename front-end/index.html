@@ -41,43 +41,6 @@
       </div>
     </div>
 
-    <!-- LOGIN -->
-    <button
-      id="login-btn"
-      onclick="document.getElementById('id01').style.display='block'"
-      style="width: auto"
-    >
-      Login
-    </button>
-    <div id="id01" class="modal">
-      <form
-        class="modal-content animate"
-        action="/action_page.php"
-        method="post"
-      >
-        <div class="container">
-          <label for="uname"><b>User Name</b></label>
-          <input type="text" placeholder="User Name" name="uname" required />
-
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Password" name="psw" required />
-
-          <button id="submit-btn" type="submit">Login</button>
-        </div>
-
-        <div class="container" style="background-color: #f1f1f1">
-          <button
-            type="button"
-            onclick="document.getElementById('id01').style.display='none'"
-            class="cancel-btn"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-    <!-- END LOGIN -->
-
     <script type="module">
         import { EventHub } from "./source/eventhub/EventHub.js";
         import { Events } from "./source/eventhub/Events.js";
@@ -186,19 +149,6 @@
         await loadQuote();
         dailyUpdate();
       }
-
-      // LOGIN
-      // Get the modal
-      let modal = document.getElementById("id01");
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-          document.body.style.backgroundColor = "white";
-        }
-      };
-      // END OF LOGIN
 
       start();
     </script>

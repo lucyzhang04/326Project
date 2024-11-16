@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import Service from "./Service.js";
-import { fetch } from "../../utility/fetch.js";
-=======
 import Service from "./Service.js"
 import { Events } from "../eventhub/Events.js"
->>>>>>> 8f0fda4cd71afb3a14d26f9860fb20987c97d09a
 
 export default class SpotifyAPIFakeService extends Service {
   constructor() {
