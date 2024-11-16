@@ -4,4 +4,5 @@
 
 export const Events = {
   Search: "Search",
+  Reset: "Reset"
 };

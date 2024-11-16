@@ -1,6 +1,8 @@
 //const { DatabaseFakeService } = require("./source/services/DatabaseFakeService");
 import { DatabaseFakeService } from "./source/services/DatabaseFakeService.js";
 import { getSongDB } from "./databaseFactory.js";
+import { EventHub } from "./source/eventhub/EventHub.js";
+import { Events } from "./source/eventhub/Events.js";
 
 function loadBaseLayout(){
     fetch('navbar.html')
@@ -17,8 +19,18 @@ function loadBaseLayout(){
                 }
             });
 
-            loadTrendingData();
+            //loadTrendingData();
 
+        })
+        .then(() => {
+            const hub = EventHub.getInstance();
+            hub.subscribe(Events.Reset, resetPage);
+        })
+        .then(() => {
+            //call the loadingTrendingData every 5 sec.
+            
+            //setInterval(loadTrendingData, 5000);
+            loadTrendingData();
         })
         .catch(error => console.error('Error loading navbar:', error));
 }
@@ -86,6 +98,15 @@ function render(data){
 
         //whiteBackground = (whiteBackground+1) % 2;
     }
+}
+
+function resetPage(){
+    let trendingContElem = document.getElementById("trending-list");
+
+    while(trendingContElem.firstChild){
+        trendingContElem.removeChild(trendingContElem.lastChild);
+    }
+
 }
 
 loadBaseLayout();
