@@ -39,6 +39,7 @@ Point Value: 5 points (large feature)
 Users can navigate between the "Feed," "Trending," and "Saved" pages by clicking hyperlinks in the navigation bar. The navigation bar will visually indicate the active tab and include a hover effect for each tab to enhance interactivity. Additionally, the navigation bar will adapt its layout to fit maximized screens.
 
 <ins>Point Value:</ins> 3 points (medium feature)
+
 <ins>Assigned to:</ins> Neha Aryasomayajula
 
 ## Recommendation Feed
@@ -93,17 +94,19 @@ On the trending page, a user can view the top 5 songs or podcasts of the day, al
 Users can like songs or podcasts on the "Trending" and "Feed" pages. Any songs or podcasts they like will appear on the "Saved" page. This page filters the full list of songs and podcasts to display only the ones the user has liked.
 
 - **Analytics Table:** 
-The user's liked songs/podcasts are retrieved from an IndexedDB instance. These cached results are displayed in an analytics table. The table updates dynamically when new songs/podcasts are added to the database. 3 points (medium feature)
+The user's liked songs/podcasts are retrieved from an IndexedDB instance. These cached results are displayed in an analytics table. The table updates dynamically when new songs/podcasts are added to the database (3 points).
 
-Specific care is taken to avoid displaying duplicate songs on the Saved Page. This is done by enforcing a primary key constraint on the combination of a song/podcast title and the artist/host in the IndexedDB instance. 2 points (medium feature)
+Specific care is taken to avoid displaying duplicate songs on the Saved Page. This is done by enforcing a primary key constraint on the combination of a song/podcast title and the artist/host in the IndexedDB instance (2 points).
 
 <ins>Point Value:</ins>: 5 points [3 points (medium feature) + 2 points (medium feature)]
-<ins>Point Value:</ins> Neha Aryasomayajula
+
+<ins>Assigned To:</ins> Neha Aryasomayajula
 
 
 - **Daily Reset of Saved Entries:**
 When the daily refresh of the quote/feed occurs, a Reset event will be published, and the "Saved" screen will reset. This clears the table.
 
 <ins>Point Value:</ins> 2 points (medium feature)
-<ins>Point Value:</ins> Neha Aryasomayajula
+
+<ins>Assigned To:</ins> Neha Aryasomayajula
 
