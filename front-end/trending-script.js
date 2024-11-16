@@ -22,16 +22,10 @@ function loadBaseLayout(){
 
         })
         .then(() => {
-            const hub = EventHub.getInstance();
-            hub.subscribe(Events.Reset, ()=>{
-                this.resetPage();
-            })
-        })
-        .then(() => {
             //call the loadingTrendingData every 5 sec.
             
-            setInterval(loadTrendingData, 5000);
-            //loadTrendingData();
+            //setInterval(loadTrendingData, 5000);
+            loadTrendingData();
         })
         .catch(error => console.error('Error loading navbar:', error));
 }
