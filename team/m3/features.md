@@ -48,7 +48,7 @@ These widgets represent individual contributions; these will contain an image (l
 ## Trending Page
 On the trending page, a user can view the top 5 songs or podcasts of the day, along with the number of people who recommended each one. Each song or podcast will be represented by an image icon (either an album cover or podcast cover). This helps users discover popular or trending content, which can lead to better recommendations.
 
-### Analytics Table
+- **Analytics Table**:
 This will display the top 5 shared songs/podcasts. The analytics bar interfaces with the server-side database and fetches the top songs/podcasts. 
 
 Point Value: 3 points (medium feature)
