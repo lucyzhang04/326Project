@@ -24,8 +24,9 @@ Point Value: 4 points (medium feature)
 **Assigned to:** Mai Chi Le and Elijah Sippel
 
 ## Navigation Bar 
-At the top of the webpages, there is a navigation bar that supports navigation inside multi-view application. One can select the remind.me button to return to the landing page (to contribute another song/podcast rec.), or go to any of the 3 other pages: trending, feed, saved, each of which will be explained in detail below. 
+Users will be able to toggle between the "Feed", "Trending", and "Saved" pages by clicking on hyperlinks in the navigation bar. The navigation bar will provide visual feedback to the user by indicating which tab is active at any given moment and by including a hover effect. It will also respond appropriately to screen maximization.
 
+Point Value: 3 points (medium feature)
 **Assigned to:** Neha Aryasomayajula
 
 ## Recommendation Feed
@@ -41,7 +42,7 @@ These widgets represent individual contributions; these will contain an image (l
 ### Dynamic Update of Widgets
 **Assigned to:** Saadhvi Raghav
 
-### Reset Feed 
+### Daily Reset of Feed 
 **Assigned to:** Saadhvi Raghav
 
 ## Trending Page
@@ -62,7 +63,7 @@ Point Value: 5 points [3 points (medium feature) + 2 points (medium feature)]
 
 **Assigned to:** Lucy Zhang 
 
-### Reset Functionality
+### Daily Reset of Trending
 When the daily refresh of the quote/feed occurs, a Reset event will be published and the trending screen will reset--thereby clearing the table. 
 
 Point Value: 2 points (medium feature)
@@ -70,26 +71,11 @@ Point Value: 2 points (medium feature)
 **Assigned to:** Lucy Zhang 
 
 ## Saved Page
-This page displays a user's liked songs. Whenever the user likes a song from the trending or personal feed page, it will be added to the saved page. 
-
-**Assigned to:** Saadhvi Raghav
-
-### Saved Songs Page
-
 Users have the option to like songs/podcasts on the trending and feed pages. The "Saved" page will display songs that a user has liked on either of those pages through interacting with an IndexedDB instance.
 
 Point Value: 3 points (medium feature)
 **Assigned to:** Neha Aryasomayajula
 
-### Navigation Bar
-Users will be able to toggle between the "Feed", "Trending", and "Saved" pages by clicking on hyperlinks in the navigation bar. The navigation bar will provide visual feedback to the user by indicating which tab is active at any given moment and by including a hover effect. It will also respond appropriately to screen maximization.
-
-Point Value: 3 points (medium feature)
+### Daily Reset of Saved Entries
 **Assigned to:** Neha Aryasomayajula
 
-### Daily Refresh of Feed
-
-The theme is updated daily (tentatively at 12:00am EST) for all platform users. In turn, the "Feed", "Trending", and "Saved" pages will be refreshed as well, displaying the new user responses for the updated daily theme. Put simply, it will be cleared daily, accepting and populating entirely new responses/recommendations.
-
-Point value: 5 points (large feature)
-**Assigned to:** Cynthia Rajeshkanna, Neha Aryasomayajula, Saadhvi Raghav, Lucy Zhang
