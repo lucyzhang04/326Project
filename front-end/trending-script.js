@@ -1,3 +1,7 @@
+//const { DatabaseFakeService } = require("./source/services/DatabaseFakeService");
+import { DatabaseFakeService } from "./source/services/DatabaseFakeService.js";
+import { getSongDB } from "./databaseFactory.js";
+
 function loadBaseLayout(){
     fetch('navbar.html')
         .then(response => response.text())
@@ -19,13 +23,16 @@ function loadBaseLayout(){
         .catch(error => console.error('Error loading navbar:', error));
 }
 
-
 function loadTrendingData(){
-    fetch('trendingData.json')
+    /*fetch('trendingData.json')
         .then(response => response.json())
         .then(data =>{
             render(data);
-        });
+        });*/
+
+    let d = new DatabaseFakeService();
+    d.getTopFive()
+        .then(data => render(data));
 }
 
 function render(data){
@@ -63,6 +70,12 @@ function render(data){
         const likeBtn = document.createElement('button');
         likeBtn.classList.add("like-btn");
         likeBtn.textContent = "Like";
+
+        likeBtn.addEventListener("click", () => {
+            const st = getSongDB();
+            st.addSong(trendingItem);
+            alert(`${trendingItem.title} has been added to your liked items!`);
+        })
 
         trendingElem.appendChild(songTitle);
         trendingElem.appendChild(songArtist);

@@ -13,7 +13,7 @@
         <div class="quote-box" id="quote-box"></div>
       </div>
 
-      <script>
+      <script type="module">
         fetch('navbar.html')
           .then(response => response.text())
           .then(data => {
@@ -30,35 +30,58 @@
           })
           .catch(error => console.error('Error loading navbar:', error));
 
-          function loadQuote() {
-            fetch('quotes.json')
-              .then(res => res.json())
-              .then(data => {
-                renderQuote(data);
-              })
-              .catch(error => console.error('Error loading quote:', error));
+         import { TaskDatabase } from './originalDatabase.js';
+         let db = new TaskDatabase('quotesDB');
+
+
+         async function loadQuote() {
+            let currentDay = new Date().toLocaleDateString();
+            await db.openDatabase();
+            let dbTasks = await db.getTasks();
+
+            let quoteIndex = 0;
+            let prevUpdate = null;
+
+            for (let i = 0; i < dbTasks.length; i++) {
+              if (dbTasks[i].id === "prevUpdate") {
+                prevUpdate = dbTasks[i].value;
+              }
+              if (dbTasks[i].id === 'index') {
+                quoteIndex = dbTasks[i].value;
+              }
+            }
+
+            try {
+              let quotes = await fetch('quotes.json')
+              .then(res => res.json());
+              
+                if(currentDay !== prevUpdate) {
+                  if (quoteIndex === null || quoteIndex >= quotes.length - 1) {
+                    await db.addTask({id: 'index', value: 0});
+                    quoteIndex = 0;
+                  } else {
+                    quoteIndex++;
+                    await db.addTask({id: 'index', value: quoteIndex});
+                  }
+                  await db.addTask({id: 'prevUpdate', value: currentDay});
+                }
+              renderQuote(quotes[quoteIndex]);
+            }
+            catch (error) {
+              console.error('Error loading quote:', error);
+            } 
           }
 
           function renderQuote(data) {
-            let quoteIndex = parseInt(localStorage.getItem('index'));
-            if (quoteIndex === null || quoteIndex >= data.length) {
-              localStorage.setItem('index', 0);
-              quoteIndex = 0;
-            }
-            else {
-              localStorage.setItem('index', quoteIndex + 1);
-              quoteIndex++;
-            }
+            let quoteDisplay = document.createElement('div');
 
-            const quoteDisplay = document.createElement('div');
-
-            const dailyQuote = document.createElement('p');
+            let dailyQuote = document.createElement('p');
             dailyQuote.classList.add("quote");
-            dailyQuote.textContent = `"${data[quoteIndex].quote}"`;
+            dailyQuote.textContent = `"${data.quote}"`;
 
-            const quoter = document.createElement('p');
+            let quoter = document.createElement('p');
             quoter.classList.add("person");
-            quoter.textContent = data[quoteIndex].person;
+            quoter.textContent = data.person;
 
             quoteDisplay.appendChild(dailyQuote);
             quoteDisplay.appendChild(quoter);
@@ -73,15 +96,20 @@
             let nextDay = new Date(currDay.getFullYear(), currDay.getMonth(), currDay.getDate() + 1, 0, 0, 0);
             let remainingTime = nextDay.getTime() - currDay.getTime();
 
-            setTimeout(() => {
-              loadQuote();
+            setTimeout(async () => {
+              await loadQuote();
               dailyUpdate();
             }, remainingTime);
           }
 
-          loadQuote();
-          dailyUpdate();
+          async function start() {
+            await loadQuote();
+            dailyUpdate();
+          }
+          
+          start();
     </script>
     
   </body>
 </html>
+

@@ -1,16 +1,7 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remind.me</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div id="navbar"></div>
-    <p class="header">Here's what others are listening to...</p>
-    <script>
-        fetch('navbar.html')
+import { getSongDB } from "./databaseFactory";
+
+function loadBaseLayout(){
+    fetch('navbar.html')
           .then(response => response.text())
           .then(data => {
             document.getElementById('navbar').innerHTML = data;
@@ -23,10 +14,15 @@
                     navLinkEl.classList.add('active');
                 }
             });
+
+            loadLiked();
+
           })
           .catch(error => console.error('Error loading navbar:', error));
-    </script>
-    <div class="grid" id="widget-grid"></div>
-    <script type="module" src="./feed-script.js"></script>
-  </body>
-</html>
+}
+
+function loadLiked(){
+    const st = getSongDB();
+    st.getSong()
+
+}
