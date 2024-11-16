@@ -6,15 +6,15 @@
   1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/20d0ace5f7b6d82d3c91d1131f2ab873e88dc058): Create trending page. Loads navigation bar, fetches data using fake data to display top 5 trending songs/podcasts. 
 
     Later commits that update/modify this commit:
-      - [Mock fetching trending data from database. Integrate into script for rendering purposes.](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848)
-      - [Update trending script to support refresh with new data](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284)
+      - [Commit](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848): Mock fetching trending data from database. Integrate into script for rendering purposes.
+      - [Commit](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284): Update trending script to support refresh with new data
 
   
   2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/07ecd62bbe4ad2f91c74aaf2ebe487f02bd668ed): Create DatabaseFakeService.js to support EventHub/subscriber model architecture. Create file to support fetch function that return the fake data for trending page.  
   
     Later commits that update/modify this commit:
-      - [Update trending script to support refresh with new data](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284)
-      - [Create mock fetch trending file](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848)
+      - [Commit](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284): Update trending script to support refresh with new data
+      - [Commit](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848): Create mock fetch trending file
 
 
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848): Add like functionality to trending page entries. Interacts with indexedDB to save liked songs/podcasts and then display on "saved" page. 
