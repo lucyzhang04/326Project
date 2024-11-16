@@ -155,11 +155,11 @@
             quoteBox.appendChild(quoteDisplay);
           }
 
-          //need to publish an event when the time ends, so that the trending/feed/saved pages can be cleared
-          function publishResetEvent(){
-            const hub = EventHub.getInstance();
-            hub.publish(Events.Reset);
-          }
+      //need to publish an event when the time ends, so that the trending/feed/saved pages can be cleared
+      function publishResetEvent(){
+        const hub = EventHub.getInstance();
+        hub.publish(Events.Reset);
+      }
 
       function dailyUpdate() {
         let currDay = new Date();
