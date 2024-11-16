@@ -16,11 +16,8 @@ function loadBaseLayout(){
                     navLinkEl.classList.add('active');
                 }
             });
-        })
-        .then(() => {
-            //call the loadingTrendingData every 5 sec.
-            setInterval(loadTrendingData, 5000);
-            //loadTrendingData();
+
+            loadTrendingData();
         })
         .catch(error => console.error('Error loading navbar:', error));
 }
@@ -87,13 +84,6 @@ function render(data){
         trendingContElem.appendChild(trendingElem);
 
         //whiteBackground = (whiteBackground+1) % 2;
-    }
-}
-
-function resetPage(){
-    let trendingContElem = document.getElementById("trending-list");
-    while(trendingContElem.firstChild){
-        trendingContElem.removeChild(trendingContElem.lastChild);
     }
 }
 
