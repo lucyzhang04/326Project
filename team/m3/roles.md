@@ -3,9 +3,24 @@
 ## Lucy Zhang - Project Manager 
 - **Role**: Responsible for ensuring that team is on track with regards to implementation goals. Lucy will ensure that individual contributions are cohesive and line up with the timeline set up and agreed upon by members.
 - **Top 3 Commits**:
-  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/21481955929fd3581f0bfbd72674aced16f492b3): Created initial GitHub repository and set up project structure, including the `team/m2` folder and the corresponding project files.
-  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/431b6617e75f72058c958108f6b8096055bb3239): Revised `features.md` to describe the recommendation feed and widget features. Assigned individuals to corresponding features
-  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/5ce4f5b49073bbbfb0a850f8003dd1b93dbe6f10): Set up multiple files for Milestone 2, such as `roles.md`. Created headers to be consistent with example files. 
+  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/20d0ace5f7b6d82d3c91d1131f2ab873e88dc058): Create trending page. Loads navigation bar, fetches data using fake data to display top 5 trending songs/podcasts. 
+
+    Later commits that update/modify this commit:
+      - [Mock fetching trending data from database. Integrate into script for rendering purposes.](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848)
+
+      - [Update trending script to support refresh with new data](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284)
+
+  
+  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/07ecd62bbe4ad2f91c74aaf2ebe487f02bd668ed): Create DatabaseFakeService.js to support EventHub/subscriber model architecture. Create file to support fetch function that return the fake data for trending page.  
+  
+    Later commits that update/modify this commit:
+      - [Update trending script to support refresh with new data](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284)
+      
+      - [Create mock fetch trending file](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848)
+
+
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848): Add like functionality to trending page entries. Interacts with indexedDB to save liked songs/podcasts and then display on "saved" page. 
+
 
 ## Saadhvi Raghav - Note-Taker
 - **Role**: Responsible for documenting team meetings, ensuring that members have a way to clearly reference their responsibilities and tasks for the upcoming weeks as discussed. 
