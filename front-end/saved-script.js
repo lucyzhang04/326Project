@@ -1,4 +1,6 @@
 import { getSongDB } from "./databaseFactory.js";
+import { EventHub } from "./source/eventhub/EventHub.js";
+import { Events } from "./source/eventhub/Events.js";
 
 function loadBaseLayout(){
     fetch('navbar.html')
@@ -13,10 +15,14 @@ function loadBaseLayout(){
                 if (navLinkEl.href.includes(windowPathname)) {
                     navLinkEl.classList.add('active');
                 }
-            });
-
+            })
+          })
+          .then(() => {
+            const hub = EventHub.getInstance();
+            hub.subscribe(Events.Reset, resetPage);
+          })
+          .then(() => {
             loadLiked();
-
           })
           .catch(error => console.error('Error loading navbar:', error));
 }
@@ -29,7 +35,7 @@ async function loadLiked(){
 }
 
 function render(data){
-    let likedContElem = document.getElementById("trending-list");
+    let likedContElem = document.getElementById("liked-list");
     likedContElem.innerHTML = "";
 
     for(const likedSong of data){
@@ -44,17 +50,20 @@ function render(data){
         songArtist.classList.add("song-artist");
         songArtist.textContent = likedSong.artist;
 
-        const songShares = document.createElement('span');
-        songShares.classList.add("song-shares");
-        songShares.textContent = `${likedSong.shares} shares`;
 
         likedSongElem.appendChild(songTitle);
         likedSongElem.appendChild(songArtist);
-        likedSongElem.appendChild(songShares);
-
         likedContElem.appendChild(likedSongElem);
     }
 
+}
+
+function resetPage(){
+    let likedContElem = document.getElementById("liked-list");
+
+    while(likedContElem.firstChild){
+        likedContElem.removeChild(likedContElem.lastChild);
+    }
 }
 
 loadBaseLayout();

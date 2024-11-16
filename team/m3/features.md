@@ -20,7 +20,7 @@ Point Value: 4 points (medium feature)
 
 After uploading a song or podcast, the user will be brought to the dashboard. This dashboard will contain a section describing daily analytics as well as widgets that represent individual responses. This will allow users to see the most popular contributions and further explore podcast series and/or albums.
 
-### Daily Analytics
+### Trending Page
 
 Above the widgets of individual user responses, a user can view the top 5 songs or podcasts of the day, along with the number of people who recommended each one. Each song or podcast will be represented by an image icon (either an album cover or podcast cover). This helps users discover popular or trending content, which can lead to better recommendations.
 
@@ -30,11 +30,24 @@ Above the widgets of individual user responses, a user can view the top 5 songs 
 
 These widgets represent individual contributions; these will contain an image (likely an album cover or podcast cover image) as well as an identifier (ie: the user's name that is entered when uploading their response). This will allow users to visualize the activity and see updates as other users contribute.
 
+**Assigned to:** Saadhvi Raghav
+
+### Saved Songs Page
+
+Users have the option to like songs/podcasts on the trending and feed pages. The "Saved" page will display songs that a user has liked on either of those pages through interacting with an IndexedDB instance.
+
+Point Value: 3 points (medium feature)
+**Assigned to:** Neha Aryasomayajula
+
+### Navigation Bar
+Users will be able to toggle between the "Feed", "Trending", and "Saved" pages by clicking on hyperlinks in the navigation bar. The navigation bar will provide visual feedback to the user by indicating which tab is active at any given moment and by including a hover effect. It will also respond appropriately to screen maximization.
+
+Point Value: 3 points (medium feature)
 **Assigned to:** Neha Aryasomayajula
 
 ### Daily Refresh of Feed
 
-The theme is updated daily (tentatively at 12:00am EST) for all platform users. In turn, the feed displaying user response widgets must be "refreshed" as well. The recommendation feed will display the new user responses for the updated daily theme. Put simply, it will be cleared daily, accepting and populating entirely new responses/recommendations.
+The theme is updated daily (tentatively at 12:00am EST) for all platform users. In turn, the "Feed", "Trending", and "Saved" pages will be refreshed as well, displaying the new user responses for the updated daily theme. Put simply, it will be cleared daily, accepting and populating entirely new responses/recommendations.
 
-Point value: 1 point (small feature)
-**Assigned to:** Elijah Sippel
+Point value: 5 points (large feature)
+**Assigned to:** Cynthia Rajeshkanna, Neha Aryasomayajula, Saadhvi Raghav, Lucy Zhang
