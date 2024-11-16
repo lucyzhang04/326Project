@@ -79,6 +79,9 @@
     <!-- END LOGIN -->
 
     <script type="module">
+        import { EventHub } from "./eventhub/EventHub.js";
+        import { TaskDatabase } from './originalDatabase.js';
+
       fetch("navbar.html")
         .then((response) => response.text())
         .then((data) => {
@@ -87,16 +90,15 @@
           const navLinkEls = document.querySelectorAll(".nav__link");
           const windowPathname = window.location.pathname;
 
-          navLinkEls.forEach((navLinkEl) => {
-            if (navLinkEl.href.includes(windowPathname)) {
-              navLinkEl.classList.add("active");
-            }
-          });
-        })
-        .catch((error) => console.error("Error loading navbar:", error));
-
-      import { TaskDatabase } from "./originalDatabase.js";
-      let db = new TaskDatabase("quotesDB");
+            navLinkEls.forEach(navLinkEl => {
+                if (navLinkEl.href.includes(windowPathname)) {
+                    navLinkEl.classList.add('active');
+                }
+            });
+          })
+          .catch(error => console.error('Error loading navbar:', error));
+         
+         let db = new TaskDatabase('quotesDB');
 
       async function loadQuote() {
         let currentDay = new Date().toLocaleDateString();
@@ -148,10 +150,16 @@
         quoteDisplay.appendChild(dailyQuote);
         quoteDisplay.appendChild(quoter);
 
-        let quoteBox = document.getElementById("quote-box");
-        quoteBox.innerHTML = "";
-        quoteBox.appendChild(quoteDisplay);
-      }
+            let quoteBox = document.getElementById("quote-box");
+            quoteBox.innerHTML = "";
+            quoteBox.appendChild(quoteDisplay);
+          }
+
+          //need to publish an event when the time ends, so that the trending/feed/saved pages can be cleared
+          function publishResetEvent(){
+            const hub = EventHub.getInstance();
+            hub.publish(Events.Reset);
+          }
 
       function dailyUpdate() {
         let currDay = new Date();
@@ -165,11 +173,13 @@
         );
         let remainingTime = nextDay.getTime() - currDay.getTime();
 
-        setTimeout(async () => {
-          await loadQuote();
-          dailyUpdate();
-        }, remainingTime);
-      }
+            //added part such that when the time ends, other views will clear pages.
+            setTimeout(async () => {
+              publishResetEvent();
+              await loadQuote();
+              dailyUpdate();
+            }, remainingTime);
+          }
 
       async function start() {
         await loadQuote();
