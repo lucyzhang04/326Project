@@ -50,6 +50,7 @@ export class SongDatabase {
   // Method to get all tasks-- will be used to display liked songs
   async getSong() {
     const db = await this.openDatabase();
+    console.log("database opened");
     const tx = db.transaction("song");
     const store = tx.objectStore("song");
     const request = store.getAll();
@@ -81,4 +82,22 @@ export class SongDatabase {
       }
     });
   }
+
+  // Method to delete a specific song from the database-- will be used for unliking feature
+  async deleteSong(songId) {
+    const db = await this.openDatabase();
+    const tx = db.transaction("song", "readwrite");
+    const store = tx.objectStore("song");
+    const request = store.delete(songId);
+
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => {
+        resolve("Task deleted successfully!");
+      }
+      request.onerror = () => {
+        reject("Failed to remove task");
+      }
+    });
+  }
 }
+
