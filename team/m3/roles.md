@@ -31,9 +31,7 @@
   3.  [Main saved page commit](https://github.com/lucyzhang04/326Project/commit/513732f260d4e21cb40b014ad6f579f13ef3f848): Retrieving liked songs from IndexedDB instance and dynamically displaying them on the screen.
      
 Additional commits related to #1:
-[Adding new tab to nav bar](https://github.com/lucyzhang04/326Project/commit/f2a9400d8bd1ccccb12f1354a5c67908f7c3eaec)
-
-[Adding width responsiveness to nav bar](https://github.com/lucyzhang04/326Project/commit/6f5247bb4f5dda19b38e108cad4c7835f2c7b292)
+[Adding new tab to nav bar](https://github.com/lucyzhang04/326Project/commit/f2a9400d8bd1ccccb12f1354a5c67908f7c3eaec) and [Adding width responsiveness to nav bar](https://github.com/lucyzhang04/326Project/commit/6f5247bb4f5dda19b38e108cad4c7835f2c7b292)
 
 Additional commit related to #2:
 
