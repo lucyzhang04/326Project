@@ -1,13 +1,19 @@
 # Song/Podcast Search Feature
 ```mermaid
 sequenceDiagram
-  user->>inputform: enters username and song to search
-  inputform ->> SpotifyAPIFakeService: send query on submission
-  SpotifyAPIFakeService ->> fetch.js: POST to searchSong endpoint
-  fetch.js ->> SpotifyAPIFakeService: Returns fake data
-  SpotifyAPIFakeService ->> results_box: populate results with Spotify data
-  user ->> results_box: User clicks to select song(s)
-  results_box ->> ...: ""
+  user->>inputform: enters username and song to search
+  inputform ->> SpotifyAPIFakeService: send query on submission
+  SpotifyAPIFakeService ->> fetch.js: POST to searchSong endpoint
+  fetch.js ->> SpotifyAPIFakeService: Returns fake data
+  SpotifyAPIFakeService ->> results_box: populate results with Spotify data
+  user ->> results_box: User clicks to select song(s)
+  user ->> results_box: User clicks on a selected song(s) again to unselect song(s)
+  results_box ->> results_box : Selected song(s) highlighted blue and stored
+  results_box->>to_add box: Selected song(s) added 
+  results_box ->> results_box : Unselected song(s) returned to previous color and deleted
+  results_box ->> to_add box: Unselected song(s) deleted
+  user ->> to_add box: Submits to be added songs
+  to_add box ->> Feed: Direct to the Feed screen on submission
 ```
 ## Collaboration Acknowledgment
 I collaborated with Mai Chi Le on this feature. I implemented 
