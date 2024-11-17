@@ -32,6 +32,7 @@
 
   2. [Main IndexedDB commit](https://github.com/lucyzhang04/326Project/commit/78a01af92d81396702b734ec877b97e3b0ed16da): Added methods to open IndexedDB instance, add individual songs to database, get all songs from database, and clear all songs from database.
      [Adding primary key to database schema](https://github.com/lucyzhang04/326Project/commit/a9e23acb865ba4bd73d683536f25c7e2272d4a32)
+     
   3.[Main saved page commit](https://github.com/lucyzhang04/326Project/commit/513732f260d4e21cb40b014ad6f579f13ef3f848): Retrieving liked songs from IndexedDB instance and dynamically displaying them on the screen.
   [Daily reset for saved page](https://github.com/lucyzhang04/326Project/commit/b6cf439d6988b9be38faf85d302138a62a82531f)
 
