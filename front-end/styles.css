@@ -245,6 +245,14 @@ body {
     animation: slowAppear 1s;
 }
 
+.no-sub-msg{
+    width: 500px;
+    height: 200px;
+    background-color: #d1dded;
+    color: black;
+    animation: slowAppear 1s;
+}
+
 .img-square {
     width: 250px;
     height: 225px;

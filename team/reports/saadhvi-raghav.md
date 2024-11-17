@@ -62,3 +62,19 @@
 - **Task**: Merged mocking functionality between trending screen and feed screen. 
 - **Details**: Added getSubmission function to DatabaseFakeService, combining the mocking for the backend for both UI screens. Updated feed-script.js to reflect new structure and work with an instance of the DatabaseFakeService.
 - **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/a624c9c25f2328953ffd1e6cd554fbbe21746b18)
+
+### November 16, 2024 
+- **Task**: Added reset functionality to feed UI screen. 
+- **Details**: Updated feed-script.js to listen for Reset events by subscribing to the Reset event using the EventHub. Wrote a clear function to clear all submissions and display an informative message to the user indicating that no submissions are available to display. 
+- **Commit(s)**: [Commit 1](https://github.com/lucyzhang04/326Project/commit/6d46597f8473d64fee7443f2b5dba26b2e743929)
+                 [Commit 2](https://github.com/lucyzhang04/326Project/pull/55/commits/c31611eb35af3e3c5f46232ae67799a2e318e705)
+
+---
+- **Task**: Mocked consistent updates to feed screen submissions. 
+- **Details**: Updated submission-fetch to rotate through returned submissions to mock new submissions being retrieved by querying the backend. Updated feed-screen.js to "retrieve" submissions every 4 seconds and re-render feed without an errors. 
+- **Commit(s)**: [Commit to branch](https://github.com/lucyzhang04/326Project/pull/56/commits/ce4f72627ab5de9d2c0de3e44f9be057663dd248)
+
+---
+- **Task**: Completed feature sequence diagram for feed screen UI 
+- **Details**: Used Mermaid syntax to make a feature sequence diagram for feed screen UI; also added description for feature. 
+- **Commit(s)**: [Commit to `saadhvi-raghav/feature-sequence-diagram.md`](https://github.com/lucyzhang04/326Project/commit/4033952ce1725f01ef39c074ec4e85ccf495ebc4)

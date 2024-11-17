@@ -3,9 +3,18 @@
 ## Lucy Zhang - Project Manager 
 - **Role**: Responsible for ensuring that team is on track with regards to implementation goals. Lucy will ensure that individual contributions are cohesive and line up with the timeline set up and agreed upon by members.
 - **Top 3 Commits**:
-  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/21481955929fd3581f0bfbd72674aced16f492b3): Created initial GitHub repository and set up project structure, including the `team/m2` folder and the corresponding project files.
-  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/431b6617e75f72058c958108f6b8096055bb3239): Revised `features.md` to describe the recommendation feed and widget features. Assigned individuals to corresponding features
-  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/5ce4f5b49073bbbfb0a850f8003dd1b93dbe6f10): Set up multiple files for Milestone 2, such as `roles.md`. Created headers to be consistent with example files. 
+  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/20d0ace5f7b6d82d3c91d1131f2ab873e88dc058): Create trending page. Loads navigation bar, fetches data using fake data to display top 5 trending songs/podcasts.
+
+    Later commits that update/modify this commit: [Update 1](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848) , [Update 2](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284). 
+
+  
+  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/07ecd62bbe4ad2f91c74aaf2ebe487f02bd668ed): Create DatabaseFakeService.js to support EventHub/subscriber model architecture. Create file to support fetch function that return the fake data for trending page.
+  
+    Later commits that update/modify this commit:[Update 1](https://github.com/lucyzhang04/326Project/commit/e43f0651baf936aa57a0265118031ae4bb98d284) , 
+[Update 2](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848)
+
+
+  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/f914d1e9b75108f38bc369ecb875f2ce04171848): Add like functionality to trending page entries. Interacts with indexedDB to save liked songs/podcasts and then display on "saved" page.
 
 ## Saadhvi Raghav - Note-Taker
 - **Role**: Responsible for documenting team meetings, ensuring that members have a way to clearly reference their responsibilities and tasks for the upcoming weeks as discussed. 
@@ -16,10 +25,17 @@
 
 ## Neha Aryasomayajula - Quality Control 
 - **Role**: Responsible for overseeing files submitted by team, verifying that all submitted work is clear, organized, and free of errors. Neha will ensure that all individual work done by members is cohesive across all aspects of the project and presented as a coordinated submission. 
-- **Top 3 Commits**: 
-  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/f0497f90c98bff78ae780aa6a6900193348122ba): Revised `users.md` file by improving the structure and content of each paragraph.
-  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/fce4f7e91f7c5419b22231294d6055ebf69ddcc2): Revised `problem.md` by resolving grammar issues and improving word choice.
-  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/4513288ed88d9c91738060b23736fbe83b2dca9a): Revised `ui-diagrams.md` by resolving grammar issues and improving word choice.
+- **Top 3 Commits**:
+  1.  [Main navigation bar commit](https://github.com/lucyzhang04/326Project/commit/81aa7cc46be48c9aba6ac9a04e1ed950ac695a8a): Set up project from scratch. Added navigation bar to toggle between "Feed" and "Trending" tabs.
+  2.  [Main IndexedDB commit](https://github.com/lucyzhang04/326Project/commit/78a01af92d81396702b734ec877b97e3b0ed16da): Added methods to open IndexedDB instance, add individual songs to database, get all songs from database, and clear all songs from database.
+  3.  [Main saved page commit](https://github.com/lucyzhang04/326Project/commit/513732f260d4e21cb40b014ad6f579f13ef3f848): Retrieving liked songs from IndexedDB instance and dynamically displaying them on the screen.
+     
+Additional commits related to #1:
+[Adding new tab to nav bar](https://github.com/lucyzhang04/326Project/commit/f2a9400d8bd1ccccb12f1354a5c67908f7c3eaec) and [Adding width responsiveness to nav bar](https://github.com/lucyzhang04/326Project/commit/6f5247bb4f5dda19b38e108cad4c7835f2c7b292)
+
+Additional commit related to #2: [Adding primary key to database schema](https://github.com/lucyzhang04/326Project/commit/a9e23acb865ba4bd73d683536f25c7e2272d4a32)
+
+Additional commit related to #3: [Daily reset for saved page](https://github.com/lucyzhang04/326Project/commit/b6cf439d6988b9be38faf85d302138a62a82531f)
 
 ## Elijah Sippel - Documentation Lead
 - **Role**: Responsible for overseeing documentation of team project. Elijah verifies that all of the project documentation is accurate and clearly reflects the "state" of project. Elijah ensures that team members can easily understand to-dos as well as completed features for easy integration of new work/code. 
@@ -47,8 +63,12 @@
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/dab73481ae91a9e9e54e9ce149338812e51c980e): Updated users.md to effectively establish and communicate the intended audience of the app to all team members
 
 ## Marie Shvakel - Timekeeper
-- **Role**: Marie is responsible for ensuring that the team is on track to meet project deadlines, as well as internal deadlines set for individual tasks given by the Task Manager. 
-- **Top 3 Commits**:
+- **Role**: Marie is responsible for ensuring that the team is on track to meet project deadlines, as well as internal deadlines set for individual tasks given by the Task Manager.
+- **Top 3 Commits [Milestone 3]**:
+  1. [Commit 1] (https://github.com/lucyzhang04/326Project/commit/4613f8ee2e3acb4bfc1f7868e97f90f7715a81bb): Implemented Spotify Query using Spotify Web API that querys Spotify for requested songs, searches by song name, and returns list of songs and respective artists that match that request.
+  2. [Commit 2] (): Registered "remind.me" as a Web App in development in Spotify. Added team members as users with access. Created a redirect URI to display query results. 
+  3. [Commit 3] (https://github.com/lucyzhang04/326Project/commit/2ac5a9a9016f1bf49c3d169333ae94c4787e178b): Updated features.md to include & describe the Spotify Query feature that was implemented by me using the Spotify Web API & Express.js.
+- **Top 3 Commits [Milestone 2]**:
   1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/0a29e68af9bc31b76a237f0f180c646e49843342): Filled out `ui-diagrams.md` to explain the different aspects of the first screen, along with a picture of the diagram of the first screen made using figma.
   2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/f818ee9323554a6c8841683ab142f76b891f4c58):I described our problem statement, problem solution, and why it matters in `problem.md`.
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/27d275312719508b0f4037c4d6a0657357b18e25): Edited `marie-shvakel.md` to include timekeeper work and information

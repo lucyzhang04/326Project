@@ -28,12 +28,17 @@ function loadBaseLayout(){
         })
         .then(() => {
             //call the loadingTrendingData every 5 sec.
-            
-            //setInterval(loadTrendingData, 5000);
             loadTrendingData();
+            setInterval(loadTrendingData, 5000);
+            
+            //loadTrendingData();
         })
         .catch(error => console.error('Error loading navbar:', error));
 }
+
+//using v0 for testing purposes to mock updates for trending data to mix up the data returned 
+//and ensure that there's updates propagated. 
+let v0 = true;
 
 function loadTrendingData(){
     /*fetch('trendingData.json')
@@ -43,7 +48,14 @@ function loadTrendingData(){
         });*/
 
     let d = new DatabaseFakeService();
-    d.getTopFive()
+
+    if(v0){
+        v0 = false;
+    }else{
+        v0 = true;
+    }
+
+    d.getTopFive(v0)
         .then(data => render(data));
 }
 

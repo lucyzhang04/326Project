@@ -11,13 +11,18 @@ export class DatabaseFakeService extends Service {
   /**
    * requests the top 5 trending songs from the database
    */
-  async getTopFive() {
-    const response = await mock_trending_fetch("http://localhost:3000/get_top_five", {
+  async getTopFive(v0) {
+    return mock_trending_fetch("http://localhost:3000/get_top_five", v0)
+           .then(response => response.ok ? response.json() : Promise.reject("Could not retrieve trending data."))
+           .catch(error => console.log(error));
+    
+    
+    /*const response = await mock_trending_fetch("http://localhost:3000/get_top_five", {
       method: "POST",
     });
     const data = await response.json();
     //console.log(data);
-    return data;
+    return data;*/
   }
 
   async getSubmissions() {
