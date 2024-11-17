@@ -1,14 +1,16 @@
 body {
     margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
     margin-top: 100px;
 }
-
+  
 .topnav {
     background-color: #c1c4c7;
     overflow: hidden;
-    padding: 20px 10px; 
+    padding: 20px 10px;
     display: flex;
     align-items: center; /* Center items vertically */
     font-family: Arial, Helvetica, sans-serif;
@@ -55,26 +57,26 @@ body {
     color: white;
 }
 
-.logo{
-    color: #5f83b3; 
-    font-size: 20px; 
+.logo {
+    color: #5f83b3;
+    font-size: 20px;
     font-weight: bold;
     margin-right: auto; /* Pushes navigation items to the right */
     line-height: 2;
 }
 
-.header{
+.header {
     font-family: Arial, Helvetica, sans-serif;
-    color: #5f83b3; 
-    font-size: 30px; 
+    color: #5f83b3;
+    font-size: 30px;
     text-align: center;
     font-weight: bold;
 }
 
-.headerLeftAlign{
+.headerLeftAlign {
     font-family: Arial, Helvetica, sans-serif;
-    color: #5f83b3; 
-    font-size: 30px; 
+    color: #5f83b3;
+    font-size: 30px;
     text-align: left;
     margin-left: 8%;
     font-weight: bold;
@@ -86,7 +88,7 @@ body {
     gap: 10px;
 }
 
-.trending-song{
+.trending-song {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr auto;
     align-items: center;
@@ -98,29 +100,29 @@ body {
     justify-content: space-between;
 }
 
-.trending-song:nth-child(even){
+.trending-song:nth-child(even) {
     background-color: #ffffff;
 }
 
-.song-title{
+.song-title {
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
     color: #4a4a4a;
 }
 
-.song-artist{
+.song-artist {
     color: #6d6d6d;
     font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
 }
 
-.song-shares{
+.song-shares {
     color: #4a4a4a;
     font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
 }
 
-.like-btn{
+.like-btn {
     background-color: #ff6666;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
@@ -131,11 +133,11 @@ body {
     cursor: pointer;
 }
 
-.like-btn:hover{
+.like-btn:hover {
     background-color: #ff4d4d;
 }
 
-.quote-box{
+.quote-box {
     background-color: #d1dded;
     border-radius: 15px;
     margin: 30px;
@@ -143,27 +145,27 @@ body {
     min-width: 50%;
 }
 
-.daily-quote{
+.daily-quote {
     padding: 5%;
 }
 
-.quote{
+.quote {
     font-family: Arial, Helvetica, sans-serif;
-    color: black; 
-    font-size: 20px; 
+    color: black;
+    font-size: 20px;
     text-align: center;
     font-weight: bold;
 }
 
-.person{
+.person {
     font-family: Arial, Helvetica, sans-serif;
-    color: #4a4a4a; 
-    font-size: 18px; 
+    color: #4a4a4a;
+    font-size: 18px;
     text-align: center;
     font-style: italic;
 }
 
-.grid{
+.grid {
     display: grid;
     grid-template-rows: repeat(6, auto);
     grid-template-columns: repeat(6, auto);
@@ -171,7 +173,7 @@ body {
     margin: 50px;
 }
 
-.widget{
+.widget {
     height: 350px;
     width: 250px;
     border-radius: 35px;
@@ -181,24 +183,23 @@ body {
     animation: slowAppear 1s;
 }
 
-.widget:hover{
+.widget:hover {
     background-color: #e7e7e7;
 }
 
-.info-container{
+.info-container {
     height: 125px;
     width: 250px;
 }
 
-.info-list{
+.info-list {
     list-style-type: none;
     padding-left: 7%;
     padding-top: 0;
     margin-bottom: 0;
-    
 }
 
-.name-element{
+.name-element {
     font-size: larger;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
@@ -206,7 +207,7 @@ body {
     padding-bottom: 7px;
 }
 
-.host-element{
+.host-element {
     font-size: larger;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 200;
@@ -215,9 +216,8 @@ body {
     padding-bottom: 7px;
 }
 
-
 /*styling for heart button*/
-.heart-button{
+.heart-button {
     background-color: black;
     border: 1px solid black;
     border-radius: 50px;
@@ -230,111 +230,120 @@ body {
     left: 80%;
     color: white;
     font-size: larger;
-    transition: 0.2s
+    transition: 0.2s;
 }
-.heart-button:hover{
+.heart-button:hover {
     background-color: #464646;
     border-color: #464646;
 }
 
-.img-square{
+.no-sub-msg{
+    width: 500px;
+    height: 200px;
+    background-color: #d1dded;
+    color: black;
+    animation: slowAppear 1s;
+}
+
+.img-square {
     width: 250px;
     height: 225px;
     border-radius: 35px;
-    margin:0;
+    margin: 0;
     box-shadow: 0px 10px 5px lightgray;
     display: block;
     background-color: white;
-}
-@keyframes slowAppear {
+    }
+    @keyframes slowAppear {
     0% {
-            opacity: 0;
-            top: 10%;
-        }
+        opacity: 0;
+        top: 10%;
+    }
     100% {
-            opacity: 1;
-            top: 0%;
-        }
+        opacity: 1;
+        top: 0%;
+    }
+}
+  
+
+.song-input-header {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
+    background-color: #edeeef;
+    color: #5f83b3;
+    padding: 15px;
+    width: fit-content;
 }
 
-#login-btn {
-    background-color:#5f83b3;
-    padding: 14px 20px;
-    border-radius: 25px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-  }
-  
-  #login-btn:hover {
-    opacity: 0.8;
-  }
-  
-  /* Extra styles for the cancel button */
-  .cancel-btn {
-    width: auto;
-    padding: 10px 18px;
-    background-color: grey;
-    border-radius: 25px;
-  }
-  
-  .container {
-    padding: 16px;
-    border-radius: 0px 0px 25px 25px;
-  
-  }
-  
-  span.psw {
-    float: right;
-    padding-top: 16px;
-  }
-  
-  /* The Modal (background) */
-  .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 50%; /* Full width */
-    height: 50%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    padding-top: 60px;
-  }
-  
-  /* Modal Content/Box */
-  .modal-content {
+#user-form {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+    max-width: 300px;
+    border-radius: 15px;
+    background-color: #edeeef;
+    height: fit-content;
+}
+
+.input-area {
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: 10px;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+    gap: 10px;
+}
+
+.results, .saved {
+    width: 400px;
+    height: 450px;
+    background-color: #edeeef;
+    border-radius: 15px;
+    padding: 10px;
+    overflow-y: scroll;
+    position: relative;
+}
+
+.results-header, .saved-header {
+    position: sticky;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #5f83b3;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+/*TODO: fix the result header at the top of the container*/
+
+.result, .savedTrack {
+    padding: 10px;
+    display: flex;
+    margin: 5px 5px;
+    gap: 10px;
+    transition: background-color 0.3s;
+    border-radius: 15px;
+    position: relative;
+
+    &::after {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        content: "";
+        width: 100%;
+        height: 1px;
+        background-color: #5f83b3;
+    }
+}
+
+.result:hover {
     background-color: #5f83b3;
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid #888;
-    border-radius: 25px;
-    width: 80%; /* Could be more or less, depending on screen size */
-  }
-  
-  /* Add Zoom Animation */
-  .animate {
-    -webkit-animation: animatezoom 0.6s;
-    animation: animatezoom 0.6s
-  }
-  
-  @-webkit-keyframes animatezoom {
-    from {-webkit-transform: scale(0)} 
-    to {-webkit-transform: scale(1)}
-  }
-    
-  @keyframes animatezoom {
-    from {transform: scale(0)} 
-    to {transform: scale(1)}
-  }
-  
-  /* Change styles for span and cancel button on extra small screens */
-  @media screen and (max-width: 300px) {
-    span.psw {
-       display: block;
-       float: none;
-    }
-    .cancel-btn {
-       width: 100%;
-    }
-  }
+    cursor: pointer;
+}
+
+.result-text {
+    max-width: 300px;
+}
