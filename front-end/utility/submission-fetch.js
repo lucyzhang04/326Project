@@ -1,6 +1,23 @@
-
- export function mock_submission_fetch(url, _options = {}) {
-
+const responses = [
+  { 
+    "name": "How to Save the Planet",
+    "host" : "Jane Doe",
+    "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04141642/Free-Stock-Photos-01.jpg", 
+  },
+  { 
+  "name": "The Daily",
+  "host" : "New York Times",
+  "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04154511/Free-Stock-Photos-06.jpg"
+  },
+  { 
+    "name": "The Rest is History",
+    "host" : "Jane Doe\n",
+    "image": "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp", 
+  }, 
+]
+ 
+ 
+ export function mock_submission_fetch(url, dataSet) {
     return new Promise((resolve, reject) => {
       const delay = 500;
       setTimeout(() => {
@@ -10,7 +27,7 @@
           statusText: "OK",
           url,
           test: () => "this is a test",
-          json: async () => make_response(),
+          json: async () => make_response(dataSet),
           text: async () => "This is a mock response",
         };
 
@@ -23,8 +40,9 @@
     });
   }
 
-  function make_response(){
-    return ([
+  function make_response(dataSet){
+    console.log("here");
+    if(dataSet) return ([
       { 
           "name": "The Rest is History",
           "host" : "Jane Doe\n",
@@ -60,26 +78,9 @@
           "host" : "New York Times",
           "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04154511/Free-Stock-Photos-06.jpg"
       },
-      { 
-          "name": "How to Save the Planet",
-          "host" : "Jane Doe",
-          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04141642/Free-Stock-Photos-01.jpg", 
-      },
-      { 
-          "name": "Podcast 1\n",
-          "host" : "Jack & Jill",
-          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04160429/Free-Stock-Photos-07.jpg", 
-      },
-      { 
-          "name": "The Daily",
-          "host" : "New York Times",
-          "image": "https://static.desygner.com/wp-content/uploads/sites/13/2022/05/04154511/Free-Stock-Photos-06.jpg"
-      },
-      { 
-        "name": "The Rest is History",
-        "host" : "Jane Doe\n",
-        "image": "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp", 
-      },
-    ]);
+    ]); 
+    const chosen = responses.shift();
+    responses.push(chosen);
+    return [chosen]; 
 }
   

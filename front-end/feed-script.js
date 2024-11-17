@@ -5,7 +5,9 @@ import { EventHub } from "./source/eventhub/EventHub.js";
 import { Events } from "./source/eventhub/Events.js";
 
 const grid = document.getElementById("widget-grid"); 
+const noSubWindow = document.getElementById("no-sub-screen"); 
 let reset = false; 
+let dataSet = true; 
 let idCount = 0; 
 /*
 const getSubmissions = async () => {
@@ -77,10 +79,8 @@ const buildWidget = (submission) => {
 }
 
 const noSubs = () => {
-    const msg = document.createElement("div"); 
-    msg.classList.add("no-sub-msg");
     const text = document.createTextNode("Currently no submissions..."); 
-    msg.appendChild(text); 
+    noSubWindow.appendChild(text); 
 }
 
 
@@ -90,16 +90,22 @@ const clearSubs = () => {
 
 const render = () => {
     const db = new DatabaseFakeService();
-    db.getSubmissions().then(submissions => submissions.forEach(sub => buildWidget(sub))).catch(error => {
+    db.getSubmissions(dataSet).then(submissions => submissions.forEach(sub => buildWidget(sub))).catch(error => {
         console.log(error);
         alert("There was an error fetching submissions -- please try again later!");
     }); 
 }
 
 if(!reset){
+    noSubWindow.style.display = "none";
     render();
+    dataSet = false;
+    setInterval(() => {
+        render();
+    }, 4000);
 }
 else{
+    noSubWindow.style.display = "block";
     reset = false; 
     noSubs(); 
 }

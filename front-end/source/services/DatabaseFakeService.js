@@ -25,8 +25,8 @@ export class DatabaseFakeService extends Service {
     return data;*/
   }
 
-  async getSubmissions() {
-    return mock_submission_fetch("http://127.0.0.1:5500/front-end/feed.html")
+  async getSubmissions(dataSet) {
+    return mock_submission_fetch("http://127.0.0.1:5500/front-end/feed.html", dataSet)
     .then(response => response.ok ? response.json() : Promise.reject("Could not retrieve submissions correctly"))
     .catch(error => "Error"); 
 }
