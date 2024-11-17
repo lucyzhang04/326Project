@@ -1,5 +1,5 @@
 import SpotifyAPIFakeService from "./source/services/SpotifyAPIFakeService.js";
-
+let savedTracks = []; // To add/saved songs are stored here
 console.log("LOADED SEARCH SONG");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -15,13 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // inputElem.addEventListener("input", async (event) => {
-  //   const searchValue = event.target.value;
-  //   // const searchResults = await SAPIService.searchSong(searchValue);
-  //   const searchResults = { message: "test" };
-  //   console.log(searchResults);
-  // });
-
   formElem.addEventListener("submit", async (event) => {
     event.preventDefault(); // Prevent page reload
 
@@ -30,10 +23,17 @@ document.addEventListener("DOMContentLoaded", () => {
     renderResults(results);
   });
 
+  document.querySelector('.saved-btn').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    savedTracks.length === 0 ?
+      (alert("Select at least one song please.")) : 
+      (window.location.href = 'feed.html');
+  });
+
   function renderResults(results) {
     console.log(results);
-    let savedTracks = []; // saved songs are stored here
-    resultsElem.innerHTML = ""; // clear the results list
+    resultsElem.innerHTML = ""; // Clear the results list
     results.tracks.items.forEach((result) => {
       const resultElem = document.createElement("div");
       resultElem.classList.add("result");
@@ -59,20 +59,18 @@ document.addEventListener("DOMContentLoaded", () => {
       // Click song to save the song
       resultElem.addEventListener("click", async () => {
         const trackIndex = savedTracks.findIndex(
-          (track) => // should probably work fine with just href
+          (track) => // Should work fine with just href but just in case
             track.name === result.name && track.artists[0].name === result.artists[0].name && track.href === result.href
         );
-        trackIndex !== -1 // TODO: call updateSaved
-          ? (savedTracks.splice(trackIndex, 1), resultElem.style.backgroundColor = "", updateSaved(savedTracks)) 
-          : (savedTracks.push(result), resultElem.style.backgroundColor = "#3267ad", updateSaved(savedTracks));
-        console.log("Saved Tracks:", savedTracks); // to remove
+        trackIndex !== -1 ? 
+          (savedTracks.splice(trackIndex, 1), resultElem.style.backgroundColor = "", updateSaved(savedTracks)) :
+          (savedTracks.push(result), resultElem.style.backgroundColor = "#3267ad", updateSaved(savedTracks));
+        console.log("Saved Tracks:", savedTracks); // Debug line
       });
       resultsElem.appendChild(resultElem);
     });
   }
 
-  //TODO: Add widget with saved songs and save them using indexedDB
-  // make one function later on to reduce code duplication
   function updateSaved(savedTracks) {
     savedElem.innerHTML = "";
     savedTracks.forEach((savedTrack) => {
