@@ -26,7 +26,7 @@ a POST request handled by fetch.js. The fake service returns mock data resemblin
 Spotify results, which are then displayed in a results box. Users can interact with
 the results by selecting one or more songs directly from the displayed list. 
 Clicking on a song saves them in a local variable. When the submit button is pressed,
-the page redirects to the saved song page.
+the page redirects to the Feed page.
 
 For Milestone 4, submitting the form will perform a POST request to the backend to
 store the saved songs in a database entry associated with the user and the current
