@@ -5,12 +5,12 @@
 
 ```mermaid
 sequenceDiagram 
-    User ->> index.html (home page UI): User opens Remind.me application and is brought to home page
-    index.html ->> IndexedDB Database (originalDatabase.js): Opens quotesDB
+    User ->> index.html: User opens Remind.me application and is brought to home page
+    index.html ->> IndexedDB Database: Opens quotesDB
     IndexedDB Database ->> index.html: Connection established
     index.html ->> IndexedDB Database: Gets prevUpdate and quoteIndex values
     IndexedDB Database ->> index.html: Values are obtained
-    index.html ->> quotes.json (mock quote data): Quote data is fetched
+    index.html ->> quotes.json: Quote data is fetched
     quotes.json ->> index.html: List of quotes is obtained
     index.html ->> IndexedDB Database: If necessary (new day), prevUpdate and quoteIndex are updated
     index.html ->> index.html: Current daily quote is rendered
@@ -22,3 +22,8 @@ sequenceDiagram
     index.html ->> index.html: New daily quote is rendered.
     index.html ->> User: New daily quote is displayed
 ```
+index.html - home page UI
+
+IndexedDB Database - originalDatabase.js
+
+quotes.json - mock quote data (API will be used in future)
