@@ -65,13 +65,13 @@ After uploading a song or podcast, the user will be brought to the personal feed
 
   At midnight of each day, the feed is "reset", clearing out the displayed submissions. If there are no submissions to be displayed, a new div element pops up, indicating that there are no submissions to display. If the page is reloaded and new submissions are received, then the rendering begins anew with the new submissions. 
 
-  <ins>Point Value:</ins> 3 points (medium feature)
+  <ins>Point Value:</ins> 2 points (medium feature)
 
   **Assigned to:** Saadhvi Raghav
 
 - **Save Button**
   Each widget has a save button that the user can use to save a particular song to their saved songs. This will add the selected song to an IndexedDB instance, which the "saved" page pulls from to display a user's selected songs.
-  
+
   <ins>Point Value:</ins> 3 points (medium feature)
 
   **Assigned to:** Saadhvi Raghav
