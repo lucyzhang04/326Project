@@ -8,8 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputElem = document.getElementById("podcast-song");
   const resultsElem = document.getElementById("results-list");
   const formElem = document.getElementById("user-form");
+  const savedElem = document.getElementById("saved-list");
 
-  if (!inputElem || !resultsElem || !formElem) {
+  if (!inputElem || !resultsElem || !formElem || !savedElem) {
     console.error("One or more elements not found");
     return;
   }
@@ -55,26 +56,48 @@ document.addEventListener("DOMContentLoaded", () => {
       text.appendChild(artist);
       resultElem.appendChild(text);
 
-      resultElem.addEventListener("click", () => {
+      // Click song to save the song
+      resultElem.addEventListener("click", async () => {
         const trackIndex = savedTracks.findIndex(
-          (track) => track.name === result.name && track.artists[0].name === result.artists[0].name
+          (track) => // should probably work fine with just href
+            track.name === result.name && track.artists[0].name === result.artists[0].name && track.href === result.href
         );
-        if(trackIndex !== -1) {
-          // Remove the track from the savedTracks array and unmark
-          savedTracks.splice(trackIndex, 1);
-          resultElem.style.backgroundColor = ""; // Reset background
-        } else {
-          // Add track to savedTracks array and mark
-          savedTracks.push(result);
-          resultElem.style.backgroundColor = "blue";
-        }
-
+        trackIndex !== -1 // TODO: call updateSaved
+          ? (savedTracks.splice(trackIndex, 1), resultElem.style.backgroundColor = "", updateSaved(savedTracks)) 
+          : (savedTracks.push(result), resultElem.style.backgroundColor = "#3267ad", updateSaved(savedTracks));
         console.log("Saved Tracks:", savedTracks); // to remove
       });
-
-      //TODO: Add widget with saved songs and save them using indexedDB
-
       resultsElem.appendChild(resultElem);
+    });
+  }
+
+  //TODO: Add widget with saved songs and save them using indexedDB
+  // make one function later on to reduce code duplication
+  function updateSaved(savedTracks) {
+    savedElem.innerHTML = "";
+    savedTracks.forEach((savedTrack) => {
+      const resultElem = document.createElement("div");
+      resultElem.classList.add("savedTrack");
+      const imgElem = document.createElement("img");
+      imgElem.src = savedTrack.album.images[0].url;
+      console.log(savedTrack.album.images[0].url);
+      imgElem.alt = savedTrack.name;
+      imgElem.width = 80;
+      resultElem.appendChild(imgElem);
+
+      const text = document.createElement("div");
+      text.classList.add("savedTrack-text");
+      const title = document.createElement("strong");
+      title.innerText = savedTrack.name;
+
+      const artist = document.createElement("p");
+      artist.innerText = savedTrack.artists[0].name;
+
+      text.appendChild(title);
+      text.appendChild(artist);
+      resultElem.appendChild(text);
+      
+      savedElem.appendChild(resultElem);
     });
   }
 });
