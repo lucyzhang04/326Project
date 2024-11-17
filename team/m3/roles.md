@@ -26,9 +26,14 @@
 ## Neha Aryasomayajula - Quality Control 
 - **Role**: Responsible for overseeing files submitted by team, verifying that all submitted work is clear, organized, and free of errors. Neha will ensure that all individual work done by members is cohesive across all aspects of the project and presented as a coordinated submission. 
 - **Top 3 Commits**: 
-  1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/f0497f90c98bff78ae780aa6a6900193348122ba): Revised `users.md` file by improving the structure and content of each paragraph.
-  2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/fce4f7e91f7c5419b22231294d6055ebf69ddcc2): Revised `problem.md` by resolving grammar issues and improving word choice.
-  3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/4513288ed88d9c91738060b23736fbe83b2dca9a): Revised `ui-diagrams.md` by resolving grammar issues and improving word choice.
+  1. [Main navigation bar commit](https://github.com/lucyzhang04/326Project/commit/81aa7cc46be48c9aba6ac9a04e1ed950ac695a8a): Set up project from scratch. Added navigation bar to toggle between "Feed" and "Trending" tabs.
+     [Adding new tab to nav bar](https://github.com/lucyzhang04/326Project/commit/f2a9400d8bd1ccccb12f1354a5c67908f7c3eaec)
+     [Adding width responsiveness to nav bar](https://github.com/lucyzhang04/326Project/commit/6f5247bb4f5dda19b38e108cad4c7835f2c7b292)
+
+  2. [Main IndexedDB commit](https://github.com/lucyzhang04/326Project/commit/78a01af92d81396702b734ec877b97e3b0ed16da): Added methods to open IndexedDB instance, add individual songs to database, get all songs from database, and clear all songs from database.
+     [Adding primary key to database schema](https://github.com/lucyzhang04/326Project/commit/a9e23acb865ba4bd73d683536f25c7e2272d4a32)
+  3.[Main saved page commit](https://github.com/lucyzhang04/326Project/commit/513732f260d4e21cb40b014ad6f579f13ef3f848): Retrieving liked songs from IndexedDB instance and dynamically displaying them on the screen.
+  [Daily reset for saved page](https://github.com/lucyzhang04/326Project/commit/b6cf439d6988b9be38faf85d302138a62a82531f)
 
 ## Elijah Sippel - Documentation Lead
 - **Role**: Responsible for overseeing documentation of team project. Elijah verifies that all of the project documentation is accurate and clearly reflects the "state" of project. Elijah ensures that team members can easily understand to-dos as well as completed features for easy integration of new work/code. 
