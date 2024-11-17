@@ -9,20 +9,6 @@ const noSubWindow = document.getElementById("no-sub-screen");
 let reset = false; 
 let dataSet = true; 
 let idCount = 0; 
-/*
-const getSubmissions = async () => {
-    return mock_fetch("http://127.0.0.1:5500/front-end/feed.html")
-    .then(response => response.ok ? response.json() : Promise.reject("Could not retrieve submission correctly"))
-    .then(submissions => {
-        submissions.forEach(sub => buildWidget(sub))
-    })
-    .catch(error => {
-        alert("There was an error fetching submissions -- please try again later!");
-    }); 
-}
-*/
-
-
 
 const buildWidget = (submission) => {
 
@@ -56,12 +42,16 @@ const buildWidget = (submission) => {
     //adding event listener 
     heartButton.addEventListener("click", async () => {
         
-        getSongDB().addSong(submission).then(response =>{ 
+        getSongDB().addSong({
+                id:idCount, 
+                "title": submission["name"],
+                "artist": submission["host"],
+            }).then(response =>{ 
             alert(`${nameText.innerText} has been saved to liked songs!`);
             console.log("Success");
         })
         .catch(error => {
-            alert(`There was an issue adding ${nameText.innerText} to your saved songs -- please try again later!`);
+            alert(`You've already saved that song!`);
             console.log(`Errors: ${error}`);
         });
         
@@ -103,6 +93,7 @@ if(!reset){
     setInterval(() => {
         render();
     }, 4000);
+    
 }
 else{
     noSubWindow.style.display = "block";
