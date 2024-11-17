@@ -21,7 +21,8 @@
 - **Top 3 Commits**:
   1. [Commit 1](https://github.com/lucyzhang04/326Project/commit/6e28b48b03ceee9c8033ab25f29697bd78c79472): Created `feed-script.js` to design basic layout of feed page. Used grid layout to display basic widgets. Each widget has a save button associated with it so that user can save that particular submission to saved songs. 
   2. [Commit 2](https://github.com/lucyzhang04/326Project/commit/6bfffd73187d4b436f735bceed66e9206d5802cf): Created `db-fetch.js` to mock fetch requests to the backend to retrieve submission data. Each widget displays text info for name and artist using mock data, as well as a save button to save chosen widget to saved songs. Grid can now handle a variable number of submissions dependent upon what is retrieved from server. 
-    **Other Commit Associated with this Feature**: [Extra Commit]https://github.com/lucyzhang04/326Project/commit/66089587988f60d7d4a9e28e5588b06c650361a4
+
+    **Other Commit Associated with this Feature**: [Extra Commit](https://github.com/lucyzhang04/326Project/commit/66089587988f60d7d4a9e28e5588b06c650361a4)
   3. [Commit 3](https://github.com/lucyzhang04/326Project/commit/6d46597f8473d64fee7443f2b5dba26b2e743929): Added 24-hour reset functionality to feed page. UI is now subscribed to the Reset event. Upon receiving one, the widget grid will clear out, displaying a message telling users that there are currently no submissions to be displayed. 
 
 ## Neha Aryasomayajula - Quality Control 
