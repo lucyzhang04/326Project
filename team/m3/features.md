@@ -48,18 +48,28 @@ After uploading a song or podcast, the user will be brought to the personal feed
 
 - **Song/Podast Widgets:**
 
-  These widgets represent individual contributions; these will contain an image (likely an album cover or podcast cover image) as well as an identifier (ie: the user's name that is entered when uploading their response).       This will allow users to visualize the activity and see updates as other users contribute.
+  These widgets represent individual contributions; these will contain an image (an album cover or podcast cover image) as well as an identifier (ie: the name of the podcast/song and the name of the artist/hosts) -- all retrieved from stored data. This will allow users to visualize the activity and see updates as other users contribute. Each widget is also animated to appear in an aesthetically pleasing way. 
+
+  <ins>Point Value:</ins> 3 points (medium feature)
 
   **Assigned to:** Saadhvi Raghav
 
 - **Dynamic Update of Widgets:**
 
-  Insert text. 
+  The submissions are retrieved from a backend database (currently being mocked using a fake database service) and displayed dynamically. Every 4 seconds, the page refreshes the stored data by requesting data again, displaying the newly added submissions to the page. 
+
+  <ins>Point Value:</ins> 3 points (medium feature)
   **Assigned to:** Saadhvi Raghav
 
 - **Daily Reset of Feed:**
 
-  Insert text
+  At midnight of each day, the feed is "reset", clearing out the displayed submissions. If there are no submissions to be displayed, a new div element pops up, indicating that there are no submissions to display. If the page is reloaded and new submissions are received, then the rendering begins anew with the new submissions. 
+  <ins>Point Value:</ins> 3 points (medium feature)
+  **Assigned to:** Saadhvi Raghav
+
+- **Save Button**
+  Each widget has a save button that the user can use to save a particular song to their saved songs. This will add the selected song to an IndexedDB instance, which the "saved" page pulls from to display a user's selected songs.
+  <ins>Point Value:</ins> 3 points (medium feature)
   **Assigned to:** Saadhvi Raghav
 
 ## Trending Page
