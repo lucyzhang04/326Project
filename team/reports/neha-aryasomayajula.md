@@ -32,7 +32,7 @@
 - **Task**: Added width responsiveness to navigation bar.
 - [Commit](https://github.com/lucyzhang04/326Project/commit/6f5247bb4f5dda19b38e108cad4c7835f2c7b292)
 
-###November 16, 2024
+### November 16, 2024
 - **Task**: Fetched liked songs from IndexedDB to display on Saved page. Added primary key to IndexedDB instance to avoid duplicate submissions. Added daily reset to Saved page.
 - [Commit #1](https://github.com/lucyzhang04/326Project/commit/513732f260d4e21cb40b014ad6f579f13ef3f848)
 - [Commit #2](https://github.com/lucyzhang04/326Project/commit/a9e23acb865ba4bd73d683536f25c7e2272d4a32)
