@@ -7,25 +7,25 @@ The landing page of the website will display a new daily theme, particularly a p
 - **Quote Display**
   -  When users open up the application, they are immediately taken to the home page on which the daily quote is generated and displayed. The quote for the day is fetched from quotes.json (the mock data for this implementation of the front-end). To ensure all users, across different devices and sessions observe the same quote on any given day, a quote is selected based on a common index stored in an IndexedDB database. From there, the quote associated with that given index is simply displayed on the home page for the user. 
 
-<ins>Point Value:</ins>: 3 points (medium feature)
+  - <ins>Point Value:</ins>: 3 points (medium feature)
   
-<ins>Assigned To:</ins> Cynthia Rajeshkanna
+  - <ins>Assigned To:</ins> Cynthia Rajeshkanna
 
 
 - **Daily Quote Generation/Reset**
-As for the daily quote generation functionality, at midnight, the quote is changed/updated to a new daily quote. Utilizing the EventHub, a 24 hour timer is used to accordingly update the new daily quote and the values associated with it (the index and previous update).
+  - As for the daily quote generation functionality, at midnight, the quote is changed/updated to a new daily quote. Utilizing the EventHub, a 24 hour timer is used to accordingly update the new daily quote and the values associated with it (the index and previous update).
 
-<ins>Point Value:</ins> 3 points (medium feature)
+  - <ins>Point Value:</ins> 3 points (medium feature)
 
-<ins>Assigned To:</ins> Cynthia Rajeshkanna
+  - <ins>Assigned To:</ins> Cynthia Rajeshkanna
 
 
 - **Daily Quote Consistency/Persistance**
-In order to ensure that users see the same daily quote and that the quote is not updated prematurely, the time of the previous update is also stored in the database. The current date and previous quote update are tracked via IndexedDB to ensure unnessary/premature/delayed quote generation doesn't occur.
+  - In order to ensure that users see the same daily quote and that the quote is not updated prematurely, the time of the previous update is also stored in the database. The current date and previous quote update are tracked via IndexedDB to ensure unnessary/premature/delayed quote generation doesn't occur.
 
-<ins>Point Value:</ins> 2 points (medium feature)
+  - <ins>Point Value:</ins> 2 points (medium feature)
 
-<ins>Assigned To:</ins> Cynthia Rajeshkanna
+  - <ins>Assigned To:</ins> Cynthia Rajeshkanna
 
 
 ## Daily Refresh of Feed
