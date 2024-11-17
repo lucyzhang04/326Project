@@ -88,4 +88,4 @@
 ---
 - **Task**: Updated ui-diagrams. 
 - **Details**: Updated UI diagrams for all pages to reflect changes to login page as well as a navigation bar. Also added a UI diagram for the saved page. 
-- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/4033952ce1725f01ef39c074ec4e85ccf495ebc4)
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/1d793a168be40b8b1eb4363f4b56fb77539bf66f)
