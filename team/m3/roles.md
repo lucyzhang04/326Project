@@ -33,14 +33,9 @@
 Additional commits related to #1:
 [Adding new tab to nav bar](https://github.com/lucyzhang04/326Project/commit/f2a9400d8bd1ccccb12f1354a5c67908f7c3eaec) and [Adding width responsiveness to nav bar](https://github.com/lucyzhang04/326Project/commit/6f5247bb4f5dda19b38e108cad4c7835f2c7b292)
 
-Additional commit related to #2:
+Additional commit related to #2: [Adding primary key to database schema](https://github.com/lucyzhang04/326Project/commit/a9e23acb865ba4bd73d683536f25c7e2272d4a32)
 
-[Adding primary key to database schema](https://github.com/lucyzhang04/326Project/commit/a9e23acb865ba4bd73d683536f25c7e2272d4a32)
-
-
-Additional commit related to #3:
-
-[Daily reset for saved page](https://github.com/lucyzhang04/326Project/commit/b6cf439d6988b9be38faf85d302138a62a82531f)
+Additional commit related to #3: [Daily reset for saved page](https://github.com/lucyzhang04/326Project/commit/b6cf439d6988b9be38faf85d302138a62a82531f)
 
 ## Elijah Sippel - Documentation Lead
 - **Role**: Responsible for overseeing documentation of team project. Elijah verifies that all of the project documentation is accurate and clearly reflects the "state" of project. Elijah ensures that team members can easily understand to-dos as well as completed features for easy integration of new work/code. 
