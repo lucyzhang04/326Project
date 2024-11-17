@@ -1,74 +1,61 @@
 console.log("Loading Exercise...");
+
 export class TaskDatabase {
-  constructor(dbName) {
-    this.dbName = dbName;
+  constructor(name) {
+    this.name = name;
+    this.db = null;
   }
-  // Method to open the database
+
   async openDatabase() {
     return new Promise((resolve, reject) => {
-      if (this.dbName === "") {
-        reject("Database name cannot be empty.");
-        return;
-      }
-      let request = indexedDB.open(this.dbName, 1);
-      request.onupgradeneeded = function (event) {
-        let db = event.target.result;
-        if (!db.objectStoreNames.contains("tasks")) {
-          db.createObjectStore("tasks", { keyPath: "id" });
+      const request = indexedDB.open(this.name, 1);
+      request.onupgradeneeded = (event) => {
+        this.db = event.target.result;
+        if (!this.db.objectStoreNames.contains('tasks')) {
+          this.db.createObjectStore('tasks', { keyPath: 'id' });
         }
       };
-      request.onsuccess = function (event) {
+
+      request.onsuccess = (event) => {
+        this.db = event.target.result;
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        reject('Error opening database: ' + event.target.errorCode);
+      };
+    });
+  }
+
+  async getTasks() {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(['tasks'], 'readonly');
+      const objectStore = transaction.objectStore('tasks');
+      const request = objectStore.getAll();
+
+      request.onsuccess = (event) => {
         resolve(event.target.result);
       };
-      request.onerror = function (event) {
-        reject(event.target.error);
+
+      request.onerror = (event) => {
+        reject('Error getting tasks: ' + event.target.errorCode);
       };
     });
   }
-  // Method to add a task-- will be used to add a liked song to DB
+
   async addTask(task) {
-    const db = await this.openDatabase();
-    const tx = db.transaction("tasks", "readwrite");
-    const store = tx.objectStore("tasks");
-    store.add(task);
     return new Promise((resolve, reject) => {
-      tx.oncomplete = function () {
-        resolve("Task added successfully!");
-      };
-      tx.onerror = function () {
-        reject("Failed to add task.");
-      };
-    });
-  }
-  // Method to get all tasks-- will be used to display liked songs
-  async getTasks() {
-    const db = await this.openDatabase();
-    const tx = db.transaction("tasks");
-    const store = tx.objectStore("tasks");
-    const request = store.getAll();
-    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(['tasks'], 'readwrite');
+      const objectStore = transaction.objectStore('tasks');
+      const request = objectStore.put(task);
+
       request.onsuccess = () => {
-        const tasks = request.result;
-        resolve(tasks);
-      }
-      request.onerror = () => {
-        reject("Failed to get all tasks.");
-      }
-    });
-  }
-  // Method to clear all tasks-- will be used to reset liked songs every 24 hours
-  async clearAllTasks() {
-    const db = await this.openDatabase();
-    const tx = db.transaction("tasks", "readwrite");
-    const store = tx.objectStore("tasks");
-    const request = store.clear();
-    return new Promise((resolve, reject) => {
-      request.onsuccess = () => {
-        resolve("Tasks cleared successfully!");
-      }
-      request.onerror = () => {
-        reject("Failed to clear tasks");
-      }
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        reject('Error adding task: ' + event.target.errorCode);
+      };
     });
   }
 }
