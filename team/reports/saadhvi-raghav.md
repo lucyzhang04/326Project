@@ -43,11 +43,6 @@
 - **Details**: Added name and host text displays for submission widgets, pulling from fake submission JSON data. Updated grid functionality so that it could handle a variable number of submissions/widgets. Updated styles.css to make sure UI reflected UI diagram. 
 - **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/6bfffd73187d4b436f735bceed66e9206d5802cf)
 
---- 
-- **Task**: Added text display to widget submissions. 
-- **Details**: Added name and host text displays for submission widgets, pulling from fake submission JSON data. Updated grid functionality so that it could handle a variable number of submissions/widgets. Updated styles.css to make sure UI reflected UI diagram. 
-- **Commit**: [Commit to feed-screen branch](https://github.com/lucyzhang04/326Project/commit/6bfffd73187d4b436f735bceed66e9206d5802cf)
-
 ---
 - **Task**: Added image display to widget submissions. 
 - **Details**: Added image displays for submission widgets, pulling from fake submission JSON data/image links. Updated styles.css to make sure UI reflected UI diagram. Also added basic event listener to save button, to show that songs could be saved to user's saved list. 
