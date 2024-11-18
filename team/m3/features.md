@@ -41,8 +41,30 @@ On the website's landing page, users can search for a song or podcast using a se
 
 As of Milestone 3, we are mocking the song search using static data. This feature includes considerable thought and integration with other features, as each stage of the form leads to additional data being loaded, displayed, and stored.
 
-Point Value: 4 points (medium feature)
+Point Value: 5 points (large feature)
+
 **Assigned to:** Mai Chi Le and Elijah Sippel
+
+- **Dynamic Update for "To Add" Widget**
+  -  When users click and select song(s) from the Results box, the song(s) are highlighted blue for clarity and when the song is unselected, the highlight is deleted. Furthermore, a "To Add" box/widget next to the Results box ensures selected songs are dynamically, visually displayed in the "To Add" box without delay and removed upon unselection in real-time leveraging responsive UI logic.
+
+  - <ins>Point Value:</ins> 3 points (medium feature)
+
+  - <ins>Assigned To:</ins> Mai Chi Le
+
+- **Submit Button with Validation**
+  - Before proceeding to the general feed, the submit button makes sure users have added at least one song displayed in "To Add" box. User's selections upon submission are dynamically validated, blocking navigation if no songs are selected. Users are seamlessly redirected to the feed screen, where they may see other people's contributions, after submission is complete.
+
+  - <ins>Point Value:</ins> 2 points (medium feature)
+
+  - <ins>Assigned To:</ins> Mai Chi Le
+
+- **Storing Songs in Array (Foundation for Backend Integration)**
+  User selection is tracked in real-time within a dynamically updated array, forming the groundwork for backend integration in milestone 4. This array ensures selections are recorded in real time and provides the necessary data structure for storage and for further processing.
+
+  - <ins>Point Value:</ins> 1 point (small feature)
+
+  - <ins>Assigned To:</ins> Mai Chi Le
 
 ## Spotify Query
 
