@@ -41,7 +41,7 @@ On the website's landing page, users can search for a song or podcast using a se
 
 As of Milestone 3, we are mocking the song search using static data. This feature includes considerable thought and integration with other features, as each stage of the form leads to additional data being loaded, displayed, and stored.
 
-Point Value: 5 points (large feature)
+Point Value: 4 points (large feature)
 
 **Assigned to:** Mai Chi Le and Elijah Sippel
 
