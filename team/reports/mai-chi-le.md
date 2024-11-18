@@ -46,7 +46,7 @@
 
 ---
 
-### Nov 14 and 15, 2024
+### Nov 17, 2024
 - **Task**: Implemented Submit Button below To Add for Song Submission and Redirection 
 - **Details**: Before proceeding to the general feed, the submit button makes sure users have added at least one song displayed in "To Add" box. User's selections upon submission are dynamically validated, blocking navigation if no songs are selected. Users are seamlessly redirected to the feed screen, where they may see other people's contributions, after submission is complete.
 - **Link to Commit**: [Commit on index.html, styles.css, search-song.js](https://github.com/lucyzhang04/326Project/commit/ff36b9b492b24c50c2c0b33517a084a419a4bf02)
