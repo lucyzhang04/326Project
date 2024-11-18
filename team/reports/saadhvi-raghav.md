@@ -78,3 +78,14 @@
 - **Task**: Completed feature sequence diagram for feed screen UI 
 - **Details**: Used Mermaid syntax to make a feature sequence diagram for feed screen UI; also added description for feature. 
 - **Commit(s)**: [Commit to `saadhvi-raghav/feature-sequence-diagram.md`](https://github.com/lucyzhang04/326Project/commit/4033952ce1725f01ef39c074ec4e85ccf495ebc4)
+
+---
+- **Task**: Fixed browser sizing issues for feed UI. 
+- **Details**: Feed Screen was appearing zoomed in on Chrome but fine on Safari, so re-adjusted sizing of widget grid on feed screen page to make sure that it re-sized properly on both browsers. 
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/2c86198549eaf2a4049fd01bb68d227ed1bad10e)
+
+
+---
+- **Task**: Updated ui-diagrams. 
+- **Details**: Updated UI diagrams for all pages to reflect changes to login page as well as a navigation bar. Also added a UI diagram for the saved page. 
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/1d793a168be40b8b1eb4363f4b56fb77539bf66f)
