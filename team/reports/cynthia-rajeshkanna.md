@@ -85,6 +85,12 @@
 ---
 
 ### November 17, 2024 
+- **Task**: Addressed IndexedDB error
+- **Details** Debugged and fixed IndexedDB error on Mai's laptop, as the error did not show up on my own device.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/commit/8e2d762b813d3761594adfcd63b49ec35a32b561)
+
+---
+
 - **Task**: Created and modified feature-sequence-diagram
 - **Details** Made a feature-sequence diagram for quote display/generation feature.
 - **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/commit/7fd5ce3de2b285fd30e5b9cb70e7eaccb299e739)
