@@ -2,8 +2,10 @@ const express = require('express');
 const path = require('path');
 const ModelFactory = require('./model/ModelFactory.js');
 const app = express();
+const spotifyRoutes = require('./query-spotify/spotify-routes.js');
 const PORT = 8888;
 
+app.use('/spotify', spotifyRoutes);
 
 //For now I am initializing the database in the default route. We should eventually add a routes file similar to Tasks V5.
 app.get('/', async (req, res) => {
