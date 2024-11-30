@@ -14,12 +14,12 @@ const redirect_uri = 'http://localhost:8888/spotify/callback?'; // Your redirect
 router.use(cookieParser());
 
 router.use(session({
-    secret: 'your-secret-key', // Replace with a strong, randomly generated secret
+    secret: generateRandomString(16), 
     resave: false,
     saveUninitialized: true,
     cookie: {
         secure: false, // Set to true if using HTTPS
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000 //how long cookie is valid (24 hours)(in milliseconds)
     }
 }));
 
