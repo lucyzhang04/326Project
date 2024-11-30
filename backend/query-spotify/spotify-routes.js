@@ -1,50 +1,103 @@
 const request = require('request');
+const express = require('express');
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const router = express.Router();
 
 // Your Spotify API credentials
 const client_id = '398a298f15a24856964bd8562cd93b16';
 const client_secret = '3fb8cc68a3184950bfdc6d006dac94d3';
-const redirect_uri = 'http://localhost:8888/callback'; // Your redirect URI
+const redirect_uri = 'http://localhost:8888/spotify/callback?'; // Your redirect URI
 
-app.get('/search',  async (req, res) =>{
+// http://localhost:8888/spotify/search?query_type=track&query_literal=sweet
 
-    let access_token = req.query.access_token;
+router.use(cookieParser());
+
+router.use(session({
+    secret: 'your-secret-key', // Replace with a strong, randomly generated secret
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false, // Set to true if using HTTPS
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
+
+router.get('/search',  async (req, res) =>{
+
+    // front end should always just call search
+    // if access_token already specified we simply perform query to spotify
+    // if token is not present we initiate login sequence.
+    // add parameter validation
+    // check query_type for supported types - track, episode, show
+    const supportedQueryTypes = ["track", "episode", "show"];
+
+    let query_literal = req.query.query_literal || null;
+    let query_type = req.query.query_type || null;
+
+    // getting access token from session cookie 
+    let access_token = req.session.access_token || null;
+
+    // if query_type or query_literal not set - we should return an error
+    if ( query_type === undefined || !supportedQueryTypes.includes(query_type) ||
+         query_literal === undefined || query_literal.length === 0  ) {
+        // generate some kind of error
+        return res.redirect('/#' +
+            new URLSearchParams({
+                error: 'invalid_parameters'
+            }));
+    }
+
+    // if access token is not set initiate login 
+    if ( access_token === null || access_token.length === 0 )
+    {
+        return res.redirect('/spotify/login?' +
+            new URLSearchParams({
+                query_literal: req.query.query_literal,
+                query_type: req.query.query_type
+            }));
+    }
 
     console.log("search called with access token"+access_token);
 
-
-    async function fetchSongs(code) {
+    async function fetchInformation(code) {
         const searchURL = 'https://api.spotify.com/v1/search?' +
             new URLSearchParams({
-                q:  'Sweet Nothing',
-                type: 'track'
+                q:  query_literal,
+                type: query_type
             });
 
         const result = await fetch(searchURL, {
             method: "GET", headers: { Authorization: `Bearer ${code}` }
         });
 
-        spotifyRes = await result.json();
+        let spotifyRes = await result.json();
 
-        return spotifyRes.tracks.items;
+        return query_type === 'track' ? spotifyRes.tracks.items :
+            (query_type === 'episode' ? spotifyRes.episodes.items : spotifyRes.shows.items);
     }
 
-    items = await fetchSongs(access_token);
+    let items = await fetchInformation(access_token);
 
+    /*
     let songs = '';
 
     for (let i = 0; i < items.length; i++) {
         songs += '<p><b>Song</b>: '+items[i].name+' <b>Artist</b>: '+items[i].artists[0].name+'</p>';
     }
 
-//    console.log(songs);
+     */
 
-    let htmlPage = '<!DOCTYPE html><html lang="EN"><head><title>Song List</title></head><body><h1>Hello from Remind.Me</h1>'+songs+'</body></html>'
+//  console.log(songs);
 
-    res.send(htmlPage);
+   // let htmlPage = '<!DOCTYPE html><html lang="EN"><head><title>Song List</title></head><body><h1>Hello from Remind.Me</h1>'+songs+'</body></html>'
+
+ //   res.send(htmlPage);
 
 });
 
-app.get('/profile',  (req, res) =>{
+/*
+router.get('/profile',  (req, res) =>{
 
     let access_token = req.query.access_token;
 
@@ -66,10 +119,16 @@ app.get('/profile',  (req, res) =>{
 
     fetchProfile(access_token);
 });
+*/
 
-app.get('/login', (req, res) => {
+router.get('/login', (req, res) => {
     const scopes = 'user-read-private user-read-email';
     const state = generateRandomString(16);
+
+    //session cookies to store type & literal
+    req.session.query_type = req.query.query_type;
+    req.session.query_literal = req.query.query_literal;
+
     const authorizeURL = 'https://accounts.spotify.com/authorize?' +
         new URLSearchParams({
             response_type: 'code',
@@ -82,8 +141,12 @@ app.get('/login', (req, res) => {
     res.redirect(authorizeURL);
 });
 
-app.get('/callback', (req, res) => {
+// This handle being called by Spotify
+router.get('/callback', (req, res) => {
     const code = req.query.code || null;
+
+    let query_literal = req.session.query_literal;
+    let query_type = req.session.query_type;
 
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
@@ -100,20 +163,17 @@ app.get('/callback', (req, res) => {
 
     request.post(authOptions, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            const access_token = body.access_token;
-            const refresh_token = body.refresh_token;
-
             // Use the access token to access the Spotify Web API
-            // ...
-
-
             // Pass the token to the browser to make requests from there
-            res.redirect('/search?' +
-                new URLSearchParams({
-                    access_token: access_token,
-                    refresh_token: refresh_token
-                }));
 
+            req.session.access_token = body.access_token;
+            req.session.refresh_token = body.refresh_token;
+
+            res.redirect('/spotify/search?' +
+                new URLSearchParams({
+                    query_literal: query_literal,
+                    query_type: query_type
+                }));
         } else {
             res.redirect('/#' +
                 new URLSearchParams({
@@ -123,7 +183,7 @@ app.get('/callback', (req, res) => {
     });
 });
 
-app.get('/refresh_token', (req, res) => {
+router.get('/refresh_token', (req, res) => {
     const refresh_token = req.query.refresh_token;
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
@@ -136,7 +196,7 @@ app.get('/refresh_token', (req, res) => {
         },
         json: true
     };
-
+    //sends message to API
     request.post(authOptions, (error, response, body) => {
         if (!error && response.statusCode === 200) {
             const access_token = body.access_token;
@@ -146,6 +206,8 @@ app.get('/refresh_token', (req, res) => {
         }
     });
 });
+
+module.exports = router;
 
 // Helper function to generate random strings
 const generateRandomString = (length) => {
