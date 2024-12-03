@@ -11,6 +11,17 @@ const redirect_uri = 'http://localhost:8888/spotify/callback?'; // Your redirect
 
 // http://localhost:8888/spotify/search?query_type=track&query_literal=sweet
 
+// Helper function to generate random strings
+const generateRandomString = (length) => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+};
+
 router.use(cookieParser());
 
 router.use(session({
@@ -42,11 +53,14 @@ router.get('/search',  async (req, res) =>{
     if ( query_type === undefined || !supportedQueryTypes.includes(query_type) ||
          query_literal === undefined || query_literal.length === 0  ) {
         // generate some kind of error
+        console.log("=> /search: invalid search parameters");
         return res.redirect('/#' +
             new URLSearchParams({
                 error: 'invalid_parameters'
             }));
     }
+
+    console.log("=> /search: "+query_literal);
 
     // if access token is not set initiate login 
     if ( access_token === null || access_token.length === 0 )
@@ -58,7 +72,7 @@ router.get('/search',  async (req, res) =>{
             }));
     }
 
-    console.log("search called with access token"+access_token);
+    console.log("search called with access token: "+access_token);
 
     async function fetchInformation(code) {
         const searchURL = 'https://api.spotify.com/v1/search?' +
@@ -79,49 +93,28 @@ router.get('/search',  async (req, res) =>{
 
     let items = await fetchInformation(access_token);
 
-    /*
-    let songs = '';
+    //comment later
+   /* let songs = '';
 
     for (let i = 0; i < items.length; i++) {
         songs += '<p><b>Song</b>: '+items[i].name+' <b>Artist</b>: '+items[i].artists[0].name+'</p>';
     }
 
-     */
+     
 
-//  console.log(songs);
+  //console.log(songs);
 
-   // let htmlPage = '<!DOCTYPE html><html lang="EN"><head><title>Song List</title></head><body><h1>Hello from Remind.Me</h1>'+songs+'</body></html>'
+    let htmlPage = '<!DOCTYPE html><html lang="EN"><head><title>Song List</title></head><body><h1>Hello from Remind.Me</h1>'+songs+'</body></html>'
 
- //   res.send(htmlPage);
+   res.send(htmlPage);
+   */
 
 });
 
-/*
-router.get('/profile',  (req, res) =>{
 
-    let access_token = req.query.access_token;
-
-    console.log("profile called with access token"+access_token);
-
-
-    async function fetchProfile(code) {
-        const result = await fetch("https://api.spotify.com/v1/me", {
-            method: "GET", headers: { Authorization: `Bearer ${code}` }
-        });
-
-        res = await result.json();
-
-        console.log('Display Name=' +res.display_name+' Country='+res.country );
-
-
-        return result;
-    }
-
-    fetchProfile(access_token);
-});
-*/
 
 router.get('/login', (req, res) => {
+    console.log("=> /login");
     const scopes = 'user-read-private user-read-email';
     const state = generateRandomString(16);
 
@@ -143,6 +136,7 @@ router.get('/login', (req, res) => {
 
 // This handle being called by Spotify
 router.get('/callback', (req, res) => {
+    console.log("=> /callback");
     const code = req.query.code || null;
 
     let query_literal = req.session.query_literal;
@@ -184,6 +178,7 @@ router.get('/callback', (req, res) => {
 });
 
 router.get('/refresh_token', (req, res) => {
+    console.log("=> /refresh_token");
     const refresh_token = req.query.refresh_token;
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
@@ -209,13 +204,3 @@ router.get('/refresh_token', (req, res) => {
 
 module.exports = router;
 
-// Helper function to generate random strings
-const generateRandomString = (length) => {
-    let text = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (let i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-};
