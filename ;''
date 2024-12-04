@@ -386,7 +386,7 @@ body {
 }
 
 .hidden {
-  display: none;
+  visibility: hidden;
 }
 
 #user-container {
@@ -422,6 +422,5 @@ body {
 
 #end-elem {
   margin-right: 10px;
-  display: flex;
 }
 
