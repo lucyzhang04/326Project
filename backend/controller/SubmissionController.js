@@ -26,7 +26,6 @@ class SubmissionController {
 
       // Create the new submission object with a unique ID
       const sub = await this.model.createSubmission(req.body);
-      console.log(req.body);
       //Notify subscribers of addition of new sub
       eventHub.publish(Events.NewSub, req.body); 
       
