@@ -45,6 +45,50 @@ class SubmissionController {
     await this.model.deleteSubmission();
     res.json(await this.model.readSubmission());
   }
+
+  //calls database method to retrieve 5 most-shared songs/podcasts for the given day. 
+  async getTopFive(req, res){
+    const trending = await this.model.getTrending();
+
+    //need to check the format of trending to see what the json wrapping on it looks like 
+    return res.json({trending});
+  }
+
+  //calls database method to retieve top 3 users with  most contributions over the past week. 
+  async getTopContributors(req, res){
+    const topContributors = await this.model.getTopContributors();
+
+    return res.json({topContributors});
+  }
+
+  //calls database to calculate the total sum of
+  async getUserContributionTime(req, res){
+    if(!req.body || !req.userID){
+      return res.status(400).json({ error: "UserID is required." });
+    }
+
+    const userID = req.userID;
+
+    const userContributionTime = await this.model.getUserContributionTime(userID);
+
+    return res.json({userContributionTime});
+  }
+
+  async getUserTotalContributions(req, res){
+    if(!req.body || !req.userID){
+      return res.status(400).json({ error: "UserID is required." });
+    }
+
+    const userID = req.userID;
+
+    const userTotalContributions = await this.model.getUserTotalContributions(userID);
+
+    return res.json({userTotalContributions});
+  }
+
+  async getLongestStreak(req, res){
+
+  }
 }
 
 
