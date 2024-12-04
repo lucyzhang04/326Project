@@ -38,3 +38,5 @@ router.get("/get-longest-streak", async(req, res) => {
 
     await db.getLongestStreak(req, res);
 })
+
+module.exports = router;

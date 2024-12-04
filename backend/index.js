@@ -17,6 +17,9 @@ app.use("/feed", songRoutes);
 app.use("/spotify", spotifyRoutes);
 app.use("/user", userRoutes);
 
+const summaryStatRoutes = require("./routes/trending-routes.js");
+app.use('/trending', summaryStatRoutes);
+
 const socket = new WebSocket.Server({port: 9000}); 
 
 socket.on("connection", (s) => {
@@ -32,6 +35,7 @@ socket.on("connection", (s) => {
         s.send(JSON.stringify(sub));
     })
 });
+
 
 //For now I am initializing the database in the default route. We should eventually add a routes file similar to Tasks V5.
 app.get("/", async (req, res) => {
