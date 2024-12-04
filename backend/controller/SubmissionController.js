@@ -1,5 +1,8 @@
 //import ModelFactory from "../model/ModelFactory.js";
 const ModelFactory = require("../model/ModelFactory.js");
+const Events = require("../eventhub/Events.js"); 
+const eventHub = require("../eventhub/EventHub.js");
+
 class SubmissionController {
   constructor() {
     ModelFactory.getModel().then((model) => {
@@ -23,7 +26,9 @@ class SubmissionController {
 
       // Create the new submission object with a unique ID
       const sub = await this.model.createSubmission(req.body);
-
+      //Notify subscribers of addition of new sub
+      eventHub.publish(Events.NewSub, req.body); 
+      
       // Send back the created submission as the response
       return res.status(201).json(sub);
     } catch (error) {
