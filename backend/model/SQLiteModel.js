@@ -25,10 +25,26 @@ const Submission = sequelize.define("Submission", {
   imageURL: {
     type: DataTypes.STRING,
     allowNull: true,
-  }
+  },
 });
 
 //Add more tables here
+
+const User = sequelize.define("User", {
+  userid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  spotify_refresh_token: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
 
 class _SQLiteModel {
   constructor() {}
@@ -40,12 +56,22 @@ class _SQLiteModel {
 
     if (fresh) {
       await this.delete();
-      await this.createSubmission({ title: "Default Title 1", artist: "Artist 1" });
-      await this.createSubmission({ title: "Default Title 2", artist: "Artist 2" });
-      await this.createSubmission({ title: "Default Title 3", artist: "Artist 3" });
+      await this.createSubmission({
+        title: "Default Title 1",
+        artist: "Artist 1",
+      });
+      await this.createSubmission({
+        title: "Default Title 2",
+        artist: "Artist 2",
+      });
+      await this.createSubmission({
+        title: "Default Title 3",
+        artist: "Artist 3",
+      });
     }
   }
 
+  // SUBMISSION
   async createSubmission(submission) {
     return await Submission.create(submission);
   }
@@ -74,8 +100,42 @@ class _SQLiteModel {
       return;
     }
 
-    await Submission.destroy({ where: { submissionid: submission.submissionid } });
+    await Submission.destroy({
+      where: { submissionid: submission.submissionid },
+    });
     return task;
+  }
+
+  // USER
+  async readUser(id = null) {
+    if (id) {
+      return await User.findByPk(id);
+    }
+    return await User.findAll();
+  }
+
+  async createUser(user) {
+    return await User.create(user);
+  }
+
+  async updateUser(user) {
+    const useru = await User.findByPk(user.userid);
+    if (!useru) {
+      return null;
+    }
+    await useru.update(user);
+    return useru;
+  }
+
+  async deleteUser(user = null) {
+    if (user === null) {
+      await User.destroy({ truncate: true });
+      return;
+    }
+    await User.destroy({
+      where: { userid: user.userid },
+    });
+    return user;
   }
 }
 
@@ -83,3 +143,4 @@ const SQLiteModel = new _SQLiteModel();
 
 // export default SQLiteModel;
 module.exports = SQLiteModel;
+

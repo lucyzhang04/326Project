@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -40,16 +40,17 @@
         <div class="saved" id="saved">
           <h3 class="saved-header">To Add</h3>
           <div id="saved-list"></div>
-          <button class="saved-btn">Submit</button> 
+          <button class="saved-btn">Submit</button>
         </div>
         <script type="module" src="search-song.js"></script>
       </div>
     </div>
 
     <script type="module">
-        import { EventHub } from "./source/eventhub/EventHub.js";
-        import { Events } from "./source/eventhub/Events.js";
-        import { TaskDatabase } from './originalDatabase.js';
+      import { EventHub } from "./source/eventhub/EventHub.js";
+      import { Events } from "./source/eventhub/Events.js";
+      import { TaskDatabase } from "./originalDatabase.js";
+      import SpotifyLogin from "./SpotifyLogin.js";
 
       fetch("navbar.html")
         .then((response) => response.text())
@@ -59,15 +60,15 @@
           const navLinkEls = document.querySelectorAll(".nav__link");
           const windowPathname = window.location.pathname;
 
-            navLinkEls.forEach(navLinkEl => {
-                if (navLinkEl.href.includes(windowPathname)) {
-                    navLinkEl.classList.add('active');
-                }
-            });
-          })
-          .catch(error => console.error('Error loading navbar:', error));
-         
-         let db = new TaskDatabase('quotesDB');
+          navLinkEls.forEach((navLinkEl) => {
+            if (navLinkEl.href.includes(windowPathname)) {
+              navLinkEl.classList.add("active");
+            }
+          });
+        })
+        .catch((error) => console.error("Error loading navbar:", error));
+
+      let db = new TaskDatabase("quotesDB");
 
       // Modified loadQuote() function to utilize an API, as opposed to prior implementation with mocked quote data
       async function loadQuote() { 
@@ -116,13 +117,13 @@
         quoteDisplay.appendChild(dailyQuote);
         quoteDisplay.appendChild(quoter);
 
-            let quoteBox = document.getElementById("quote-box");
-            quoteBox.innerHTML = "";
-            quoteBox.appendChild(quoteDisplay);
-          }
+        let quoteBox = document.getElementById("quote-box");
+        quoteBox.innerHTML = "";
+        quoteBox.appendChild(quoteDisplay);
+      }
 
       //need to publish an event when the time ends, so that the trending/feed/saved pages can be cleared
-      function publishResetEvent(){
+      function publishResetEvent() {
         const hub = EventHub.getInstance();
         hub.publish(Events.Reset);
       }
@@ -135,17 +136,17 @@
           currDay.getDate() + 1,
           0,
           0,
-          0
+          0,
         );
         let remainingTime = nextDay.getTime() - currDay.getTime();
 
-            //added part such that when the time ends, other views will clear pages.
-            setTimeout(async () => {
-              publishResetEvent();
-              await loadQuote();
-              dailyUpdate();
-            }, remainingTime);
-          }
+        //added part such that when the time ends, other views will clear pages.
+        setTimeout(async () => {
+          publishResetEvent();
+          await loadQuote();
+          dailyUpdate();
+        }, remainingTime);
+      }
 
       async function start() {
         await loadQuote();
@@ -153,6 +154,8 @@
       }
 
       start();
+
+      SpotifyLogin();
     </script>
   </body>
 </html>
