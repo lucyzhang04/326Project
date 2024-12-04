@@ -74,32 +74,17 @@
         await db.openDatabase();
         let dbTasks = await db.getTasks();
 
-        let quoteIndex = 0;
-        let prevUpdate = null;
-
-        for (let i = 0; i < dbTasks.length; i++) {
-          if (dbTasks[i].id === "prevUpdate") {
-            prevUpdate = dbTasks[i].value;
-          }
-          if (dbTasks[i].id === "index") {
-            quoteIndex = dbTasks[i].value;
-          }
-        }
-
+        let prevUpdate = dbTasks.find(task => task.id === "prevUpdate");
+        
         try {
-          let quotes = await fetch("quotes.json").then((res) => res.json());
+            let quotes = await fetch("https://zenquotes.io/api/random");
 
-          if (currentDay !== prevUpdate) {
-            if (quoteIndex === null || quoteIndex >= quotes.length - 1) {
-              await db.addTask({ id: "index", value: 0 });
-              quoteIndex = 0;
-            } else {
-              quoteIndex++;
-              await db.addTask({ id: "index", value: quoteIndex });
-            }
-            await db.addTask({ id: "prevUpdate", value: currentDay });
-          }
-          renderQuote(quotes[quoteIndex]);
+            let quoteData = await quotes.json();
+            console.log(quoteData);
+            let quoteSpecific = {quote: quoteData[0].q, person: quoteData[0].a};
+
+            await db.addTask({id: "prevUpdate", value: currentDay});
+            renderQuote(quoteSpecific);
         } catch (error) {
           console.error("Error loading quote:", error);
         }
@@ -159,3 +144,41 @@
     </script>
   </body>
 </html>
+
+
+<!-- previous loadQuote function (with mocked quote data)
+async function loadQuote() {
+  let currentDay = new Date().toLocaleDateString();
+  await db.openDatabase();
+  let dbTasks = await db.getTasks();
+
+  let quoteIndex = 0;
+  let prevUpdate = null;
+
+  for (let i = 0; i < dbTasks.length; i++) {
+    if (dbTasks[i].id === "prevUpdate") {
+      prevUpdate = dbTasks[i].value;
+    }
+    if (dbTasks[i].id === "index") {
+      quoteIndex = dbTasks[i].value;
+    }
+  }
+
+  try {
+    let quotes = await fetch("quotes.json").then((res) => res.json());
+
+    if (currentDay !== prevUpdate) {
+      if (quoteIndex === null || quoteIndex >= quotes.length - 1) {
+        await db.addTask({ id: "index", value: 0 });
+        quoteIndex = 0;
+      } else {
+        quoteIndex++;
+        await db.addTask({ id: "index", value: quoteIndex });
+      }
+      await db.addTask({ id: "prevUpdate", value: currentDay });
+    }
+    renderQuote(quotes[quoteIndex]);
+  } catch (error) {
+    console.error("Error loading quote:", error);
+  }
+} -->
