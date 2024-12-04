@@ -25,6 +25,18 @@ const Submission = sequelize.define("Submission", {
   imageURL: {
     type: DataTypes.STRING,
     allowNull: true,
+  },
+
+  //create a dummy userID/submissionDate attribute for now
+  userID: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+
+  submissionDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+
   }
 });
 
@@ -77,6 +89,125 @@ class _SQLiteModel {
     await Submission.destroy({ where: { submissionid: submission.submissionid } });
     return task;
   }
+
+  /*method queries into submissions table to count the freq. of unique song/podcast names
+  and returns the top 5 shared entries for a given day (will filter submission table by current day)
+  with info such as artist, name, and freq. 
+  */
+  async getTrending(){
+
+    //TO-DO: MODIFY SO THAT THE QUERIES FILTER BASED ON CURRENT DAY --> DONE
+
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    try{
+
+      const topSongs = await Submission.findAll({
+        //the attributes value essentially determine the freq. count for each song title
+        attributes: [
+          'title',
+          'artist',
+          [Sequelize.fn('COUNT', Sequelize.col('title')), 'songFrequency']
+        ], 
+        //filters out only entries that were submitted at most a week ago. 
+        where: {
+          submissionDate: {
+            [Op.gte]: currentDate,
+          },
+        },
+        //this aggregates the frequency by group
+        group: ['title'],
+        //sort in desc. order and limit to top 5.
+        order: [[Sequelize.literal('songFrequency'), 'DESC']],
+        limit: 5
+      });
+
+      //map each entry to {title, artist, freq}
+      return topSongs.map(entry => ({
+        title: entry.title,
+        artist: entry.artist,
+        frequency: entry.getDataValue('songFrequency'),
+      }));
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+  /*method determines the top 3 contributors for the past week (will filter by past 7 days in submission table)
+  by querying into the submission table to find the # of contributions of each user and then 
+  joins results with the user table on userID to ultimately return a result
+  that contains a mapping of username to # of contributions for the 
+  3 users with the most contributions over the past week. 
+  */
+
+  async getTopContributors(){
+
+    //TO-DO: MODIFY SO THAT THE QUERIES FILTER OUT ENTRIES THAT ARE OLDER THAN A WEEK --> DONE
+    const currentDate = new Date();
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+    try{
+      const topContributors = await Submission.findAll({
+        attributes: [
+          'userID',
+          [Sequelize.fn('COUNT', Sequelize.col('userID')), 'userFrequency']
+        ],
+        where: {
+          submissionDate : {
+            [Op.gte]: oneWeekAgo,
+          },
+        },
+        group: ['userID'],
+        order: [[Sequelize.literal('userFrequency'), 'DESC']],
+        limit: 3
+      });
+
+      //for now, since the users database isn't set up yet, the userID will be returned
+      //ultimately, will need to join the submission/user databases using userID to associate username with the freq.
+      return topContributors.map(user => ({
+        user: user.userID,
+        frequency: user.getDataValue('userFrequency'),
+      }));
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+  async getUserContributionTime(userID){
+    try{
+      const totalContributionTime = await Submission.sum({
+        where: {
+          userID: userID,
+        }
+      });
+
+      return totalContributionTime;
+    }catch(e){
+      //unable to fetch user's contributions from submission table
+      console.log(e);
+    }
+  }
+
+  async getUserTotalContributions(userID){
+    try{ 
+      const totalContributions = await Submission.count({
+        where: {
+          userID: userID,
+        },
+      });
+
+      return totalContributions;
+
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+
+
+
 }
 
 const SQLiteModel = new _SQLiteModel();
