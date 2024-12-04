@@ -8,12 +8,14 @@ const WebSocket = require("ws");
 
 const app = express();
 const spotifyRoutes = require("./query-spotify/spotify-routes.js");
+const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
 
 app.use(express.json());
 const songRoutes = require("./routes/feed-routes.js");
 app.use("/feed", songRoutes);
 app.use("/spotify", spotifyRoutes);
+app.use("/user", userRoutes);
 
 const summaryStatRoutes = require("./routes/trending-routes.js");
 app.use('/trending', summaryStatRoutes);

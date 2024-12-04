@@ -2,8 +2,8 @@ const request = require('request');
 const express = require('express');
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const { default: fetch } = require("node-fetch");
 const ModelFactory = require('../model/ModelFactory.js');
-
 const router = express.Router();
 
 // Your Spotify API credentials
@@ -163,27 +163,56 @@ router.get('/callback', (req, res) => {
         },
         json: true
     };
+  }
 
-    request.post(authOptions, (error, response, body) => {
-        if (!error && response.statusCode === 200) {
-            // Use the access token to access the Spotify Web API
-            // Pass the token to the browser to make requests from there
+  request.post(authOptions, (error, response, body) => {
+    console.log("=> /callback: post request");
+    console.log("body: ", body);
+    if (!error && response.statusCode === 200) {
+      // Use the access token to access the Spotify Web API
+      // Pass the token to the browser to make requests from there
+      req.session.access_token = body.access_token;
+      req.session.refresh_token = body.refresh_token;
 
-            req.session.access_token = body.access_token;
-            req.session.refresh_token = body.refresh_token;
+      fetch("https://api.spotify.com/v1/me", {
+        headers: {
+          Authorization: `Bearer ${body.access_token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          req.session.username = data.id;
+        })
+        .then(() => {
+          fetch("http://localhost:8888/user/find_or_create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: req.session.username,
+              spotify_refresh_token: req.session.refresh_token,
+            }),
+          });
+        });
 
-            res.redirect('/spotify/search?' +
-                new URLSearchParams({
-                    query_literal: query_literal,
-                    query_type: query_type
-                }));
-        } else {
-            res.redirect('/#' +
-                new URLSearchParams({
-                    error: 'invalid_token'
-                }));
-        }
-    });
+      // post request to user/find_or_create endpoint passing in username and refresh_token
+      res.redirect(
+        "/#" +
+          new URLSearchParams({
+            access_token: body.access_token,
+            refresh_token: body.refresh_token,
+          }),
+      );
+    } else {
+      res.redirect(
+        "/#" +
+          new URLSearchParams({
+            error: "invalid_token",
+          }),
+      );
+    }
+  });
 });
 
 router.get('/refresh_token', (req, res) => {
