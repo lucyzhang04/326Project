@@ -26,9 +26,18 @@ const buildWidget = (submission) => {
 
     
     //filling out text Nodes and image info
-    nameText.innerText = submission["name"];
-    hostText.innerText = submission["host"];
-    img.src = submission["image"];;
+    /**
+     * nameText.innerText = submission["name"];
+        hostText.innerText = submission["host"];
+        img.src = submission["image"];
+     * 
+     */
+    nameText.innerText = submission["title"];
+    hostText.innerText = submission["artist"];
+    if(submission["image"] === undefined || submission["image"] === "fake link"){
+        img.src = "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp"
+    }
+    else img.src = submission["image"];
 
     //adding classes 
     nameText.classList.add("name-element");
@@ -44,8 +53,8 @@ const buildWidget = (submission) => {
         
         getSongDB().addSong({
                 id:idCount, 
-                "title": submission["name"],
-                "artist": submission["host"],
+                "title": submission["title"],
+                "artist": submission["artist"],
             }).then(response =>{ 
             alert(`${nameText.innerText} has been saved to liked songs!`);
             console.log("Success");
@@ -88,11 +97,13 @@ const render = () => {
 
 if(!reset){
     noSubWindow.style.display = "none";
-    render();
+    //render();
     dataSet = false;
+    /*
     setInterval(() => {
         render();
     }, 4000);
+    */
     
 }
 else{
@@ -106,4 +117,15 @@ hub.subscribe(Events.Reset, (data) => {
     clearSubs();
 });
 
-
+console.log("executing");
+const socket = new WebSocket("ws://localhost:9000");
+socket.onopen = (event) => {
+    console.log("Socket has successfully opened");
+}
+socket.onmessage = (message) => {
+    //only thing you should receive is a submission --> can do checks later 
+    console.log("Its working!");
+    const newSub = JSON.parse(message.data); 
+    console.log(newSub);
+    buildWidget(newSub);
+}
