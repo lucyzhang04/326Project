@@ -69,14 +69,16 @@
          
          let db = new TaskDatabase('quotesDB');
 
-      async function loadQuote() {
+         async function loadQuote() {
         let currentDay = new Date().toLocaleDateString();
         await db.openDatabase();
         let dbTasks = await db.getTasks();
 
         let prevUpdate = dbTasks.find(task => task.id === "prevUpdate");
+        let currQuote = dbTasks.find(task => task.id === "dailyQuote");
         
         try {
+          if (currentDay !== prevUpdate.value) {
             let quotes = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
 
             let quoteData = await quotes.json();
@@ -84,7 +86,13 @@
             let quoteSpecific = {quote: quoteData[0].q, person: quoteData[0].a};
 
             await db.addTask({id: "prevUpdate", value: currentDay});
+            await db.addTask({id: "dailyQuote", value: JSON.stringify(quoteSpecific)});
             renderQuote(quoteSpecific);
+          }
+          else {
+            let quoteSpecific = JSON.parse(currQuote.value);
+            renderQuote(quoteSpecific);
+          }
         } catch (error) {
           console.error("Error loading quote:", error);
         }
