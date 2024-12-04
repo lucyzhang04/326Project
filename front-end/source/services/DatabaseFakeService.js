@@ -12,7 +12,7 @@ export class DatabaseFakeService extends Service {
    * requests the top 5 trending songs from the database
    */
   async getTopFive(v0) {
-    return mock_trending_fetch("http://localhost:3000/get_top_five", v0)
+    return mock_trending_fetch("http://localhost:3000/get-top-five", v0)
            .then(response => response.ok ? response.json() : Promise.reject("Could not retrieve trending data."))
            .catch(error => console.log(error));
     
