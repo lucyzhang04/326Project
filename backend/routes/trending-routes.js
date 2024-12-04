@@ -15,7 +15,7 @@ router.get("/get-top-five", async(req, res) => {
 router.get("/get-top-contributors", async(req, res) => {
     console.log("Reached top contributors endpoint");
 
-    await db.getTopContributors(req, res);
+    await db.getTopContributor(req, res);
 })
 
 //Route for getting the given user's total contributions (in min) from subission database
@@ -38,5 +38,3 @@ router.get("/get-longest-streak", async(req, res) => {
 
     await db.getLongestStreak(req, res);
 })
-
-module.exports = router;
