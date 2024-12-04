@@ -88,16 +88,30 @@ const clearSubs = () => {
 }
 
 const render = () => {
+    /*
     const db = new DatabaseFakeService();
     db.getSubmissions(dataSet).then(submissions => submissions.forEach(sub => buildWidget(sub))).catch(error => {
         console.log(error);
         alert("There was an error fetching submissions -- please try again later!");
     }); 
+    */
+   
+   fetch("http://localhost:8888/feed/get_all_subs").then(async (data) => {
+        console.log(data);
+        return data.ok ? await data.json() : Promise.reject("There was an error fetching submissions."); 
+   }).then((data) => {
+        const submissions = data.submissions; 
+        submissions.forEach(sub => buildWidget(sub));
+   }).catch(error => {
+    console.log(error);
+    alert("There was an error fetching submissions -- please try again later!");
+   }); 
+
 }
 
 if(!reset){
     noSubWindow.style.display = "none";
-    //render();
+    render();
     dataSet = false;
     /*
     setInterval(() => {
