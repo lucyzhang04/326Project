@@ -1,7 +1,4 @@
-const express = require('express');
 const request = require('request');
-const app = express();
-const port = 8888;
 
 // Your Spotify API credentials
 const client_id = '398a298f15a24856964bd8562cd93b16';
@@ -148,10 +145,6 @@ app.get('/refresh_token', (req, res) => {
             });
         }
     });
-});
-
-app.listen(port, () => {
-    console.log(`Express app listening at http://localhost:${port}`);
 });
 
 // Helper function to generate random strings

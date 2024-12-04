@@ -5,6 +5,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "private": true,
@@ -12,6 +13,8 @@
     "express": "^4.21.1",
     "node-fetch": "^3.3.2",
     "open": "^10.1.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "sequelize": "^6.37.5",
+    "sqlite3": "^5.1.7"
   }
 }

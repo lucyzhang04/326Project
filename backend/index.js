@@ -3,11 +3,10 @@ const path = require('path');
 const ModelFactory = require('./model/ModelFactory.js');
 const app = express();
 const PORT = 8888;
+
 app.use(express.json());
 const songRoutes = require('./routes/feed-routes.js');
 app.use('/feed', songRoutes);
-
-//app.use(express.urlencoded({extended: true}))
 
 //For now I am initializing the database in the default route. We should eventually add a routes file similar to Tasks V5.
 app.get('/', async (req, res) => {

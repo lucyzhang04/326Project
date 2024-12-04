@@ -42,6 +42,7 @@ class SubmissionController {
   }
 }
 
+
 //export default new SubmissionController();
 const submissionController = new SubmissionController(); 
 module.exports = submissionController;
