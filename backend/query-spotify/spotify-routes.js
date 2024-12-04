@@ -2,6 +2,7 @@ const request = require("request");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const { default: fetch } = require("node-fetch");
 const router = express.Router();
 
 // Your Spotify API credentials
@@ -186,6 +187,29 @@ router.get("/callback", (req, res) => {
       req.session.access_token = body.access_token;
       req.session.refresh_token = body.refresh_token;
 
+      fetch("https://api.spotify.com/v1/me", {
+        headers: {
+          Authorization: `Bearer ${body.access_token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          req.session.username = data.id;
+        })
+        .then(() => {
+          fetch("http://localhost:8888/user/find_or_create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: req.session.username,
+              spotify_refresh_token: req.session.refresh_token,
+            }),
+          });
+        });
+
+      // post request to user/find_or_create endpoint passing in username and refresh_token
       res.redirect(
         "/#" +
           new URLSearchParams({

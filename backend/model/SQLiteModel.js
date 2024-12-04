@@ -114,6 +114,15 @@ class _SQLiteModel {
     return await User.findAll();
   }
 
+  async findUser(user) {
+    return await User.findOne({
+      where: {
+        username: user.username,
+        spotify_refresh_token: user.spotify_refresh_token,
+      },
+    });
+  }
+
   async createUser(user) {
     return await User.create(user);
   }
@@ -143,4 +152,3 @@ const SQLiteModel = new _SQLiteModel();
 
 // export default SQLiteModel;
 module.exports = SQLiteModel;
-
