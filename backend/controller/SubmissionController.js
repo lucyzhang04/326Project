@@ -1,5 +1,5 @@
-import ModelFactory from "../model/ModelFactory.js";
-
+//import ModelFactory from "../model/ModelFactory.js";
+const ModelFactory = require("../model/ModelFactory.js");
 class SubmissionController {
   constructor() {
     ModelFactory.getModel().then((model) => {
@@ -42,4 +42,7 @@ class SubmissionController {
   }
 }
 
-export default new SubmissionController();
+
+//export default new SubmissionController();
+const submissionController = new SubmissionController(); 
+module.exports = submissionController;
