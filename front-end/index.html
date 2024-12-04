@@ -77,7 +77,7 @@
         let prevUpdate = dbTasks.find(task => task.id === "prevUpdate");
         
         try {
-            let quotes = await fetch("https://zenquotes.io/api/random");
+            let quotes = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
 
             let quoteData = await quotes.json();
             console.log(quoteData);
