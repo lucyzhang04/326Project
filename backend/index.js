@@ -5,14 +5,14 @@ const eventHub = require("./eventhub/EventHub");
 const Events = require("./eventhub/Events.js");
 const WebSocket = require("ws"); 
 const app = express();
-//const spotifyRoutes = require('./query-spotify/spotify-routes.js');
+const spotifyRoutes = require('./query-spotify/spotify-routes.js');
 const PORT = 8888;
 
 
 app.use(express.json());
 const songRoutes = require('./routes/feed-routes.js');
 app.use('/feed', songRoutes);
-//app.use('/spotify', spotifyRoutes);
+app.use('/spotify', spotifyRoutes);
 
 const socket = new WebSocket.Server({port: 9000}); 
 
