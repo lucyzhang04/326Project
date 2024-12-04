@@ -84,3 +84,8 @@
 - **Task**: Updated ui-diagrams. 
 - **Details**: Updated UI diagrams for all pages to reflect changes to login page as well as a navigation bar. Also added a UI diagram for the saved page. 
 - **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/1d793a168be40b8b1eb4363f4b56fb77539bf66f)
+
+### December 3, 2024 
+- **Task**: Added basic feed routes to back-end to service front end feed screen UI.  
+- **Details**: Create routes folder and feed-routes.js, and wrote two basic endpoints to get all submissions stored in database, as well as add a recent user submission to the database. Also updated structure of SubmissionController.js to reflect commonjs type rather than using import statements. Updated index.js to mount new routes.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/4e78d48dac5617c4d282e31586990775eafac565)
