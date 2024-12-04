@@ -1,11 +1,25 @@
 const request = require('request');
 const express = require('express');
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 const router = express.Router();
 
 // Your Spotify API credentials
 const client_id = '398a298f15a24856964bd8562cd93b16';
 const client_secret = '3fb8cc68a3184950bfdc6d006dac94d3';
 const redirect_uri = 'http://localhost:8888/spotify/callback?'; // Your redirect URI
+
+router.use(cookieParser());
+
+router.use(session({
+    secret: 'your-secret-key', // Replace with a strong, randomly generated secret
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false, // Set to true if using HTTPS
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
 
 router.get('/search',  async (req, res) =>{
 
@@ -100,17 +114,16 @@ router.get('/login', (req, res) => {
     const state = generateRandomString(16);
     let query_literal = req.query.query_literal;
     let query_type = req.query.query_type;
-    let updated_redirect_url = redirect_uri/*+new URLSearchParams({
-        query_literal: query_literal,
-        query_type: query_type
-    })*/;
+
+    req.session.query_type = query_type;
+    req.session.query_literal = query_literal;
 
     const authorizeURL = 'https://accounts.spotify.com/authorize?' +
         new URLSearchParams({
             response_type: 'code',
             client_id: client_id,
             scope: scopes,
-            redirect_uri: updated_redirect_url,
+            redirect_uri: redirect_uri,
             state: state
         });
 
@@ -120,18 +133,15 @@ router.get('/login', (req, res) => {
 // This handle being called by Spotify
 router.get('/callback', (req, res) => {
     const code = req.query.code || null;
-    let query_literal = req.query.query_literal;
-    let query_type = req.query.query_type;
-    let updated_redirect_url = redirect_uri/*+new URLSearchParams({
-        query_literal: query_literal,
-        query_type: query_type
-    })*/;
+
+    let query_literal = req.session.query_literal;
+    let query_type = req.session.query_type;
 
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
         form: {
             code: code,
-            redirect_uri: updated_redirect_url,
+            redirect_uri: redirect_uri,
             grant_type: 'authorization_code'
         },
         headers: {
