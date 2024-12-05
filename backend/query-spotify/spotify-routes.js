@@ -2,7 +2,7 @@ const request = require("request");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const { default: fetch } = require("node-fetch");
+const fetch = require("node-fetch");
 const ModelFactory = require("../model/ModelFactory.js");
 const router = express.Router();
 
