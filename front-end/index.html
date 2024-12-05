@@ -81,7 +81,7 @@
         let currQuote = dbTasks.find(task => task.id === "dailyQuote");
         
         try {
-          if (currentDay !== prevUpdate.value) {
+          if (currentDay !== prevUpdate.value || !prevUpdate) {
             // Utilized the following API endpoint (https://zenquotes.io/api/random) to generate random quotes. 
             // Needed to resolved CORS issues by setting up CORS middleware
             let quotes = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
