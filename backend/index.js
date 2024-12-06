@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require("cors"); 
 const path = require('path');
 const ModelFactory = require('./model/ModelFactory.js');
 const eventHub = require("./eventhub/EventHub");
@@ -9,10 +10,18 @@ const spotifyRoutes = require('./query-spotify/spotify-routes.js');
 const PORT = 8888;
 
 
+app.use(cors());
 app.use(express.json());
-const songRoutes = require('./routes/feed-routes.js');
-app.use('/feed', songRoutes);
-app.use('/spotify', spotifyRoutes);
+const songRoutes = require("./routes/feed-routes.js");
+app.use("/feed", songRoutes);
+app.use("/spotify", spotifyRoutes);
+//app.use("/user", userRoutes);
+
+
+//app.use(express.json());
+//const songRoutes = require('./routes/feed-routes.js');
+//app.use('/feed', songRoutes);
+//app.use('/spotify', spotifyRoutes);
 
 const socket = new WebSocket.Server({port: 9000}); 
 
