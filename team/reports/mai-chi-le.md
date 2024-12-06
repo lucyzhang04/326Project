@@ -15,7 +15,7 @@
 ---
 
 ### Nov 14 and 15, 2024
-- **Task**: Created and Implemented Login Pop-Uo UI
+- **Task**: Created and Implemented Login Pop-Up UI
 - **Details**: Implemeted a login UI feature with a Login button that would trigger a pop up with slow zoom animation to a login page with username and password fields and a submit button
 - **Link to Commit**: [Commit on index.html, styles.css](https://github.com/lucyzhang04/326Project/commit/6fb51649858458688cf01d4e7c4a762cbec188d9)
 
