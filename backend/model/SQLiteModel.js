@@ -7,6 +7,24 @@ const sequelize = new Sequelize({
   storage: "database.sqlite",
 });
 
+// Define User table
+const User = sequelize.define("User", {
+  userid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true, // Ensure that usernames are unique
+  },
+  spotify_refresh_token: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
 // Define the Submissions table
 const Submission = sequelize.define("Submission", {
   submissionid: {
@@ -26,37 +44,27 @@ const Submission = sequelize.define("Submission", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-
-  //create a dummy userID/submissionDate attribute for now
-  userID: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-
   submissionDate: {
     type: DataTypes.DATE,
     allowNull: false,
-
+    defaultValue: Sequelize.NOW, // Automatically set to current timestamp if not provided
+  },
+  user_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: User, 
+      key: 'username',
+    },
+    onDelete: 'CASCADE', // Cascade delete: when a User is deleted, the associated Submissions are also deleted
+    onUpdate: 'CASCADE', // Cascade update: if the username is updated, the associated Submissions are updated
   }
 });
 
-//Add more tables here
+// Define relationships
+User.hasMany(Submission, { foreignKey: 'user_name' }); // A User can have many Submissions
+Submission.belongsTo(User, { foreignKey: 'user_name' }); // A Submission belongs to a User
 
-const User = sequelize.define("User", {
-  userid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  spotify_refresh_token: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
 
 class _SQLiteModel {
   constructor() {}
@@ -64,7 +72,7 @@ class _SQLiteModel {
   async init(fresh = false) {
     try {
       await sequelize.authenticate();
-      await sequelize.sync({ force: fresh }); 
+      await sequelize.sync({force: fresh }); 
       if (fresh) {
         await this.delete();
         console.log("Database initialized with a fresh start (tables dropped).");
@@ -173,15 +181,15 @@ class _SQLiteModel {
     try{
       const topContributors = await Submission.findAll({
         attributes: [
-          'userID',
-          [Sequelize.fn('COUNT', Sequelize.col('userID')), 'userFrequency']
+          'user_name',
+          [Sequelize.fn('COUNT', Sequelize.col('user_name')), 'userFrequency']
         ],
         where: {
           submissionDate : {
             [Op.gte]: oneWeekAgo,
           },
         },
-        group: ['userID'],
+        group: ['user_name'],
         order: [[Sequelize.literal('userFrequency'), 'DESC']],
         limit: 3
       });
@@ -189,7 +197,7 @@ class _SQLiteModel {
       //for now, since the users database isn't set up yet, the userID will be returned
       //ultimately, will need to join the submission/user databases using userID to associate username with the freq.
       return topContributors.map(user => ({
-        user: user.userID,
+        user: user.user_name,
         frequency: user.getDataValue('userFrequency'),
       }));
     }catch(e){
@@ -197,11 +205,11 @@ class _SQLiteModel {
     }
   }
 
-  async getUserContributionTime(userID){
+  async getUserContributionTime(user_name){
     try{
       const totalContributionTime = await Submission.sum({
         where: {
-          userID: userID,
+          user_name: user_name,
         }
       });
 
@@ -212,11 +220,11 @@ class _SQLiteModel {
     }
   }
 
-  async getUserTotalContributions(userID){
+  async getUserTotalContributions(user_name){
     try{ 
       const totalContributions = await Submission.count({
         where: {
-          userID: userID,
+          user_name: user_name,
         },
       });
 
@@ -227,9 +235,33 @@ class _SQLiteModel {
     }
   }
 
-
-
-
+  async getYourSubmissions(username) {
+    if (!username) {
+      throw new Error("Username filter is required.");
+    }
+  
+    try {
+      const submissions = await Submission.findAll({
+        attributes: ["title", "artist"], // Extract title and artist from Submission table
+        include: [
+          {
+            model: User,
+            attributes: ["username"], // Extract username from the User table
+            where: { username }, // Mandatory filter on username
+          },
+        ],
+      });
+  
+      return submissions.map((submission) => ({
+        username: submission.User.username, // Access the associated User's username
+        title: submission.title,
+        artist: submission.artist,
+      }));
+    } catch (error) {
+      console.error("Error fetching submissions with user details:", error);
+      throw error;
+    }
+  }
 
   // USER
   async readUser(id = null) {
