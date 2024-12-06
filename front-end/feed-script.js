@@ -80,6 +80,8 @@ const buildWidget = (submission) => {
 const noSubs = () => {
     const text = document.createTextNode("Currently no submissions..."); 
     noSubWindow.appendChild(text); 
+    noSubWindow.classList.add("no-sub-msg");
+    noSubWindow.style.display = "block";
 }
 
 
@@ -97,18 +99,28 @@ const render = () => {
     */
    
    fetch("http://localhost:8888/feed/get_all_subs").then(async (data) => {
-        console.log(data);
+        
         return data.ok ? await data.json() : Promise.reject("There was an error fetching submissions."); 
    }).then((data) => {
+        console.log(data);
         const submissions = data.submissions; 
-        submissions.forEach(sub => buildWidget(sub));
+        if(submissions.length === 0){
+            console.log("here in correct block")
+            reset = false; 
+            noSubs(); 
+        }
+        else{
+            noSubWindow.style.display = "none";
+            submissions.forEach(sub => buildWidget(sub));
+        } 
    }).catch(error => {
     console.log(error);
     alert("There was an error fetching submissions -- please try again later!");
    }); 
 
 }
-
+render();
+/*
 if(!reset){
     noSubWindow.style.display = "none";
     render();
@@ -117,7 +129,7 @@ if(!reset){
     setInterval(() => {
         render();
     }, 4000);
-    */
+    
     
 }
 else{
@@ -125,6 +137,7 @@ else{
     reset = false; 
     noSubs(); 
 }
+*/
 const hub = EventHub.getInstance(); 
 hub.subscribe(Events.Reset, (data) => {
     reset = true; 
@@ -139,6 +152,7 @@ socket.onopen = (event) => {
 socket.onmessage = (message) => {
     //only thing you should receive is a submission --> can do checks later 
     console.log("Its working!");
+    noSubWindow.style.display = "none";
     const newSub = JSON.parse(message.data); 
     console.log(newSub);
     buildWidget(newSub);
