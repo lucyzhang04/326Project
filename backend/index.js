@@ -1,6 +1,8 @@
-const express = require("express");
-const path = require("path");
-const ModelFactory = require("./model/ModelFactory.js");
+const express = require('express');
+const cors = require("cors"); 
+const path = require('path');
+const ModelFactory = require('./model/ModelFactory.js');
+
 const eventHub = require("./eventhub/EventHub");
 const Events = require("./eventhub/Events.js");
 const WebSocket = require("ws");
@@ -10,11 +12,19 @@ const spotifyRoutes = require("./query-spotify/spotify-routes.js");
 const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
 
+app.use(cors());
 app.use(express.json());
 const songRoutes = require("./routes/feed-routes.js");
 app.use("/feed", songRoutes);
 app.use("/spotify", spotifyRoutes);
 app.use("/user", userRoutes);
+//app.use("/user", userRoutes);
+
+
+//app.use(express.json());
+//const songRoutes = require('./routes/feed-routes.js');
+//app.use('/feed', songRoutes);
+//app.use('/spotify', spotifyRoutes);
 
 const summaryStatRoutes = require("./routes/trending-routes.js");
 app.use("/trending", summaryStatRoutes);

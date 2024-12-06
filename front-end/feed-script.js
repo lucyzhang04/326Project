@@ -26,9 +26,18 @@ const buildWidget = (submission) => {
 
     
     //filling out text Nodes and image info
-    nameText.innerText = submission["name"];
-    hostText.innerText = submission["host"];
-    img.src = submission["image"];;
+    /**
+     * nameText.innerText = submission["name"];
+        hostText.innerText = submission["host"];
+        img.src = submission["image"];
+     * 
+     */
+    nameText.innerText = submission["title"];
+    hostText.innerText = submission["artist"];
+    if(submission["image"] === undefined || submission["image"] === "fake link"){
+        img.src = "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp"
+    }
+    else img.src = submission["image"];
 
     //adding classes 
     nameText.classList.add("name-element");
@@ -44,8 +53,8 @@ const buildWidget = (submission) => {
         
         getSongDB().addSong({
                 id:idCount, 
-                "title": submission["name"],
-                "artist": submission["host"],
+                "title": submission["title"],
+                "artist": submission["artist"],
             }).then(response =>{ 
             alert(`${nameText.innerText} has been saved to liked songs!`);
             console.log("Success");
@@ -71,6 +80,8 @@ const buildWidget = (submission) => {
 const noSubs = () => {
     const text = document.createTextNode("Currently no submissions..."); 
     noSubWindow.appendChild(text); 
+    noSubWindow.classList.add("no-sub-msg");
+    noSubWindow.style.display = "block";
 }
 
 
@@ -79,20 +90,46 @@ const clearSubs = () => {
 }
 
 const render = () => {
+    /*
     const db = new DatabaseFakeService();
     db.getSubmissions(dataSet).then(submissions => submissions.forEach(sub => buildWidget(sub))).catch(error => {
         console.log(error);
         alert("There was an error fetching submissions -- please try again later!");
     }); 
-}
+    */
+   
+   fetch("http://localhost:8888/feed/get_all_subs").then(async (data) => {
+        
+        return data.ok ? await data.json() : Promise.reject("There was an error fetching submissions."); 
+   }).then((data) => {
+        console.log(data);
+        const submissions = data.submissions; 
+        if(submissions.length === 0){
+            console.log("here in correct block")
+            reset = false; 
+            noSubs(); 
+        }
+        else{
+            noSubWindow.style.display = "none";
+            submissions.forEach(sub => buildWidget(sub));
+        } 
+   }).catch(error => {
+    console.log(error);
+    alert("There was an error fetching submissions -- please try again later!");
+   }); 
 
+}
+render();
+/*
 if(!reset){
     noSubWindow.style.display = "none";
     render();
     dataSet = false;
+    /*
     setInterval(() => {
         render();
     }, 4000);
+    
     
 }
 else{
@@ -100,10 +137,23 @@ else{
     reset = false; 
     noSubs(); 
 }
+*/
 const hub = EventHub.getInstance(); 
 hub.subscribe(Events.Reset, (data) => {
     reset = true; 
     clearSubs();
 });
 
-
+console.log("executing");
+const socket = new WebSocket("ws://localhost:9000");
+socket.onopen = (event) => {
+    console.log("Socket has successfully opened");
+}
+socket.onmessage = (message) => {
+    //only thing you should receive is a submission --> can do checks later 
+    console.log("Its working!");
+    noSubWindow.style.display = "none";
+    const newSub = JSON.parse(message.data); 
+    console.log(newSub);
+    buildWidget(newSub);
+}
