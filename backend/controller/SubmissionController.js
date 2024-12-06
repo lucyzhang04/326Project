@@ -63,31 +63,42 @@ class SubmissionController {
 
   //calls database to calculate the total sum of
   async getUserContributionTime(req, res){
-    if(!req.body || !req.userID){
-      return res.status(400).json({ error: "UserID is required." });
+    if(!req.body || !req.user_name){
+      return res.status(400).json({ error: "user_name is required." });
     }
 
-    const userID = req.userID;
+    const user_name = req.user_name;
 
-    const userContributionTime = await this.model.getUserContributionTime(userID);
+    const userContributionTime = await this.model.getUserContributionTime(user_name);
 
     return res.json({userContributionTime});
   }
 
   async getUserTotalContributions(req, res){
-    if(!req.body || !req.userID){
+    if(!req.body || !req.user_name){
       return res.status(400).json({ error: "UserID is required." });
     }
 
-    const userID = req.userID;
+    const user_name = req.user_name;
 
-    const userTotalContributions = await this.model.getUserTotalContributions(userID);
+    const userTotalContributions = await this.model.getUserTotalContributions(user_name);
 
     return res.json({userTotalContributions});
   }
 
   async getLongestStreak(req, res){
 
+  }
+
+  async getYourSubmissions(req, res){
+    console.log(req["user_name"]);
+    if(!req.body || !req.body.user_name){
+      console.log("here");
+      return res.status(400).json({ error: "user_name is required." });
+    }
+    const user_name = req.body.user_name;
+    const yourSubmissions = await this.model.getYourSubmissions(user_name);
+    return res.json({yourSubmissions});
   }
 }
 

@@ -19,6 +19,9 @@ app.use("/user", userRoutes);
 const summaryStatRoutes = require("./routes/trending-routes.js");
 app.use("/trending", summaryStatRoutes);
 
+const historyRoute = require("./routes/history-routes.js");
+app.use("/history", historyRoute);
+
 const socket = new WebSocket.Server({ port: 9000 });
 
 socket.on("connection", (s) => {
