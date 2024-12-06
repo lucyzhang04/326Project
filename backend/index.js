@@ -35,21 +35,24 @@ socket.on("connection", (s) => {
   });
 });
 
-//For now I am initializing the database in the default route. We should eventually add a routes file similar to Tasks V5.
-app.get("/", async (req, res) => {
-  console.log("Request received at /");
+// Initialize the database once at startup
+(async () => {
   try {
     const model = await ModelFactory.getModel();
-    await model.init();
+    await model.init(); // Initialize without resetting
     console.log("Database initialized and synced successfully.");
   } catch (error) {
     console.error("Error initializing database:", error);
-    return res.status(500).send("Server error during database setup.");
+    process.exit(1); // Exit the process if database initialization fails
   }
-  res.status(200).sendFile(path.join(__dirname, "../front-end/index.html"));
-});
+})();
 
 app.use(express.static(path.join(__dirname, "../front-end")));
+
+app.get("/", (req, res) => {
+  console.log("Request received at /");
+  res.status(200).sendFile(path.join(__dirname, "../front-end/index.html"));
+});
 
 app.listen(PORT, (error) => {
   if (!error) {

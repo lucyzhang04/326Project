@@ -62,24 +62,18 @@ class _SQLiteModel {
   constructor() {}
 
   async init(fresh = false) {
-    await sequelize.authenticate();
-    await sequelize.sync({ force: true });
-    // An exception will be thrown if either of these operations fail.
-
-    if (fresh) {
-      await this.delete();
-      await this.createSubmission({
-        title: "Default Title 1",
-        artist: "Artist 1",
-      });
-      await this.createSubmission({
-        title: "Default Title 2",
-        artist: "Artist 2",
-      });
-      await this.createSubmission({
-        title: "Default Title 3",
-        artist: "Artist 3",
-      });
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync({ force: fresh }); 
+      if (fresh) {
+        await this.delete();
+        console.log("Database initialized with a fresh start (tables dropped).");
+      } else {
+        console.log("Database initialized without dropping existing tables.");
+      }
+    } catch (error) {
+      console.error("Error during database initialization:", error);
+      throw error; // Propagate the error for further handling
     }
   }
 
