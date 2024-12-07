@@ -356,6 +356,61 @@ class _SQLiteModel {
     });
     return user;
   }
+
+  // QUOTES
+  async createQuote(quote) {
+    return await Quote.create(quote);
+  }
+
+  async readQuote(id = null) {
+    if (id) {
+      return await Quote.findByPk(id);
+    }
+    return await Quote.findAll();
+  }
+
+  async deleteQuote(quote = null) {
+    if (quote === null) {
+      await Quote.destroy({ truncate: true });
+      return;
+    }
+
+    await Quote.destroy({
+      where: { quoteid: quote.quoteid },
+    });
+    return quote;
+  }
+
+  async getSubsToday(){
+    const today = new Date(); 
+    today.setHours(0, 0, 0, 0); 
+    try{
+      const songsToday = await Submission.findAll({
+        attributes: [
+          "title", 
+          "artist",
+          "imageURL"
+        ],
+        where: {
+          submissionDate: {
+            [Op.gte]: today
+          }
+        }
+      });
+
+      const query = songsToday.map((sub) => ({
+        title: sub.title, 
+        artist: sub.artist, 
+        imageURL: sub.imageURL 
+      })); 
+      console.log(query); 
+      return songsToday; 
+    }
+    catch(e){
+      console.log(e);
+      console.log("Unable to fetch today's songs."); 
+    }
+  }
 }
 
 const SQLiteModel = new _SQLiteModel();
