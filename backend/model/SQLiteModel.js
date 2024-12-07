@@ -61,6 +61,28 @@ const Submission = sequelize.define("Submission", {
   }
 });
 
+// Define the Quotes table
+const Quote = sequelize.define("Quote", {
+  quoteid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  quote: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  person: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  quoteDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW, 
+  },
+});
+
 // Define relationships
 User.hasMany(Submission, { foreignKey: 'user_name' }); // A User can have many Submissions
 Submission.belongsTo(User, { foreignKey: 'user_name' }); // A Submission belongs to a User
