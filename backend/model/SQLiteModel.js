@@ -58,7 +58,29 @@ const Submission = sequelize.define("Submission", {
     },
     onDelete: 'CASCADE', // Cascade delete: when a User is deleted, the associated Submissions are also deleted
     onUpdate: 'CASCADE', // Cascade update: if the username is updated, the associated Submissions are updated
-  }
+  },
+});
+
+// Define the Quotes table
+const Quote = sequelize.define("Quote", {
+  quoteid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  quote: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  person: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  quoteDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW, 
+  },
 });
 
 // Define relationships
@@ -266,6 +288,51 @@ class _SQLiteModel {
     }
   }
 
+  async getLongestStreak(){
+    const submissions = await Submission.findAll({
+      attributes: ['user_name', 'submissionDate'],
+      order: [
+        ['user_name', 'ASC'],
+        ['submissionDate', 'ASC']
+      ]
+    });
+
+    let longestStreakUser = null;
+    let longestStreak = 0;
+    let currentUser = null;
+    let currentStreak = 0;
+    let previousDate = null;
+
+    submissions.forEach(submission => {
+      const userID = submission.user_name;
+      const submissionDate = submission.submissionDate
+
+      if (userID !== currentUser) {
+        // New user: reset streak
+        currentUser = userID;
+        currentStreak = 1;
+        previousDate = submissionDate;
+      } else {
+        // Same user: check if submission is consecutive
+        const diffDays = (submissionDate - previousDate) / (1000 * 60 * 60 * 24);
+        if (diffDays === 1) {
+          currentStreak++; // Increment streak if consecutive
+        } else if (diffDays > 1) {
+          currentStreak = 1; // Reset streak if not consecutive
+        }
+        previousDate = submissionDate;
+      }
+
+      // Update longest streak
+      if (currentStreak > longestStreak) {
+        longestStreak = currentStreak;
+        longestStreakUser = currentUser;
+      }
+    });
+
+    return { userID: longestStreakUser, streak: longestStreak };
+  }
+
   async getYourSubmissions(username) {
     console.log("In getYourSubmissions");
     if (!username) {
@@ -333,6 +400,61 @@ class _SQLiteModel {
       where: { userid: user.userid },
     });
     return user;
+  }
+
+  // QUOTES
+  async createQuote(quote) {
+    return await Quote.create(quote);
+  }
+
+  async readQuote(id = null) {
+    if (id) {
+      return await Quote.findByPk(id);
+    }
+    return await Quote.findAll();
+  }
+
+  async deleteQuote(quote = null) {
+    if (quote === null) {
+      await Quote.destroy({ truncate: true });
+      return;
+    }
+
+    await Quote.destroy({
+      where: { quoteid: quote.quoteid },
+    });
+    return quote;
+  }
+
+  async getSubsToday(){
+    const today = new Date(); 
+    today.setHours(0, 0, 0, 0); 
+    try{
+      const songsToday = await Submission.findAll({
+        attributes: [
+          "title", 
+          "artist",
+          "imageURL"
+        ],
+        where: {
+          submissionDate: {
+            [Op.gte]: today
+          }
+        }
+      });
+
+      const query = songsToday.map((sub) => ({
+        title: sub.title, 
+        artist: sub.artist, 
+        imageURL: sub.imageURL 
+      })); 
+      console.log(query); 
+      return songsToday; 
+    }
+    catch(e){
+      console.log(e);
+      console.log("Unable to fetch today's songs."); 
+    }
   }
 }
 
