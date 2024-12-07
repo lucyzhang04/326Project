@@ -334,27 +334,27 @@ class _SQLiteModel {
   }
 
   async getYourSubmissions(username) {
+    console.log("In getYourSubmissions");
     if (!username) {
       throw new Error("Username filter is required.");
     }
   
     try {
       const submissions = await Submission.findAll({
-        attributes: ["title", "artist"], // Extract title and artist from Submission table
-        include: [
-          {
-            model: User,
-            attributes: ["username"], // Extract username from the User table
-            where: { username }, // Mandatory filter on username
-          },
-        ],
+        attributes: ["title", "artist", "user_name"], // Extract title and artist from Submission table
+        where: {
+          user_name: username,
+        },
       });
+      console.log("Here are all your submissions!")
+      console.log(submissions);
   
       return submissions.map((submission) => ({
-        username: submission.User.username, // Access the associated User's username
+        username: submission.user_name, // Access the associated User's username
         title: submission.title,
         artist: submission.artist,
       }));
+
     } catch (error) {
       console.error("Error fetching submissions with user details:", error);
       throw error;
