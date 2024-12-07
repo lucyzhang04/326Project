@@ -149,3 +149,4 @@ export default function HandleSpotifyLogin() {
     loginElement.onclick = null;
   }
 }
+
