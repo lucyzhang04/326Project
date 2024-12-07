@@ -1,8 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
     <title>Remind.me</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -10,21 +13,36 @@
     <div id="navbar"></div>
     <p class="header">Here's what others are listening to...</p>
     <script>
-        fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-            
-            const navLinkEls = document.querySelectorAll('.nav__link');
-            const windowPathname = window.location.pathname;
+      fetch("navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
 
-            navLinkEls.forEach(navLinkEl => {
-                if (navLinkEl.href.includes(windowPathname)) {
-                    navLinkEl.classList.add('active');
-                }
-            });
-          })
-          .catch(error => console.error('Error loading navbar:', error));
+          const navLinkEls = document.querySelectorAll(".nav__link");
+          const windowPathname = window.location.pathname;
+
+          // Find and execute scripts in the fetched HTML
+          const scriptTags = navbarEl.querySelectorAll("script");
+          scriptTags.forEach((scriptTag) => {
+            const scriptElement = document.createElement("script");
+            if (scriptTag.src) {
+              // If the script has a src attribute, copy it to the new script tag
+              scriptElement.src = scriptTag.src;
+              scriptElement.type = scriptTag.type; // Handle module type if needed
+              scriptElement.defer = scriptTag.defer || false;
+            } else {
+              // Inline scripts: copy the content
+              scriptElement.textContent = scriptTag.textContent;
+            }
+            document.body.appendChild(scriptElement); // Append to body to execute
+          });
+          navLinkEls.forEach((navLinkEl) => {
+            if (navLinkEl.href.includes(windowPathname)) {
+              navLinkEl.classList.add("active");
+            }
+          });
+        })
+        .catch((error) => console.error("Error loading navbar:", error));
     </script>
     <div class="grid" id="widget-grid"></div>
     <div class="no-sub-msg" id="no-sub-screen"></div>

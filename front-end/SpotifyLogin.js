@@ -5,6 +5,7 @@
 // photo and name from Spotify API and display it instead of the Login link.
 
 export default function HandleSpotifyLogin() {
+  console.log("Loaded Spotify Login handler");
   function getCookie(name) {
     const cookieArr = document.cookie.split(";");
     for (let cookie of cookieArr) {
@@ -20,37 +21,50 @@ export default function HandleSpotifyLogin() {
       handleAuthCallback();
     }
     if (getCookie("spotify_refresh_token")) {
-      // Get user profile from Spotify API
-      getUserProfile().then((profile) => {
-        const profilePicture = profile.profilePicture;
-        const name = profile.name;
+      if (getCookie("spotify_username")) {
+        const profilePicture = getCookie("spotify_profileURL");
+        const name = getCookie("spotify_displayName");
+        updateUI(profilePicture, name);
+      } else {
+        // Get user profile from Spotify API
+        getUserProfile().then((profile) => {
+          const profilePicture = profile.profilePicture;
+          const username = profile.username;
+          const displayName = profile.name || username;
 
-        // Update the UI
-        const userContainer = document.getElementById("user-container");
-        userContainer.innerHTML = ""; // Clear any previous content
-        const pfp = document.createElement("img");
-        pfp.src = profilePicture;
-        pfp.alt = `${name} profile picture`;
-        pfp.width = 50;
+          updateUI(profilePicture, displayName);
 
-        const nameElement = document.createElement("span");
-        nameElement.innerText = `Logged in as ${name}`;
-
-        const logoutButton = document.createElement("button");
-        logoutButton.innerText = "Log Out";
-        logoutButton.id = "logout-button";
-        logoutButton.onclick = logout;
-
-        userContainer.appendChild(nameElement);
-        userContainer.appendChild(pfp);
-        userContainer.appendChild(logoutButton);
-
-        // Hide the login link
-        const loginElement = document.getElementById("login-element");
-        loginElement.classList.add("hidden");
-      });
+          setCookie("spotify_username", username, 30);
+          setCookie("spotify_profileURL", profilePicture, 30);
+          setCookie("spotify_displayName", displayName, 30);
+        });
+      }
     }
   };
+
+  function updateUI(profilePicture, displayName) {
+    const userContainer = document.getElementById("user-container");
+    userContainer.innerHTML = ""; // Clear any previous content
+    const pfp = document.createElement("img");
+    pfp.src = profilePicture;
+    pfp.alt = `${displayName} profile picture`;
+    pfp.width = 50;
+
+    const nameElement = document.createElement("span");
+    nameElement.innerText = `Logged in as ${displayName}`;
+
+    const logoutButton = document.createElement("button");
+    logoutButton.innerText = "Log Out";
+    logoutButton.id = "logout-button";
+    logoutButton.onclick = logout;
+
+    userContainer.appendChild(nameElement);
+    userContainer.appendChild(pfp);
+    userContainer.appendChild(logoutButton);
+    // Hide the login link
+    const loginElement = document.getElementById("login-element");
+    loginElement.classList.add("hidden");
+  }
 
   function setCookie(name, value, days) {
     const date = new Date();
@@ -111,12 +125,14 @@ export default function HandleSpotifyLogin() {
     try {
       const profile = await fetchUserProfile();
       const name = profile.display_name;
-      const profilePicture = profile.images?.[0]?.url; // Safely access the first image URL
-
+      const username = profile.id;
+      const profilePicture =
+        profile.images?.[0]?.url ||
+        `https://placehold.co/400/orange/white?text=${name}`;
       console.log("Name:", name);
       console.log("Profile Picture:", profilePicture);
 
-      return { name, profilePicture };
+      return { name, username, profilePicture };
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }
@@ -127,7 +143,13 @@ export default function HandleSpotifyLogin() {
     document.cookie =
       "spotify_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie =
+      "spotify_username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
       "spotify_refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "spotify_displayName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "spotify_profileURL=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     // Reset the UI
     const userContainer = document.getElementById("user-container");
@@ -138,3 +160,6 @@ export default function HandleSpotifyLogin() {
     loginElement.onclick = null;
   }
 }
+
+HandleSpotifyLogin();
+window.onload();

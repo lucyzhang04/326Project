@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Remind.me</title>
     <link rel="stylesheet" href="styles.css" />
+    <!-- <script src="./SpotifyLogin.js" type="module"></script> -->
   </head>
   <body>
     <div id="navbar"></div>
@@ -19,10 +20,16 @@
       </div>
       <div class="input-area">
         <form id="user-form">
-          <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required />
-          </div>
+          <!-- <div> -->
+          <!--   <label for="username">Username:</label> -->
+          <!--   <input -->
+          <!--     type="text" -->
+          <!--     id="username" -->
+          <!--     name="username" -->
+          <!--     required -->
+          <!--     readonly -->
+          <!--   /> -->
+          <!-- </div> -->
           <br />
           <div>
             <label for="podcast-song">Podcast/Song:</label>
@@ -50,17 +57,37 @@
       import { EventHub } from "./source/eventhub/EventHub.js";
       import { Events } from "./source/eventhub/Events.js";
       import { TaskDatabase } from "./originalDatabase.js";
-      import SpotifyLogin from "./SpotifyLogin.js";
 
       fetch("navbar.html")
         .then((response) => response.text())
         .then((data) => {
-          document.getElementById("navbar").innerHTML = data;
+          const navbarEl = document.getElementById("navbar");
+          navbarEl.innerHTML = data;
 
-          const navLinkEls = document.querySelectorAll(".nav__link");
-          const windowPathname = window.location.pathname;
+          // Find and execute scripts in the fetched HTML
+          const scriptTags = navbarEl.querySelectorAll("script");
+          scriptTags.forEach((scriptTag) => {
+            const scriptElement = document.createElement("script");
+            if (scriptTag.src) {
+              // If the script has a src attribute, copy it to the new script tag
+              scriptElement.src = scriptTag.src;
+              scriptElement.type = scriptTag.type; // Handle module type if needed
+              scriptElement.defer = scriptTag.defer || false;
+            } else {
+              // Inline scripts: copy the content
+              scriptElement.textContent = scriptTag.textContent;
+            }
+            document.body.appendChild(scriptElement); // Append to body to execute
+          });
+
+          // Add active class logic after scripts are executed
+          const navLinkEls = navbarEl.querySelectorAll(".nav__link");
+          const windowPathname = windowPathname
+            .replace(/^\//, "")
+            .replace(/\.html$/, "");
 
           navLinkEls.forEach((navLinkEl) => {
+            console.log(windowPathname);
             if (navLinkEl.href.includes(windowPathname)) {
               navLinkEl.classList.add("active");
             }
@@ -71,33 +98,44 @@
       let db = new TaskDatabase("quotesDB");
 
       // Modified loadQuote() function to utilize an API, as opposed to prior implementation with mocked quote data
-      async function loadQuote() { 
+      async function loadQuote() {
         let currentDay = new Date().toLocaleDateString();
         await db.openDatabase();
         let dbTasks = await db.getTasks();
 
         // Added logic to ensure daily quote persistence (the same quote should be displayed for a given day).
-        let prevUpdate = dbTasks.find(task => task.id === "prevUpdate") || { value: null };
-        let currQuote = dbTasks.find(task => task.id === "dailyQuote") || { value: null };
-        
+        let prevUpdate = dbTasks.find((task) => task.id === "prevUpdate") || {
+          value: null,
+        };
+        let currQuote = dbTasks.find((task) => task.id === "dailyQuote") || {
+          value: null,
+        };
+
         try {
           if (currentDay !== prevUpdate.value) {
-            // Utilized the following API endpoint (https://zenquotes.io/api/random) to generate random quotes. 
+            // Utilized the following API endpoint (https://zenquotes.io/api/random) to generate random quotes.
             // Needed to resolved CORS issues by setting up CORS middleware
-            let quotes = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
+            let quotes = await fetch(
+              "https://api.allorigins.win/raw?url=https://zenquotes.io/api/random",
+            );
 
             let quoteData = await quotes.json();
             console.log(quoteData);
             if (quoteData && quoteData.length > 0) {
-              let quoteSpecific = {quote: quoteData[0].q, person: quoteData[0].a};
-              await db.addTask({id: "prevUpdate", value: currentDay});
-              await db.addTask({id: "dailyQuote", value: JSON.stringify(quoteSpecific)});
+              let quoteSpecific = {
+                quote: quoteData[0].q,
+                person: quoteData[0].a,
+              };
+              await db.addTask({ id: "prevUpdate", value: currentDay });
+              await db.addTask({
+                id: "dailyQuote",
+                value: JSON.stringify(quoteSpecific),
+              });
               renderQuote(quoteSpecific);
             } else {
               throw new Error("No quote data available");
             }
-          }
-          else if (currQuote.value) {
+          } else if (currQuote.value) {
             let quoteSpecific = JSON.parse(currQuote.value);
             renderQuote(quoteSpecific);
           } else {
@@ -105,7 +143,7 @@
           }
         } catch (error) {
           console.error("Error loading quote:", error);
-          renderQuote({quote: "Keep pushing forward!", person: "Unknown"});
+          renderQuote({ quote: "Keep pushing forward!", person: "Unknown" });
         }
       }
 
@@ -160,12 +198,9 @@
       }
 
       start();
-
-      SpotifyLogin();
     </script>
   </body>
 </html>
-
 
 <!-- previous loadQuote function (with mocked quote data)
 async function loadQuote() {
