@@ -104,6 +104,10 @@ export default function HandleSpotifyLogin() {
     }
 
     const data = await response.json();
+
+    console.log("do we get here");
+    console.log(data);
+    
     return data;
   }
 
@@ -138,3 +142,4 @@ export default function HandleSpotifyLogin() {
     loginElement.onclick = null;
   }
 }
+
