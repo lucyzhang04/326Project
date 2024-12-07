@@ -195,9 +195,15 @@ router.get("/callback", (req, res) => {
           Authorization: `Bearer ${body.access_token}`,
         },
       })
-        .then((response) => response.json())
+        .then((response) => {
+          console.log("response: ", response);
+          return response.json();
+        })
         .then((data) => {
           req.session.username = data.id;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
         })
         .then(() => {
           fetch("http://localhost:8888/user/find_or_create", {
