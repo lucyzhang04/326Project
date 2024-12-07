@@ -66,40 +66,67 @@ function loadTrendingData(){
         .then(data => {
             console.log("data fetched");
             console.log(data.trending);
-            render(data.trending);
+
+            if(data.trending.length == 0){
+                noSubs();
+            }else{
+                renderTrending(data.trending);
+            }
+            
         });
 
-    /*let d = new DatabaseFakeService();
+    fetch('http://localhost:8888/trending/get-top-contributors')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.topContributors);
+            renderTopContributors(data.topContributors);
+        });
 
-    if(v0){
-        v0 = false;
-    }else{
-        v0 = true;
-    }
+    fetch('http://localhost:8888/feed/get_all_subs', {
+        method: 'GET',
+        /*body: JSON.stringify({user_name : localStorage.getItem("username")}),
+        })*/
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.submissions);
+            //renderTest(data.submissions);
+        });
 
-    d.getTopFive(v0)
-        .then(data => render(data));*/
+    fetch('http://localhost:8888/trending/get-user-contributions', {
+            method: 'GET',
+            headers: {user_name : localStorage.getItem("username")},
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`current user ${localStorage.getItem("username")} contributions `);
+            console.log(data.userTotalContributions);
+            renderCurUserContributionNum(data.userTotalContributions);
+        });
+
+    fetch('http://localhost:8888/trending/get-longest-streak')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.longestStreak);
+            renderLongestStreak(data.longestStreak);
+        });
 }
 
-function render(data){
+function noSubs(){
+    const text = document.createTextNode("Currently no submissions...");
+    noSubWindow = document.getElementById("no-sub-screen");
+    noSubWindow.appendChild(text);
+    noSubWindow.classList.add("no-sub-msg");
+    noSubWindow.style.display = "block";
+}
+
+function renderTrending(data){
     let trendingContElem = document.getElementById("trending-list");
     trendingContElem.innerHTML = "";
-    
-    //let whiteBackground = 0;
+
     for(const trendingItem of data){
         const trendingElem = document.createElement('div');
         trendingElem.classList.add("trending-song");
-        /*let color = "gray";
-        if(whiteBackground){
-            color = "white";
-        }
-        trendingElem.style.backgroundColor = color;*/
-
-        /*const songInfo = document.createElement('p');
-        songInfo.classList.add('song-info');
-        songInfo.textContent = `${trendingItem.id}.  ${trendingItem.title}    ---    ${trendingItem.artist}   (${trendingItem.shares} shares)`;
-        
-        trendingElem.appendChild(songInfo);*/
 
         const songTitle = document.createElement('span');
         songTitle.classList.add("song-title");
@@ -134,6 +161,100 @@ function render(data){
         //whiteBackground = (whiteBackground+1) % 2;
     }
 }
+
+function renderTest(data){
+    const sumStat = document.getElementById("your-contrib-num");
+    sumStat.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.innerText = "Your Contributions";
+    sumStat.appendChild(header);
+    header.classList.add("stat-header");
+
+    for(const contrib of data){
+
+        const user = document.createElement("div");
+        user.classList.add("stat-line");
+        const name = document.createElement("span");
+        name.innerText = contrib.title + " ";
+        const freq = document.createElement("span");
+        freq.innerText = contrib.artist;
+
+        //ul.appendChild(user);
+        user.appendChild(name);
+        user.appendChild(freq);
+        sumStat.appendChild(user);
+    }
+}
+
+function renderTopContributors(data){
+
+    const sumStat = document.getElementById("top-contrib");
+    sumStat.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.innerText = "Top Contributors";
+    sumStat.appendChild(header);
+    header.classList.add("stat-header");
+
+    for(const contrib of data){
+
+        const user = document.createElement("div");
+        user.classList.add("stat-line");
+        const name = document.createElement("span");
+        name.innerText = contrib.user + " ";
+        const freq = document.createElement("span");
+        freq.innerText = contrib.frequency + " contributions";
+
+        sumStat.appendChild(user);
+        user.appendChild(name);
+        user.appendChild(freq);
+    }
+
+}
+
+function renderLongestStreak(data){
+    const sumStat = document.getElementById("longest-streak");
+    sumStat.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.innerText = "Longest Streak";
+    sumStat.appendChild(header);
+    header.classList.add("stat-header");
+
+    const cnt = document.createElement("div");
+    cnt.innerText = data.streak;
+    if(data.streak == 1){
+        cnt.innerText += " day";
+    }else{
+        cnt.innerText += " days";
+    }
+    cnt.classList.add("your-cnt");
+
+    const user = document.createElement("div");
+    user.innerText = data.userID;
+    user.classList.add("user-small");
+    
+    cnt.appendChild(user);
+    sumStat.appendChild(cnt);
+}
+
+function renderCurUserContributionNum(data){
+    const sumStat = document.getElementById("your-contrib-num");
+    sumStat.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.innerText = "Your Contributions";
+    sumStat.appendChild(header);
+    header.classList.add("stat-header");
+
+    const cnt = document.createElement("div");
+    cnt.innerText = data;
+    cnt.classList.add("your-cnt");
+
+    sumStat.appendChild(cnt);
+}
+
 
 function resetPage(){
     let trendingContElem = document.getElementById("trending-list");
