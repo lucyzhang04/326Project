@@ -91,7 +91,6 @@ class SubmissionController {
   }
 
   async getYourSubmissions(req, res){
-    console.log(req["user_name"]);
     if(!req.body || !req.body.user_name){
       console.log("here");
       return res.status(400).json({ error: "user_name is required." });
