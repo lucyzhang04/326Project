@@ -1,5 +1,5 @@
 // import { Sequelize, DataTypes } from "sequelize";
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes, Op } = require("sequelize");
 
 // Initialize a new Sequelize instance with SQLite
 const sequelize = new Sequelize({

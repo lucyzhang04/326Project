@@ -63,11 +63,11 @@ class SubmissionController {
 
   //calls database to calculate the total sum of
   async getUserContributionTime(req, res){
-    if(!req.body || !req.user_name){
+    if(!req.body || !req.body.user_name){
       return res.status(400).json({ error: "user_name is required." });
     }
 
-    const user_name = req.user_name;
+    const user_name = req.body.user_name;
 
     const userContributionTime = await this.model.getUserContributionTime(user_name);
 
@@ -75,11 +75,11 @@ class SubmissionController {
   }
 
   async getUserTotalContributions(req, res){
-    if(!req.body || !req.user_name){
+    if(!req.body || !req.body.user_name){
       return res.status(400).json({ error: "UserID is required." });
     }
 
-    const user_name = req.user_name;
+    const user_name = req.body.user_name;
 
     const userTotalContributions = await this.model.getUserTotalContributions(user_name);
 
