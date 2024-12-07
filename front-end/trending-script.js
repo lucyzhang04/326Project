@@ -4,10 +4,19 @@ import { getSongDB } from "./databaseFactory.js";
 import { EventHub } from "./source/eventhub/EventHub.js";
 import { Events } from "./source/eventhub/Events.js";
 
-function loadBaseLayout(){
+//import { username } from "./SpotifyLogin.js";
+
+//let username;
+
+export function loadBaseLayout(){
     fetch('navbar.html')
         .then(response => response.text())
         .then(data => {
+
+            /*const hub = EventHub.getInstance();
+            hub.subscribe(Events.Reset, resetPage);
+            hub.subscribe(Events.Username, updateUsername);*/
+            
             document.getElementById('navbar').innerHTML = data;
                 
             const navLinkEls = document.querySelectorAll('.nav__link');
@@ -25,10 +34,15 @@ function loadBaseLayout(){
         .then(() => {
             const hub = EventHub.getInstance();
             hub.subscribe(Events.Reset, resetPage);
+            //hub.subscribe(Events.Username, updateUsername);
+            //console.log("checkpoint 1");
         })
         .then(() => {
             //call the loadingTrendingData every 5 sec.
             loadTrendingData();
+
+            console.log(localStorage.getItem("username"));
+
             setInterval(loadTrendingData, 5000);
             
             //loadTrendingData();
@@ -47,7 +61,15 @@ function loadTrendingData(){
             render(data);
         });*/
 
-    let d = new DatabaseFakeService();
+    fetch('http://localhost:8888/trending/get-top-five')
+        .then(response => response.json())
+        .then(data => {
+            console.log("data fetched");
+            console.log(data.trending);
+            render(data.trending);
+        });
+
+    /*let d = new DatabaseFakeService();
 
     if(v0){
         v0 = false;
@@ -56,7 +78,7 @@ function loadTrendingData(){
     }
 
     d.getTopFive(v0)
-        .then(data => render(data));
+        .then(data => render(data));*/
 }
 
 function render(data){
@@ -89,7 +111,8 @@ function render(data){
 
         const songShares = document.createElement('span');
         songShares.classList.add("song-shares");
-        songShares.textContent = `${trendingItem.shares} shares`;
+        //songShares.textContent = `${trendingItem.shares} shares`;
+        songShares.textContent = `${trendingItem.frequency} shares`;
 
         const likeBtn = document.createElement('button');
         likeBtn.classList.add("like-btn");
@@ -121,4 +144,12 @@ function resetPage(){
 
 }
 
-loadBaseLayout();
+//loadBaseLayout();
+
+/*export function updateUsername(val){
+    console.log("Event published. Username updated.");
+    username = val;
+    console.log("done");
+}*/
+
+

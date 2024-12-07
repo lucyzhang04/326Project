@@ -15,7 +15,7 @@ router.get("/get-top-five", async(req, res) => {
 router.get("/get-top-contributors", async(req, res) => {
     console.log("Reached top contributors endpoint");
 
-    await db.getTopContributor(req, res);
+    await db.getTopContributors(req, res);
 })
 
 //Route for getting the given user's total contributions (in min) from subission database
