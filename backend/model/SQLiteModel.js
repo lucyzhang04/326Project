@@ -1,5 +1,5 @@
 // import { Sequelize, DataTypes } from "sequelize";
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes, Op } = require("sequelize");
 
 // Initialize a new Sequelize instance with SQLite
 const sequelize = new Sequelize({
@@ -118,6 +118,37 @@ class _SQLiteModel {
       where: { submissionid: submission.submissionid },
     });
     return task;
+  }
+
+  async getSubsToday(){
+    const today = new Date(); 
+    today.setHours(0, 0, 0, 0); 
+    try{
+      const songsToday = await Submission.findAll({
+        attributes: [
+          "title", 
+          "artist",
+          "imageURL"
+        ],
+        where: {
+          submissionDate: {
+            [Op.gte]: today
+          }
+        }
+      });
+
+      const query = songsToday.map((sub) => ({
+        title: sub.title, 
+        artist: sub.artist, 
+        imageURL: sub.imageURL 
+      })); 
+      console.log(query); 
+      return songsToday; 
+    }
+    catch(e){
+      console.log(e);
+      console.log("Unable to fetch today's songs."); 
+    }
   }
 
   /*method queries into submissions table to count the freq. of unique song/podcast names

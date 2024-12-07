@@ -46,6 +46,10 @@ class SubmissionController {
     res.json(await this.model.readSubmission());
   }
 
+  async getSubsToday(req, res){
+    return res.json(await this.model.getSubsToday());
+  }
+
   //calls database method to retrieve 5 most-shared songs/podcasts for the given day. 
   async getTopFive(req, res){
     const trending = await this.model.getTrending();
