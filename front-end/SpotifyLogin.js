@@ -1,8 +1,14 @@
 // Check if the user is logged in by reading cookies
 // to see if there is a refresh token saved.
 
+import { EventHub } from "./source/eventhub/EventHub.js";
+import { Events } from "./source/eventhub/Events.js";
+//import { updateUsername } from "./trending-script.js";
+
 // If the user is logged in, display get their profile
 // photo and name from Spotify API and display it instead of the Login link.
+
+//export let username = undefined;
 
 export default function HandleSpotifyLogin() {
   function getCookie(name) {
@@ -105,9 +111,6 @@ export default function HandleSpotifyLogin() {
 
     const data = await response.json();
 
-    console.log("do we get here");
-    console.log(data);
-    
     return data;
   }
 
@@ -116,6 +119,10 @@ export default function HandleSpotifyLogin() {
       const profile = await fetchUserProfile();
       const name = profile.display_name;
       const profilePicture = profile.images?.[0]?.url; // Safely access the first image URL
+
+      console.log(profile.id);
+
+      localStorage.setItem("username", profile.id);
 
       console.log("Name:", name);
       console.log("Profile Picture:", profilePicture);
