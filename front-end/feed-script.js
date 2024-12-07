@@ -98,20 +98,21 @@ const render = () => {
     }); 
     */
    
-   fetch("http://localhost:8888/feed/get_all_subs").then(async (data) => {
-        
+   fetch("http://localhost:8888/feed/get_today_subs").then(async (data) => {
+        console.log(data);
         return data.ok ? await data.json() : Promise.reject("There was an error fetching submissions."); 
    }).then((data) => {
         console.log(data);
         const submissions = data.submissions; 
-        if(submissions.length === 0){
+        console.log(submissions);
+        if(data.length === 0){
             console.log("here in correct block")
             reset = false; 
             noSubs(); 
         }
         else{
             noSubWindow.style.display = "none";
-            submissions.forEach(sub => buildWidget(sub));
+            data.forEach(sub => buildWidget(sub));
         } 
    }).catch(error => {
     console.log(error);
