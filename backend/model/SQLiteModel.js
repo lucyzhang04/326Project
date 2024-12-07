@@ -1,10 +1,28 @@
 // import { Sequelize, DataTypes } from "sequelize";
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes, Op } = require("sequelize");
 
 // Initialize a new Sequelize instance with SQLite
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: "database.sqlite",
+});
+
+// Define User table
+const User = sequelize.define("User", {
+  userid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true, // Ensure that usernames are unique
+  },
+  spotify_refresh_token: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 // Define the Submissions table
@@ -26,60 +44,66 @@ const Submission = sequelize.define("Submission", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-
-  //create a dummy userID/submissionDate attribute for now
-  userID: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-
   submissionDate: {
     type: DataTypes.DATE,
     allowNull: false,
-
+    defaultValue: Sequelize.NOW, // Automatically set to current timestamp if not provided
+  },
+  user_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: User, 
+      key: 'username',
+    },
+    onDelete: 'CASCADE', // Cascade delete: when a User is deleted, the associated Submissions are also deleted
+    onUpdate: 'CASCADE', // Cascade update: if the username is updated, the associated Submissions are updated
   }
 });
 
-//Add more tables here
-
-const User = sequelize.define("User", {
-  userid: {
+// Define the Quotes table
+const Quote = sequelize.define("Quote", {
+  quoteid: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  username: {
+  quote: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  spotify_refresh_token: {
+  person: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  quoteDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW, 
   },
 });
+
+// Define relationships
+User.hasMany(Submission, { foreignKey: 'user_name' }); // A User can have many Submissions
+Submission.belongsTo(User, { foreignKey: 'user_name' }); // A Submission belongs to a User
+
 
 class _SQLiteModel {
   constructor() {}
 
   async init(fresh = false) {
-    await sequelize.authenticate();
-    await sequelize.sync({ force: true });
-    // An exception will be thrown if either of these operations fail.
-
-    if (fresh) {
-      await this.delete();
-      await this.createSubmission({
-        title: "Default Title 1",
-        artist: "Artist 1",
-      });
-      await this.createSubmission({
-        title: "Default Title 2",
-        artist: "Artist 2",
-      });
-      await this.createSubmission({
-        title: "Default Title 3",
-        artist: "Artist 3",
-      });
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync({force: fresh }); 
+      if (fresh) {
+        await this.delete();
+        console.log("Database initialized with a fresh start (tables dropped).");
+      } else {
+        console.log("Database initialized without dropping existing tables.");
+      }
+    } catch (error) {
+      console.error("Error during database initialization:", error);
+      throw error; // Propagate the error for further handling
     }
   }
 
@@ -116,6 +140,37 @@ class _SQLiteModel {
       where: { submissionid: submission.submissionid },
     });
     return task;
+  }
+
+  async getSubsToday(){
+    const today = new Date(); 
+    today.setHours(0, 0, 0, 0); 
+    try{
+      const songsToday = await Submission.findAll({
+        attributes: [
+          "title", 
+          "artist",
+          "imageURL"
+        ],
+        where: {
+          submissionDate: {
+            [Op.gte]: today
+          }
+        }
+      });
+
+      const query = songsToday.map((sub) => ({
+        title: sub.title, 
+        artist: sub.artist, 
+        imageURL: sub.imageURL 
+      })); 
+      console.log(query); 
+      return songsToday; 
+    }
+    catch(e){
+      console.log(e);
+      console.log("Unable to fetch today's songs."); 
+    }
   }
 
   /*method queries into submissions table to count the freq. of unique song/podcast names
@@ -179,15 +234,15 @@ class _SQLiteModel {
     try{
       const topContributors = await Submission.findAll({
         attributes: [
-          'userID',
-          [Sequelize.fn('COUNT', Sequelize.col('userID')), 'userFrequency']
+          'user_name',
+          [Sequelize.fn('COUNT', Sequelize.col('user_name')), 'userFrequency']
         ],
         where: {
           submissionDate : {
             [Op.gte]: oneWeekAgo,
           },
         },
-        group: ['userID'],
+        group: ['user_name'],
         order: [[Sequelize.literal('userFrequency'), 'DESC']],
         limit: 3
       });
@@ -195,7 +250,7 @@ class _SQLiteModel {
       //for now, since the users database isn't set up yet, the userID will be returned
       //ultimately, will need to join the submission/user databases using userID to associate username with the freq.
       return topContributors.map(user => ({
-        user: user.userID,
+        user: user.user_name,
         frequency: user.getDataValue('userFrequency'),
       }));
     }catch(e){
@@ -203,11 +258,11 @@ class _SQLiteModel {
     }
   }
 
-  async getUserContributionTime(userID){
+  async getUserContributionTime(user_name){
     try{
       const totalContributionTime = await Submission.sum({
         where: {
-          userID: userID,
+          user_name: user_name,
         }
       });
 
@@ -218,11 +273,11 @@ class _SQLiteModel {
     }
   }
 
-  async getUserTotalContributions(userID){
+  async getUserTotalContributions(user_name){
     try{ 
       const totalContributions = await Submission.count({
         where: {
-          userID: userID,
+          user_name: user_name,
         },
       });
 
@@ -233,9 +288,33 @@ class _SQLiteModel {
     }
   }
 
-
-
-
+  async getYourSubmissions(username) {
+    if (!username) {
+      throw new Error("Username filter is required.");
+    }
+  
+    try {
+      const submissions = await Submission.findAll({
+        attributes: ["title", "artist"], // Extract title and artist from Submission table
+        include: [
+          {
+            model: User,
+            attributes: ["username"], // Extract username from the User table
+            where: { username }, // Mandatory filter on username
+          },
+        ],
+      });
+  
+      return submissions.map((submission) => ({
+        username: submission.User.username, // Access the associated User's username
+        title: submission.title,
+        artist: submission.artist,
+      }));
+    } catch (error) {
+      console.error("Error fetching submissions with user details:", error);
+      throw error;
+    }
+  }
 
   // USER
   async readUser(id = null) {
@@ -276,6 +355,61 @@ class _SQLiteModel {
       where: { userid: user.userid },
     });
     return user;
+  }
+
+  // QUOTES
+  async createQuote(quote) {
+    return await Quote.create(quote);
+  }
+
+  async readQuote(id = null) {
+    if (id) {
+      return await Quote.findByPk(id);
+    }
+    return await Quote.findAll();
+  }
+
+  async deleteQuote(quote = null) {
+    if (quote === null) {
+      await Quote.destroy({ truncate: true });
+      return;
+    }
+
+    await Quote.destroy({
+      where: { quoteid: quote.quoteid },
+    });
+    return quote;
+  }
+
+  async getSubsToday(){
+    const today = new Date(); 
+    today.setHours(0, 0, 0, 0); 
+    try{
+      const songsToday = await Submission.findAll({
+        attributes: [
+          "title", 
+          "artist",
+          "imageURL"
+        ],
+        where: {
+          submissionDate: {
+            [Op.gte]: today
+          }
+        }
+      });
+
+      const query = songsToday.map((sub) => ({
+        title: sub.title, 
+        artist: sub.artist, 
+        imageURL: sub.imageURL 
+      })); 
+      console.log(query); 
+      return songsToday; 
+    }
+    catch(e){
+      console.log(e);
+      console.log("Unable to fetch today's songs."); 
+    }
   }
 }
 

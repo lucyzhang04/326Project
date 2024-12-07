@@ -12,6 +12,12 @@ router.get("/get_all_subs", async (req, res) => {
     res.end(); 
 })
 
+router.get("/get_today_subs", async (req, res) => {
+    console.log("Reached get todays subs endpoint");
+    await db.getSubsToday(req, res); 
+    res.end(); 
+})
+
 //Route for adding submission to database from user submission.
 router.post("/add_sub", async (req, res) => {
     console.log("Reached add subs endpoint")

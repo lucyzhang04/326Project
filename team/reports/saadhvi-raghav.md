@@ -89,3 +89,73 @@
 - **Task**: Added basic feed routes to back-end to service front end feed screen UI.  
 - **Details**: Create routes folder and feed-routes.js, and wrote two basic endpoints to get all submissions stored in database, as well as add a recent user submission to the database. Also updated structure of SubmissionController.js to reflect commonjs type rather than using import statements. Updated index.js to mount new routes.
 - **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/4e78d48dac5617c4d282e31586990775eafac565)
+
+### December 4, 2024 
+- **Task**: Implemented Publisher/Subscriber method on the backend. 
+- **Details**: EventHub.js and Event.js files were added in the eventhub folder to provide publisher/subscriber mechanism. SubmissionController.js was modified to publish a newSub event when a submission is successfully added.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/ec311bc718634410a8c011f3f80c1c1d47fe95e5)
+
+---
+
+- **Task**: Implemented WebSocket on the backend. 
+- **Details**: Modified `index.js` to open a WebSocket when the backend is started up. Socket listens for connections from clients, and subscribes to the newSub event. When a newSub event is published, backend sends to new submissions to the active clients via the socket. 
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/eb95c279ece4ea9490bec1f823f456d47770de1e)
+
+---
+
+- **Task**: Implemented WebSocket on the backend. 
+- **Details**: Modified `index.js` to open a WebSocket when the backend is started up. Socket listens for connections from clients, and subscribes to the newSub event. When a newSub event is published, backend sends to new submissions to the active clients via the socket. Also modified package.json to reflect new dependencies.
+- **Commit(s)**: [Commit for server socket](https://github.com/lucyzhang04/326Project/commit/eb95c279ece4ea9490bec1f823f456d47770de1e)
+                    [Commit for package.json](https://github.com/lucyzhang04/326Project/commit/22beb72e113c1610524b232af8312ce5f53e856e)
+
+---
+
+- **Task**: Implemented WebSocket on the frontend. 
+- **Details**: Modified `feed-script.js` to open a WebSocket when the feed page is displayed. When a new submission is received from a user, that submission is sent from the backend to the frontend via the socket, and will be displayed on the feed UI in real time. 
+- **Commit(s)**: [Commit for client socket](https://github.com/lucyzhang04/326Project/commit/306533bc65232e08baeb81ee71862e49c4822835)
+
+---
+
+- **Task**: Modified `feed-script.js` to query endpoint in backend and retrieve submissions stored in submissions database. 
+- **Details**: `feed-script.js` queries /feed/get_all_subs endpoint to get submissions stored in database and render them, removing reliance on mocked data.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/0878f541b31edeca26b4853123c291365a997d02)
+
+---
+
+- **Task**: Modified `feed-script.js` to query endpoint in backend and retrieve submissions stored in submissions database. 
+- **Details**: `feed-script.js` queries /feed/get_all_subs endpoint to get submissions stored in database and render them, removing reliance on mocked data.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/0878f541b31edeca26b4853123c291365a997d02)
+
+### December 6, 2024
+- **Task**: Modified `feed-script.js` to show message if no submissions are present on feed screen. 
+- **Details**: A pop-up message appears on the feed screen if no submissions are present, to show users hat no error has occurred and that the application is simply waiting for submissions.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/3308c090818b0155a8a1103d145f83b42f0c9584)
+
+--- 
+- **Task**: Modified `index.js` to address CORS issues. 
+- **Details**: Modified `index.js` to address CORS issues experiences when querying backend endpoints.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/aa02e6b6ff280b0bd1ecb59a22aa0f06fb914315)
+
+---
+- **Task**: Implemented getTodaySubs() method in `SQLiteModel.js`, and modified `SubmissionController.js`; 
+- **Details**: Implemented above function to filter queries in the database by date, to retrieve submissions submitted on a particular day. 
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/9affe7b2f7c5e4e8e9fa23c263e2f7acd83015c4)
+
+--- 
+- **Task**: Implemented new GET endpoint method in `feed-routes.js`.
+- **Details**: Implemented /get_today_subs endpoint in `feed-routes.js`, so frontend can use that route to retrieve submissions only from the current day using methods written above. 
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/d4b928cd9b152d6645f238e729f98b518a60584e)
+
+--- 
+
+- **Task**: Modified `feed-script.js` to use newly defined endpoint.
+- **Details**: Modified render() function to query the database using the defined endpoint above, to only display the current day's submissions.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/dc70884c6ac648f03c4421ef229522aaa357565a)
+
+
+
+
+
+
+
+

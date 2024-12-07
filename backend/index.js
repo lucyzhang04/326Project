@@ -1,6 +1,8 @@
-const express = require("express");
-const path = require("path");
-const ModelFactory = require("./model/ModelFactory.js");
+const express = require('express');
+const cors = require("cors"); 
+const path = require('path');
+const ModelFactory = require('./model/ModelFactory.js');
+
 const eventHub = require("./eventhub/EventHub");
 const Events = require("./eventhub/Events.js");
 const WebSocket = require("ws");
@@ -10,14 +12,25 @@ const spotifyRoutes = require("./query-spotify/spotify-routes.js");
 const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
 
+app.use(cors());
 app.use(express.json());
 const songRoutes = require("./routes/feed-routes.js");
 app.use("/feed", songRoutes);
 app.use("/spotify", spotifyRoutes);
 app.use("/user", userRoutes);
+//app.use("/user", userRoutes);
+
+
+//app.use(express.json());
+//const songRoutes = require('./routes/feed-routes.js');
+//app.use('/feed', songRoutes);
+//app.use('/spotify', spotifyRoutes);
 
 const summaryStatRoutes = require("./routes/trending-routes.js");
 app.use("/trending", summaryStatRoutes);
+
+const historyRoute = require("./routes/history-routes.js");
+app.use("/history", historyRoute);
 
 const socket = new WebSocket.Server({ port: 9000 });
 
@@ -35,21 +48,24 @@ socket.on("connection", (s) => {
   });
 });
 
-//For now I am initializing the database in the default route. We should eventually add a routes file similar to Tasks V5.
-app.get("/", async (req, res) => {
-  console.log("Request received at /");
+// Initialize the database once at startup
+(async () => {
   try {
     const model = await ModelFactory.getModel();
-    await model.init();
+    await model.init(); // Initialize without resetting
     console.log("Database initialized and synced successfully.");
   } catch (error) {
     console.error("Error initializing database:", error);
-    return res.status(500).send("Server error during database setup.");
+    process.exit(1); // Exit the process if database initialization fails
   }
-  res.status(200).sendFile(path.join(__dirname, "../front-end/index.html"));
-});
+})();
 
 app.use(express.static(path.join(__dirname, "../front-end")));
+
+app.get("/", (req, res) => {
+  console.log("Request received at /");
+  res.status(200).sendFile(path.join(__dirname, "../front-end/index.html"));
+});
 
 app.listen(PORT, (error) => {
   if (!error) {

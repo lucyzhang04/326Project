@@ -4,12 +4,41 @@ import { getSongDB } from "./databaseFactory.js";
 import { EventHub } from "./source/eventhub/EventHub.js";
 import { Events } from "./source/eventhub/Events.js";
 
+<<<<<<< HEAD
 function loadBaseLayout() {
   fetch("navbar.html")
     .then((response) => response.text())
     .then((data) => {
       const navbarEl = document.getElementById("navbar");
       navbarEl.innerHTML = data;
+||||||| 86d2b1a
+function loadBaseLayout(){
+    fetch('navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+                
+            const navLinkEls = document.querySelectorAll('.nav__link');
+            const windowPathname = window.location.pathname;
+=======
+//import { username } from "./SpotifyLogin.js";
+
+//let username;
+
+export function loadBaseLayout(){
+    fetch('navbar.html')
+        .then(response => response.text())
+        .then(data => {
+
+            /*const hub = EventHub.getInstance();
+            hub.subscribe(Events.Reset, resetPage);
+            hub.subscribe(Events.Username, updateUsername);*/
+            
+            document.getElementById('navbar').innerHTML = data;
+                
+            const navLinkEls = document.querySelectorAll('.nav__link');
+            const windowPathname = window.location.pathname;
+>>>>>>> 58882977a5263453951abf7ba4bde73f74f7b662
 
       // Find and execute scripts in the fetched HTML
       const scriptTags = navbarEl.querySelectorAll("script");
@@ -33,6 +62,7 @@ function loadBaseLayout() {
         .replace(/^\//, "")
         .replace(/\.html$/, "");
 
+<<<<<<< HEAD
       navLinkEls.forEach((navLinkEl) => {
         console.log(windowPathname);
         if (navLinkEl.href.includes(windowPathname)) {
@@ -52,6 +82,40 @@ function loadBaseLayout() {
       //loadTrendingData();
     })
     .catch((error) => console.error("Error loading navbar:", error));
+||||||| 86d2b1a
+        })
+        .then(() => {
+            const hub = EventHub.getInstance();
+            hub.subscribe(Events.Reset, resetPage);
+        })
+        .then(() => {
+            //call the loadingTrendingData every 5 sec.
+            loadTrendingData();
+            setInterval(loadTrendingData, 5000);
+            
+            //loadTrendingData();
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+=======
+        })
+        .then(() => {
+            const hub = EventHub.getInstance();
+            hub.subscribe(Events.Reset, resetPage);
+            //hub.subscribe(Events.Username, updateUsername);
+            //console.log("checkpoint 1");
+        })
+        .then(() => {
+            //call the loadingTrendingData every 5 sec.
+            loadTrendingData();
+
+            console.log(localStorage.getItem("username"));
+
+            setInterval(loadTrendingData, 5000);
+            
+            //loadTrendingData();
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+>>>>>>> 58882977a5263453951abf7ba4bde73f74f7b662
 }
 
 //using v0 for testing purposes to mock updates for trending data to mix up the data returned
@@ -65,7 +129,21 @@ function loadTrendingData() {
             render(data);
         });*/
 
+<<<<<<< HEAD
   let d = new DatabaseFakeService();
+||||||| 86d2b1a
+    let d = new DatabaseFakeService();
+=======
+    fetch('http://localhost:8888/trending/get-top-five')
+        .then(response => response.json())
+        .then(data => {
+            console.log("data fetched");
+            console.log(data.trending);
+            render(data.trending);
+        });
+
+    /*let d = new DatabaseFakeService();
+>>>>>>> 58882977a5263453951abf7ba4bde73f74f7b662
 
   if (v0) {
     v0 = false;
@@ -73,7 +151,15 @@ function loadTrendingData() {
     v0 = true;
   }
 
+<<<<<<< HEAD
   d.getTopFive(v0).then((data) => render(data));
+||||||| 86d2b1a
+    d.getTopFive(v0)
+        .then(data => render(data));
+=======
+    d.getTopFive(v0)
+        .then(data => render(data));*/
+>>>>>>> 58882977a5263453951abf7ba4bde73f74f7b662
 }
 
 function render(data) {
@@ -104,9 +190,20 @@ function render(data) {
     songArtist.classList.add("song-artist");
     songArtist.textContent = trendingItem.artist;
 
+<<<<<<< HEAD
     const songShares = document.createElement("span");
     songShares.classList.add("song-shares");
     songShares.textContent = `${trendingItem.shares} shares`;
+||||||| 86d2b1a
+        const songShares = document.createElement('span');
+        songShares.classList.add("song-shares");
+        songShares.textContent = `${trendingItem.shares} shares`;
+=======
+        const songShares = document.createElement('span');
+        songShares.classList.add("song-shares");
+        //songShares.textContent = `${trendingItem.shares} shares`;
+        songShares.textContent = `${trendingItem.frequency} shares`;
+>>>>>>> 58882977a5263453951abf7ba4bde73f74f7b662
 
     const likeBtn = document.createElement("button");
     likeBtn.classList.add("like-btn");
@@ -137,4 +234,12 @@ function resetPage() {
   }
 }
 
-loadBaseLayout();
+//loadBaseLayout();
+
+/*export function updateUsername(val){
+    console.log("Event published. Username updated.");
+    username = val;
+    console.log("done");
+}*/
+
+

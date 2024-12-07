@@ -39,103 +39,6 @@ router.use(
   }),
 );
 
-router.get("/search", async (req, res) => {
-  // front end should always just call search
-  // if access_token already specified we simply perform query to spotify
-  // if token is not present we initiate login sequence.
-  // add parameter validation
-  // check query_type for supported types - track, episode, show
-  const supportedQueryTypes = ["track", "episode", "show"];
-
-  let query_literal = req.query.query_literal || null;
-  let query_type = req.query.query_type || null;
-
-  // getting access token from session cookie
-  let access_token = req.session.access_token || null;
-
-  // if query_type or query_literal not set - we should return an error
-  if (
-    query_type === undefined ||
-    !supportedQueryTypes.includes(query_type) ||
-    query_literal === undefined ||
-    query_literal.length === 0
-  ) {
-    // generate some kind of error
-    console.log("=> /search: invalid search parameters");
-    return res.redirect(
-      "/#" +
-        new URLSearchParams({
-          error: "invalid_parameters",
-        }),
-    );
-  }
-
-  console.log("=> /search: " + query_literal);
-
-  // if access token is not set initiate login
-  if (access_token === null || access_token.length === 0) {
-    return res.redirect(
-      "/spotify/login?" +
-        new URLSearchParams({
-          query_literal: req.query.query_literal,
-          query_type: req.query.query_type,
-        }),
-    );
-  }
-
-  console.log("search called with access token: " + access_token);
-
-  async function fetchInformation(code) {
-    const searchURL =
-      "https://api.spotify.com/v1/search?" +
-      new URLSearchParams({
-        q: query_literal,
-        type: query_type,
-      });
-
-    const result = await fetch(searchURL, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${code}` },
-    });
-
-    let spotifyRes = await result.json();
-
-    return query_type === "track"
-      ? spotifyRes.tracks.items
-      : query_type === "episode"
-        ? spotifyRes.episodes.items
-        : spotifyRes.shows.items;
-  }
-
-  let items = await fetchInformation(access_token);
-
-  // initializing database
-  const model = await ModelFactory.getModel();
-  await model.init();
-
-  // store songs into DB
-  for (let i = 0; i < items.length; i++) {
-    await model.createSubmission({
-      title: items[i].name,
-      artist: items[i].artists[0].name,
-    });
-  }
-
-  //comment later
-  /* let songs = '';
-
-    for (let i = 0; i < items.length; i++) {
-        songs += '<p><b>Song</b>: '+items[i].name+' <b>Artist</b>: '+items[i].artists[0].name+'</p>';
-    }
-
-  //console.log(songs);
-
-    let htmlPage = '<!DOCTYPE html><html lang="EN"><head><title>Song List</title></head><body><h1>Hello from Remind.Me</h1>'+songs+'</body></html>'
-
-   res.send(htmlPage);
-   */
-});
-
 router.get("/login", (req, res) => {
   console.log("=> /login");
   const scopes = "user-read-private user-read-email";
@@ -262,6 +165,105 @@ router.get("/refresh_token", (req, res) => {
       });
     }
   });
+});
+
+router.get("/search", async (req, res) => {
+  // front end should always just call search
+  // if access_token already specified we simply perform query to spotify
+  // if token is not present we initiate login sequence.
+  // add parameter validation
+  // check query_type for supported types - track, episode, show
+  const supportedQueryTypes = ["track", "episode", "show"];
+
+  let query_literal = req.query.query_literal || null;
+  let query_type = req.query.query_type || null;
+
+  // getting access token from session cookie
+  let access_token = req.session.access_token || null;
+  let username = req.session.username;
+
+  // if query_type or query_literal not set - we should return an error
+  if (
+    query_type === undefined ||
+    !supportedQueryTypes.includes(query_type) ||
+    query_literal === undefined ||
+    query_literal.length === 0
+  ) {
+    // generate some kind of error
+    console.log("=> /search: invalid search parameters");
+    return res.redirect(
+      "/#" +
+        new URLSearchParams({
+          error: "invalid_parameters",
+        }),
+    );
+  }
+
+  console.log("=> /search: " + query_literal);
+
+  // if access token is not set initiate login
+  if (access_token === null || access_token.length === 0) {
+    return res.redirect(
+      "/spotify/login?" +
+        new URLSearchParams({
+          query_literal: req.query.query_literal,
+          query_type: req.query.query_type,
+        }),
+    );
+  }
+
+  console.log("search called with access token: " + access_token);
+
+  async function fetchInformation(code) {
+    const searchURL =
+      "https://api.spotify.com/v1/search?" +
+      new URLSearchParams({
+        q: query_literal,
+        type: query_type,
+      });
+
+    const result = await fetch(searchURL, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${code}` },
+    });
+
+    let spotifyRes = await result.json();
+
+    return query_type === "track"
+      ? spotifyRes.tracks.items
+      : query_type === "episode"
+        ? spotifyRes.episodes.items
+        : spotifyRes.shows.items;
+  }
+
+  let items = await fetchInformation(access_token);
+
+  // initializing database
+  const model = await ModelFactory.getModel();
+  await model.init();
+
+  // store songs into DB
+  for (let i = 0; i < items.length; i++) {
+    await model.createSubmission({
+      title: items[i].name,
+      artist: items[i].artists[0].name,
+      user_name: username  // Associate the submission with the logged-in user
+    });
+  }
+
+  //comment later
+  /* let songs = '';
+
+    for (let i = 0; i < items.length; i++) {
+        songs += '<p><b>Song</b>: '+items[i].name+' <b>Artist</b>: '+items[i].artists[0].name+'</p>';
+    }
+
+  //console.log(songs);
+
+    let htmlPage = '<!DOCTYPE html><html lang="EN"><head><title>Song List</title></head><body><h1>Hello from Remind.Me</h1>'+songs+'</body></html>'
+
+   res.send(htmlPage);
+   */
 });
 
 module.exports = router;
