@@ -28,8 +28,8 @@ class UserController {
       }
       // Find the user in the database
       const user = await this.findUser({
-        spotify_refresh_token: req.body.spotify_refresh_token,
-        username: req.body.username,
+      //  spotify_refresh_token: req.body.spotify_refresh_token,
+        username: req.body.username
       });
       // If the user is found, send back the user as the response
       if (user) {

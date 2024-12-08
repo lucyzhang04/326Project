@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const fetch = require("node-fetch");
 const ModelFactory = require("../model/ModelFactory.js");
+const cors = require("cors");
 const router = express.Router();
 
 // Your Spotify API credentials
@@ -12,6 +13,7 @@ const client_secret = "3fb8cc68a3184950bfdc6d006dac94d3";
 const redirect_uri = "http://localhost:8888/spotify/callback?"; // Your redirect URI
 
 // http://localhost:8888/spotify/search?query_type=track&query_literal=sweet
+// http://localhost:8888/spotify/login
 
 // Helper function to generate random strings
 const generateRandomString = (length) => {
@@ -39,7 +41,7 @@ router.use(
   }),
 );
 
-router.get("/login", (req, res) => {
+router.get("/login", cors(),(req, res) => {
   console.log("=> /login");
   const scopes = "user-read-private user-read-email";
   const state = generateRandomString(16);
@@ -172,9 +174,13 @@ router.get("/search", async (req, res) => {
   let query_literal = req.query.query_literal || null;
   let query_type = req.query.query_type || null;
 
+  // store user_name in session for compatibility purpose of teammate code.
+  req.session.user_name = req.query.user_name;
+
   // getting access token from session cookie
+  // "BQAhpeuKBkDSkKqb9aJb-hAQlG2q8NOId1eEsttZqWqorKoDhtzymAEpR2ActKhDpFPv0vbV7zEyB3Uee8jHiDXE4bOMTcPZ55H40C9MVKWAb4_CVe2typ7XWW3s9c7IoKgxCj6kWESj96qphpBjynFkXUwvwUUWHwtLdNJ_ZeB2on5joVXy2FvHw-8G7Fv6Pbw"
   let access_token = req.session.access_token || null;
-  let username = req.session.username;
+
 
   // if query_type or query_literal not set - we should return an error
   if (
@@ -209,6 +215,9 @@ router.get("/search", async (req, res) => {
   console.log("search called with access token: " + access_token);
 
   async function fetchInformation(code) {
+
+    console.log("=> fetchInformation");
+
     const searchURL =
       "https://api.spotify.com/v1/search?" +
       new URLSearchParams({
@@ -223,41 +232,28 @@ router.get("/search", async (req, res) => {
 
     let spotifyRes = await result.json();
 
+    console.log("<=fetchInformation");
+
+    /*
     return query_type === "track"
-      ? spotifyRes.tracks.items
+      ? spotifyRes.tracks
       : query_type === "episode"
-        ? spotifyRes.episodes.items
-        : spotifyRes.shows.items;
+        ? spotifyRes.episodes
+        : spotifyRes.shows;
+     */
+    return spotifyRes;
   }
 
   let items = await fetchInformation(access_token);
 
-  // initializing database
-  const model = await ModelFactory.getModel();
-  await model.init();
+  console.log("<=search");
 
-  // store songs into DB
-  for (let i = 0; i < items.length; i++) {
-    await model.createSubmission({
-      title: items[i].name,
-      artist: items[i].artists[0].name,
-      user_name: username  // Associate the submission with the logged-in user
-    });
-  }
+  res.json(items);
 
-  //comment later
-  /* let songs = '';
+  res.end();
 
-    for (let i = 0; i < items.length; i++) {
-        songs += '<p><b>Song</b>: '+items[i].name+' <b>Artist</b>: '+items[i].artists[0].name+'</p>';
-    }
+  return res;
 
-  //console.log(songs);
-
-    let htmlPage = '<!DOCTYPE html><html lang="EN"><head><title>Song List</title></head><body><h1>Hello from Remind.Me</h1>'+songs+'</body></html>'
-
-   res.send(htmlPage);
-   */
 });
 
 module.exports = router;

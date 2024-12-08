@@ -18,7 +18,7 @@ const User = sequelize.define("User", {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Ensure that usernames are unique
+    unique: false, // Ensure that usernames are unique
   },
   spotify_refresh_token: {
     type: DataTypes.STRING,
@@ -59,7 +59,7 @@ const Submission = sequelize.define("Submission", {
     },
     onDelete: 'CASCADE', // Cascade delete: when a User is deleted, the associated Submissions are also deleted
     onUpdate: 'CASCADE', // Cascade update: if the username is updated, the associated Submissions are updated
-  },
+  }
 });
 
 // Define the Quotes table
@@ -289,73 +289,28 @@ class _SQLiteModel {
     }
   }
 
-  async getLongestStreak(){
-    const submissions = await Submission.findAll({
-      attributes: ['user_name', 'submissionDate'],
-      order: [
-        ['user_name', 'ASC'],
-        ['submissionDate', 'ASC']
-      ]
-    });
-
-    let longestStreakUser = null;
-    let longestStreak = 0;
-    let currentUser = null;
-    let currentStreak = 0;
-    let previousDate = null;
-
-    submissions.forEach(submission => {
-      const userID = submission.user_name;
-      const submissionDate = submission.submissionDate
-
-      if (userID !== currentUser) {
-        // New user: reset streak
-        currentUser = userID;
-        currentStreak = 1;
-        previousDate = submissionDate;
-      } else {
-        // Same user: check if submission is consecutive
-        const diffDays = (submissionDate - previousDate) / (1000 * 60 * 60 * 24);
-        if (diffDays === 1) {
-          currentStreak++; // Increment streak if consecutive
-        } else if (diffDays > 1) {
-          currentStreak = 1; // Reset streak if not consecutive
-        }
-        previousDate = submissionDate;
-      }
-
-      // Update longest streak
-      if (currentStreak > longestStreak) {
-        longestStreak = currentStreak;
-        longestStreakUser = currentUser;
-      }
-    });
-
-    return { userID: longestStreakUser, streak: longestStreak };
-  }
-
   async getYourSubmissions(username) {
-    console.log("In getYourSubmissions");
     if (!username) {
       throw new Error("Username filter is required.");
     }
   
     try {
       const submissions = await Submission.findAll({
-        attributes: ["title", "artist", "user_name"], // Extract title and artist from Submission table
-        where: {
-          user_name: username,
-        },
+        attributes: ["title", "artist"], // Extract title and artist from Submission table
+        include: [
+          {
+            model: User,
+            attributes: ["username"], // Extract username from the User table
+            where: { username }, // Mandatory filter on username
+          },
+        ],
       });
-      console.log("Here are all your submissions!")
-      console.log(submissions);
   
       return submissions.map((submission) => ({
-        username: submission.user_name, // Access the associated User's username
+        username: submission.User.username, // Access the associated User's username
         title: submission.title,
         artist: submission.artist,
       }));
-
     } catch (error) {
       console.error("Error fetching submissions with user details:", error);
       throw error;
@@ -374,7 +329,7 @@ class _SQLiteModel {
     return await User.findOne({
       where: {
         username: user.username,
-        spotify_refresh_token: user.spotify_refresh_token,
+     //   spotify_refresh_token: user.spotify_refresh_token,
       },
     });
   }

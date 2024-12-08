@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const SAPIService = new SpotifyAPIFakeService();
 
   const inputElem = document.getElementById("podcast-song");
+  const usernameElem = document.getElementById("username");
   const resultsElem = document.getElementById("results-list");
   const formElem = document.getElementById("user-form");
   const savedElem = document.getElementById("saved-list");
@@ -19,7 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault(); // Prevent page reload
 
     const searchValue = inputElem.value;
-    const results = await SAPIService.searchSongs(searchValue);
+    const usernameValue  = usernameElem.value;
+    const results = await SAPIService.searchSongs(searchValue, usernameValue);
     renderResults(results);
   });
 

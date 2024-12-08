@@ -13,6 +13,8 @@ const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
 
 app.use(cors());
+
+//app.use(cors());
 app.use(express.json());
 const songRoutes = require("./routes/feed-routes.js");
 app.use("/feed", songRoutes);
