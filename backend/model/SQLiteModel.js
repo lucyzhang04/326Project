@@ -1,5 +1,6 @@
 // import { Sequelize, DataTypes } from "sequelize";
 const { Sequelize, DataTypes, Op } = require("sequelize");
+const fetch = require("node-fetch");
 
 // Initialize a new Sequelize instance with SQLite
 const sequelize = new Sequelize({
@@ -453,30 +454,6 @@ class _SQLiteModel {
     return user;
   }
 
-  // QUOTES
-  async createQuote(quote) {
-    return await Quote.create(quote);
-  }
-
-  async readQuote(id = null) {
-    if (id) {
-      return await Quote.findByPk(id);
-    }
-    return await Quote.findAll();
-  }
-
-  async deleteQuote(quote = null) {
-    if (quote === null) {
-      await Quote.destroy({ truncate: true });
-      return;
-    }
-
-    await Quote.destroy({
-      where: { quoteid: quote.quoteid },
-    });
-    return quote;
-  }
-
   async getSubsToday(){
     const today = new Date(); 
     today.setHours(0, 0, 0, 0); 
@@ -505,6 +482,70 @@ class _SQLiteModel {
     catch(e){
       console.log(e);
       console.log("Unable to fetch today's songs."); 
+    }
+  }
+
+  // QUOTES
+  async createQuote(quote) {
+    return await Quote.create(quote);
+  }
+
+  async readQuote(id = null) {
+    if (id) {
+      return await Quote.findByPk(id);
+    }
+    return await Quote.findAll();
+  }
+
+  async deleteQuote(quote = null) {
+    if (quote === null) {
+      await Quote.destroy({ truncate: true });
+      return;
+    }
+
+    await Quote.destroy({
+      where: {quoteid: quote.quoteid},
+    });
+    return quote;
+  }
+
+  // QUOTES
+  async getQuote() {
+    let currDay = new Date();
+    currDay.setHours(0, 0, 0, 0);
+
+    try {
+      let currQuote = await Quote.findOne({
+        where: {
+          quoteDate: {
+            [Op.eq]: currDay
+          }
+        }
+      });
+
+      if (!currQuote) {
+        try {
+          const response = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
+          const quoteData = await response.json();
+
+          currQuote = await this.createQuote({
+            quote: quoteData[0].q, 
+            person: quoteData[0].a, 
+            quoteDate: currDay
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          currQuote = await this.createQuote({
+            quote: "326! Yay!", 
+            person: "Tim Richards", 
+            quoteDate: currDay
+          });
+        }
+      }
+      return currQuote;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
     }
   }
 }
