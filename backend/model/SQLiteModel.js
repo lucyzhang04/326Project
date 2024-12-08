@@ -18,7 +18,7 @@ const User = sequelize.define("User", {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Ensure that usernames are unique
+    unique: false, // Ensure that usernames are unique
   },
   spotify_refresh_token: {
     type: DataTypes.STRING,
@@ -59,7 +59,7 @@ const Submission = sequelize.define("Submission", {
     },
     onDelete: 'CASCADE', // Cascade delete: when a User is deleted, the associated Submissions are also deleted
     onUpdate: 'CASCADE', // Cascade update: if the username is updated, the associated Submissions are updated
-  },
+  }
 });
 
 // Define the Quotes table
@@ -334,7 +334,6 @@ class _SQLiteModel {
   }
 
   async getYourSubmissions(username) {
-    console.log("In getYourSubmissions");
     if (!username) {
       throw new Error("Username filter is required.");
     }
@@ -346,16 +345,41 @@ class _SQLiteModel {
           user_name: username,
         },
       });
-      console.log("Here are all your submissions!")
-      console.log(submissions);
   
       return submissions.map((submission) => ({
-        username: submission.user_name, // Access the associated User's username
+        username: submission.User.username,
         title: submission.title,
         artist: submission.artist,
         submissiondate: submission.submissionDate
       }));
+    } catch (error) {
+      console.error("Error fetching submissions with user details:", error);
+      throw error;
+    }
+  }
 
+  async getYourSubmissions(username) {
+    if (!username) {
+      throw new Error("Username filter is required.");
+    }
+  
+    try {
+      const submissions = await Submission.findAll({
+        attributes: ["title", "artist"], 
+        include: [
+          {
+            model: User,
+            attributes: ["username"], 
+            where: { username }, 
+          },
+        ],
+      });
+  
+      return submissions.map((submission) => ({
+        username: submission.User.username, 
+        title: submission.title,
+        artist: submission.artist,
+      }));
     } catch (error) {
       console.error("Error fetching submissions with user details:", error);
       throw error;
@@ -374,7 +398,7 @@ class _SQLiteModel {
     return await User.findOne({
       where: {
         username: user.username,
-        spotify_refresh_token: user.spotify_refresh_token,
+     //   spotify_refresh_token: user.spotify_refresh_token,
       },
     });
   }
