@@ -1,33 +1,43 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
     <title>Remind.me</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="navbar"></div>
     <p class="header">Here's what others are listening to...</p>
-    <script>
-        fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-            
-            const navLinkEls = document.querySelectorAll('.nav__link');
-            const windowPathname = window.location.pathname;
+    <script type="module">
+      import SpotifyLogin from "./SpotifyLogin.js";
+      SpotifyLogin();
 
-            navLinkEls.forEach(navLinkEl => {
-                if (navLinkEl.href.includes(windowPathname)) {
-                    navLinkEl.classList.add('active');
-                }
-            });
-          })
-          .catch(error => console.error('Error loading navbar:', error));
+      fetch("navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+
+          const navLinkEls = document.querySelectorAll(".nav__link");
+          const windowPathname = window.location.pathname;
+
+          navLinkEls.forEach((navLinkEl) => {
+            if (navLinkEl.href.includes(windowPathname)) {
+              navLinkEl.classList.add("active");
+            }
+          });
+        })
+        .then(() => {
+          document.dispatchEvent(new CustomEvent("readyForHydration"));
+        })
+        .catch((error) => console.error("Error loading navbar:", error));
     </script>
     <div class="no-sub-msg" id="no-sub-screen"></div>
     <div class="grid" id="widget-grid"></div>
     <script type="module" src="./feed-script.js"></script>
   </body>
 </html>
+

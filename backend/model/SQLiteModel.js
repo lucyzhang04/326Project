@@ -17,7 +17,7 @@ const User = sequelize.define("User", {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Ensure that usernames are unique
+    unique: true, // Ensure that usernamesare unique
   },
   spotify_refresh_token: {
     type: DataTypes.STRING,
@@ -53,11 +53,11 @@ const Submission = sequelize.define("Submission", {
     type: DataTypes.STRING,
     allowNull: false,
     references: {
-      model: User, 
-      key: 'username',
+      model: User,
+      key: "username",
     },
-    onDelete: 'CASCADE', // Cascade delete: when a User is deleted, the associated Submissions are also deleted
-    onUpdate: 'CASCADE', // Cascade update: if the username is updated, the associated Submissions are updated
+    onDelete: "CASCADE", // Cascade delete: when a User is deleted, the associated Submissions are also deleted
+    onUpdate: "CASCADE", // Cascade update: if the username is updated, the associated Submissions are updated
   },
 });
 
@@ -79,14 +79,13 @@ const Quote = sequelize.define("Quote", {
   quoteDate: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: Sequelize.NOW, 
+    defaultValue: Sequelize.NOW,
   },
 });
 
 // Define relationships
-User.hasMany(Submission, { foreignKey: 'user_name' }); // A User can have many Submissions
-Submission.belongsTo(User, { foreignKey: 'user_name' }); // A Submission belongs to a User
-
+User.hasMany(Submission, { foreignKey: "user_name" }); // A User can have many Submissions
+Submission.belongsTo(User, { foreignKey: "user_name" }); // A Submission belongs to a User
 
 class _SQLiteModel {
   constructor() {}
@@ -94,10 +93,12 @@ class _SQLiteModel {
   async init(fresh = false) {
     try {
       await sequelize.authenticate();
-      await sequelize.sync({force: fresh }); 
+      await sequelize.sync({ force: fresh });
       if (fresh) {
         await this.delete();
-        console.log("Database initialized with a fresh start (tables dropped).");
+        console.log(
+          "Database initialized with a fresh start (tables dropped).",
+        );
       } else {
         console.log("Database initialized without dropping existing tables.");
       }
@@ -142,34 +143,29 @@ class _SQLiteModel {
     return task;
   }
 
-  async getSubsToday(){
-    const today = new Date(); 
-    today.setHours(0, 0, 0, 0); 
-    try{
+  async getSubsToday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    try {
       const songsToday = await Submission.findAll({
-        attributes: [
-          "title", 
-          "artist",
-          "imageURL"
-        ],
+        attributes: ["title", "artist", "imageURL"],
         where: {
           submissionDate: {
-            [Op.gte]: today
-          }
-        }
+            [Op.gte]: today,
+          },
+        },
       });
 
       const query = songsToday.map((sub) => ({
-        title: sub.title, 
-        artist: sub.artist, 
-        imageURL: sub.imageURL 
-      })); 
-      console.log(query); 
-      return songsToday; 
-    }
-    catch(e){
+        title: sub.title,
+        artist: sub.artist,
+        imageURL: sub.imageURL,
+      }));
+      console.log(query);
+      return songsToday;
+    } catch (e) {
       console.log(e);
-      console.log("Unable to fetch today's songs."); 
+      console.log("Unable to fetch today's songs.");
     }
   }
 
@@ -177,42 +173,40 @@ class _SQLiteModel {
   and returns the top 5 shared entries for a given day (will filter submission table by current day)
   with info such as artist, name, and freq. 
   */
-  async getTrending(){
-
+  async getTrending() {
     //TO-DO: MODIFY SO THAT THE QUERIES FILTER BASED ON CURRENT DAY --> DONE
 
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
 
-    try{
-
+    try {
       const topSongs = await Submission.findAll({
         //the attributes value essentially determine the freq. count for each song title
         attributes: [
-          'title',
-          'artist',
-          [Sequelize.fn('COUNT', Sequelize.col('title')), 'songFrequency']
-        ], 
-        //filters out only entries that were submitted at most a week ago. 
+          "title",
+          "artist",
+          [Sequelize.fn("COUNT", Sequelize.col("title")), "songFrequency"],
+        ],
+        //filters out only entries that were submitted at most a week ago.
         where: {
           submissionDate: {
             [Op.gte]: currentDate,
           },
         },
         //this aggregates the frequency by group
-        group: ['title'],
+        group: ["title"],
         //sort in desc. order and limit to top 5.
-        order: [[Sequelize.literal('songFrequency'), 'DESC']],
-        limit: 5
+        order: [[Sequelize.literal("songFrequency"), "DESC"]],
+        limit: 5,
       });
 
       //map each entry to {title, artist, freq}
-      return topSongs.map(entry => ({
+      return topSongs.map((entry) => ({
         title: entry.title,
         artist: entry.artist,
-        frequency: entry.getDataValue('songFrequency'),
+        frequency: entry.getDataValue("songFrequency"),
       }));
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   }
@@ -224,57 +218,56 @@ class _SQLiteModel {
   3 users with the most contributions over the past week. 
   */
 
-  async getTopContributors(){
-
+  async getTopContributors() {
     //TO-DO: MODIFY SO THAT THE QUERIES FILTER OUT ENTRIES THAT ARE OLDER THAN A WEEK --> DONE
     const currentDate = new Date();
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(currentDate.getDate() - 7);
 
-    try{
+    try {
       const topContributors = await Submission.findAll({
         attributes: [
-          'user_name',
-          [Sequelize.fn('COUNT', Sequelize.col('user_name')), 'userFrequency']
+          "user_name",
+          [Sequelize.fn("COUNT", Sequelize.col("user_name")), "userFrequency"],
         ],
         where: {
-          submissionDate : {
+          submissionDate: {
             [Op.gte]: oneWeekAgo,
           },
         },
-        group: ['user_name'],
-        order: [[Sequelize.literal('userFrequency'), 'DESC']],
-        limit: 3
+        group: ["user_name"],
+        order: [[Sequelize.literal("userFrequency"), "DESC"]],
+        limit: 3,
       });
 
       //for now, since the users database isn't set up yet, the userID will be returned
       //ultimately, will need to join the submission/user databases using userID to associate username with the freq.
-      return topContributors.map(user => ({
+      return topContributors.map((user) => ({
         user: user.user_name,
-        frequency: user.getDataValue('userFrequency'),
+        frequency: user.getDataValue("userFrequency"),
       }));
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   }
 
-  async getUserContributionTime(user_name){
-    try{
+  async getUserContributionTime(user_name) {
+    try {
       const totalContributionTime = await Submission.sum({
         where: {
           user_name: user_name,
-        }
+        },
       });
 
       return totalContributionTime;
-    }catch(e){
+    } catch (e) {
       //unable to fetch user's contributions from submission table
       console.log(e);
     }
   }
 
-  async getUserTotalContributions(user_name){
-    try{ 
+  async getUserTotalContributions(user_name) {
+    try {
       const totalContributions = await Submission.count({
         where: {
           user_name: user_name,
@@ -282,19 +275,18 @@ class _SQLiteModel {
       });
 
       return totalContributions;
-
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   }
 
-  async getLongestStreak(){
+  async getLongestStreak() {
     const submissions = await Submission.findAll({
-      attributes: ['user_name', 'submissionDate'],
+      attributes: ["user_name", "submissionDate"],
       order: [
-        ['user_name', 'ASC'],
-        ['submissionDate', 'ASC']
-      ]
+        ["user_name", "ASC"],
+        ["submissionDate", "ASC"],
+      ],
     });
 
     let longestStreakUser = null;
@@ -303,9 +295,9 @@ class _SQLiteModel {
     let currentStreak = 0;
     let previousDate = null;
 
-    submissions.forEach(submission => {
+    submissions.forEach((submission) => {
       const userID = submission.user_name;
-      const submissionDate = submission.submissionDate
+      const submissionDate = submission.submissionDate;
 
       if (userID !== currentUser) {
         // New user: reset streak
@@ -314,7 +306,8 @@ class _SQLiteModel {
         previousDate = submissionDate;
       } else {
         // Same user: check if submission is consecutive
-        const diffDays = (submissionDate - previousDate) / (1000 * 60 * 60 * 24);
+        const diffDays =
+          (submissionDate - previousDate) / (1000 * 60 * 60 * 24);
         if (diffDays === 1) {
           currentStreak++; // Increment streak if consecutive
         } else if (diffDays > 1) {
@@ -337,7 +330,7 @@ class _SQLiteModel {
     if (!username) {
       throw new Error("Username filter is required.");
     }
-  
+
     try {
       const submissions = await Submission.findAll({
         attributes: ["title", "artist"], // Extract title and artist from Submission table
@@ -349,7 +342,7 @@ class _SQLiteModel {
           },
         ],
       });
-  
+
       return submissions.map((submission) => ({
         username: submission.User.username, // Access the associated User's username
         title: submission.title,
@@ -426,34 +419,29 @@ class _SQLiteModel {
     return quote;
   }
 
-  async getSubsToday(){
-    const today = new Date(); 
-    today.setHours(0, 0, 0, 0); 
-    try{
+  async getSubsToday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    try {
       const songsToday = await Submission.findAll({
-        attributes: [
-          "title", 
-          "artist",
-          "imageURL"
-        ],
+        attributes: ["title", "artist", "imageURL"],
         where: {
           submissionDate: {
-            [Op.gte]: today
-          }
-        }
+            [Op.gte]: today,
+          },
+        },
       });
 
       const query = songsToday.map((sub) => ({
-        title: sub.title, 
-        artist: sub.artist, 
-        imageURL: sub.imageURL 
-      })); 
-      console.log(query); 
-      return songsToday; 
-    }
-    catch(e){
+        title: sub.title,
+        artist: sub.artist,
+        imageURL: sub.imageURL,
+      }));
+      console.log(query);
+      return songsToday;
+    } catch (e) {
       console.log(e);
-      console.log("Unable to fetch today's songs."); 
+      console.log("Unable to fetch today's songs.");
     }
   }
 }
