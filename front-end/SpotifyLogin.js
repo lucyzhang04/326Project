@@ -47,6 +47,7 @@ export default function HandleSpotifyLogin() {
   });
 
   function updateUI(profilePicture, displayName) {
+    document.dispatchEvent(new CustomEvent("login"));
     const userContainer = document.getElementById("user-container");
     if (!userContainer) {
       console.error("User container element not found");
@@ -139,6 +140,7 @@ export default function HandleSpotifyLogin() {
   }
 
   function logout() {
+    document.dispatchEvent(new CustomEvent("logout"));
     // Clear localStorage items
     localStorage.removeItem("spotify_access_token");
     localStorage.removeItem("spotify_username");

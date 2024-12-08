@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,7 +17,7 @@
       <div class="song-input-header">
         Share a song or podcast that makes you think of today's quote!
       </div>
-      <div class="input-area" id="input-area">
+      <div class="input-area" id="logged-in" style="display: none">
         <form id="user-form">
           <div>
             <label for="podcast-song">Podcast/Song:</label>
@@ -39,6 +39,10 @@
         </div>
         <script type="module" src="search-song.js"></script>
       </div>
+      <div id="logged-out">
+        Please <strong><a href="/spotify/login">log in</a></strong> to submit a
+        song or podcast!
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -49,6 +53,17 @@
       import { TaskDatabase } from "./originalDatabase.js";
       import SpotifyLogin from "./SpotifyLogin.js";
       SpotifyLogin();
+
+      // add submission elements when user logs in:
+      document.addEventListener("login", () => {
+        document.getElementById("logged-in").style.display = "flex";
+        document.getElementById("logged-out").style.display = "none";
+      });
+
+      document.addEventListener("logout", () => {
+        document.getElementById("logged-in").style.display = "none";
+        document.getElementById("logged-out").style.display = "block";
+      });
 
       fetch("navbar.html")
         .then((response) => response.text())
@@ -75,7 +90,7 @@
       async function loadQuote() {
         try {
           let currQuote = await axios.get(
-            "http://localhost:8888/api/quotes/daily-quote"
+            "http://localhost:8888/api/quotes/daily-quote",
           );
           let quoteData = await currQuote.data;
           renderQuote(quoteData);
@@ -121,7 +136,7 @@
           currDay.getDate() + 1,
           0,
           0,
-          0
+          0,
         );
         let remainingTime = nextDay.getTime() - currDay.getTime();
 
