@@ -88,7 +88,6 @@ const Quote = sequelize.define("Quote", {
 User.hasMany(Submission, { foreignKey: 'user_name' }); // A User can have many Submissions
 Submission.belongsTo(User, { foreignKey: 'user_name' }); // A Submission belongs to a User
 
-
 class _SQLiteModel {
   constructor() {}
 
@@ -341,20 +340,17 @@ class _SQLiteModel {
   
     try {
       const submissions = await Submission.findAll({
-        attributes: ["title", "artist"],
-        include: [
-          {
-            model: User,
-            attributes: ["username"], 
-            where: { username }, 
-          },
-        ],
+        attributes: ["title", "artist", "user_name", "submissionDate"], // Extract title and artist from Submission table
+        where: {
+          user_name: username,
+        },
       });
   
       return submissions.map((submission) => ({
         username: submission.User.username,
         title: submission.title,
         artist: submission.artist,
+        submissiondate: submission.submissionDate
       }));
     } catch (error) {
       console.error("Error fetching submissions with user details:", error);
@@ -525,6 +521,55 @@ class _SQLiteModel {
       throw error;
     }
   }
+
+  async getQuoteByDate(date) {
+    // Normalize the provided date to the start of the day (set hours to 00:00:00)
+    let currDay = new Date(date);
+    currDay.setHours(0, 0, 0, 0);
+  
+    try {
+      // Attempt to find a quote for the given date
+      let currQuote = await Quote.findOne({
+        where: {
+          quoteDate: {
+            [Op.eq]: currDay
+          }
+        }
+      });
+  
+      // If no quote exists for the provided date
+      if (!currQuote) {
+        try {
+          // Fetch a random quote from an external API
+          const response = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
+          const quoteData = await response.json();
+  
+          // Create a new quote record for the provided date
+          currQuote = await this.createQuote({
+            quote: quoteData[0].q,
+            person: quoteData[0].a,
+            quoteDate: currDay
+          });
+        } catch (error) {
+          console.error("Error fetching quote:", error);
+          
+          // If fetching the API quote fails, create a fallback quote
+          currQuote = await this.createQuote({
+            quote: "Default quote due to error.", 
+            person: "Unknown", 
+            quoteDate: currDay
+          });
+        }
+      }
+  
+      // Return the quote (either from the DB or newly created)
+      return currQuote;
+    } catch (error) {
+      console.error("Error in getQuoteByDate:", error);
+      throw error;
+    }
+  }
+  
 }
 
 const SQLiteModel = new _SQLiteModel();
