@@ -87,6 +87,9 @@ const Quote = sequelize.define("Quote", {
 User.hasMany(Submission, { foreignKey: 'user_name' }); // A User can have many Submissions
 Submission.belongsTo(User, { foreignKey: 'user_name' }); // A Submission belongs to a User
 
+// Add a placeholder association between Submission and Quote
+Submission.hasMany(Quote, { constraints: false });
+Quote.belongsTo(Submission, { constraints: false });
 
 class _SQLiteModel {
   constructor() {}
@@ -333,6 +336,34 @@ class _SQLiteModel {
     return { userID: longestStreakUser, streak: longestStreak };
   }
 
+  // async getYourSubmissions(username) {
+  //   console.log("In getYourSubmissions");
+  //   if (!username) {
+  //     throw new Error("Username filter is required.");
+  //   }
+  
+  //   try {
+  //     const submissions = await Submission.findAll({
+  //       attributes: ["title", "artist", "user_name"], // Extract title and artist from Submission table
+  //       where: {
+  //         user_name: username,
+  //       },
+  //     });
+  //     console.log("Here are all your submissions!")
+  //     console.log(submissions);
+  
+  //     return submissions.map((submission) => ({
+  //       username: submission.user_name, // Access the associated User's username
+  //       title: submission.title,
+  //       artist: submission.artist,
+  //     }));
+
+  //   } catch (error) {
+  //     console.error("Error fetching submissions with user details:", error);
+  //     throw error;
+  //   }
+  // }
+
   async getYourSubmissions(username) {
     console.log("In getYourSubmissions");
     if (!username) {
@@ -341,25 +372,45 @@ class _SQLiteModel {
   
     try {
       const submissions = await Submission.findAll({
-        attributes: ["title", "artist", "user_name"], // Extract title and artist from Submission table
+        attributes: [
+          "title",
+          "artist",
+          "user_name",
+          "submissionDate"
+        ],
         where: {
           user_name: username,
         },
+        include: [
+          {
+            model: Quote,
+            attributes: [['quote', 'matching_quote']], // Only fetch the "quote" column
+            required: false,
+            on: Sequelize.where(
+              Sequelize.fn('DATE', Sequelize.col('Quotes.quoteDate')), // Convert quoteDate to DATE
+              Sequelize.fn('DATE', Sequelize.col('Submission.submissionDate')) // Convert submissionDate to DATE
+            ),
+          },
+        ],
       });
-      console.log("Here are all your submissions!")
+  
+      console.log("Here are all your submissions with matching quotes!");
       console.log(submissions);
   
       return submissions.map((submission) => ({
-        username: submission.user_name, // Access the associated User's username
+        username: submission.user_name,
         title: submission.title,
         artist: submission.artist,
+        matching_quote: submission.dataValues.matching_quote, // Access the joined column
+        submissiondate: submission.submissionDate
       }));
-
     } catch (error) {
-      console.error("Error fetching submissions with user details:", error);
+      console.error("Error fetching submissions with matching quotes:", error);
       throw error;
     }
   }
+  
+  
 
   // USER
   async readUser(id = null) {
