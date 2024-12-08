@@ -13,7 +13,7 @@ class QuotesController {
   // Get all quotes
   async getAllQuotes(req, res) {
     const quotes = await this.model.readQuote();
-    res.json({ quotes });
+    res.json({quotes});
   }
 
   // Add a new quote
@@ -25,7 +25,7 @@ class QuotesController {
       }
 
       // Create the new submission object with a unique ID
-      const quote = await this.model.createQuote(req.body);
+      const quote = await this.model.createQuote({quote: req.body.quote, person: req.body.person, quoteDate: new Date()});
       
       // Send back the created quote as the response
       return res.status(201).json(quote);

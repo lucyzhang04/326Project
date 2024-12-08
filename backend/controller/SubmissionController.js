@@ -103,16 +103,16 @@ class SubmissionController {
   }
 
   async getYourSubmissions(req, res){
-    if(!req.body || !req.body.user_name){
-      console.log("here");
+    console.log(req.query);
+    if(!req.query || !req.query.user_name){
+      console.log("in unwanted case");
       return res.status(400).json({ error: "user_name is required." });
     }
-    const user_name = req.body.user_name;
+    const user_name = req.query.user_name;
     const yourSubmissions = await this.model.getYourSubmissions(user_name);
     return res.json({yourSubmissions});
   }
 }
-
 
 //export default new SubmissionController();
 const submissionController = new SubmissionController(); 

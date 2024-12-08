@@ -13,6 +13,8 @@ const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
 
 app.use(cors());
+
+//app.use(cors());
 app.use(express.json());
 const songRoutes = require("./routes/feed-routes.js");
 app.use("/feed", songRoutes);
@@ -24,7 +26,10 @@ app.use("/user", userRoutes);
 //app.use(express.json());
 //const songRoutes = require('./routes/feed-routes.js');
 //app.use('/feed', songRoutes);
-//app.use('/spotify', spotifyRoutes);
+//app.use('/spotify', spotifyRoute
+
+const quoteRoutes = require('./routes/quote-routes');
+app.use('/api/quotes', quoteRoutes);
 
 const summaryStatRoutes = require("./routes/trending-routes.js");
 app.use("/trending", summaryStatRoutes);
