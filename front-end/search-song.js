@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const SAPIService = new SpotifyAPIFakeService();
 
   const inputElem = document.getElementById("podcast-song");
-  const usernameElem = document.getElementById("username");
   const resultsElem = document.getElementById("results-list");
   const formElem = document.getElementById("user-form");
   const savedElem = document.getElementById("saved-list");
@@ -20,18 +19,43 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault(); // Prevent page reload
 
     const searchValue = inputElem.value;
-    const usernameValue  = usernameElem.value;
-    const results = await SAPIService.searchSongs(searchValue, usernameValue);
+    const username = localStorage.getItem("username");
+    const results = await SAPIService.searchSongs(searchValue, username);
     renderResults(results);
   });
 
-  document.querySelector('.saved-btn').addEventListener('click', function(event) {
-    event.preventDefault();
+  document
+    .querySelector(".saved-btn")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      const username = localStorage.getItem("username");
 
-    savedTracks.length === 0 ?
-      (alert("Select at least one song please.")) : 
-      (window.location.href = 'feed.html');
-  });
+      if (savedTracks.length === 0) {
+        alert("Select at least one song please.");
+      } else {
+        console.log("creating submission");
+        console.log(savedTracks[0]);
+        fetch("/feed/add_sub", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_name: username,
+            title: savedTracks[0].name,
+            artist: savedTracks[0].artists[0].name,
+            imageURL: savedTracks[0]?.album?.images[0]?.url || null,
+          }),
+        }).then((response) => {
+          console.log(response);
+          if (response.status === 201) {
+            window.location.href = "feed.html";
+          } else {
+            alert("Failed to create submission");
+          }
+        });
+      }
+    });
 
   function renderResults(results) {
     console.log(results);
@@ -61,12 +85,20 @@ document.addEventListener("DOMContentLoaded", () => {
       // Click song to save the song
       resultElem.addEventListener("click", async () => {
         const trackIndex = savedTracks.findIndex(
-          (track) => // Should work fine with just href but just in case
-            track.name === result.name && track.artists[0].name === result.artists[0].name && track.href === result.href
+          (
+            track, // Should work fine with just href but just in case
+          ) =>
+            track.name === result.name &&
+            track.artists[0].name === result.artists[0].name &&
+            track.href === result.href,
         );
-        trackIndex !== -1 ? 
-          (savedTracks.splice(trackIndex, 1), resultElem.style.backgroundColor = "", updateSaved(savedTracks)) :
-          (savedTracks.push(result), resultElem.style.backgroundColor = "#3267ad", updateSaved(savedTracks));
+        trackIndex !== -1
+          ? (savedTracks.splice(trackIndex, 1),
+            (resultElem.style.backgroundColor = ""),
+            updateSaved(savedTracks))
+          : (savedTracks.push(result),
+            (resultElem.style.backgroundColor = "#3267ad"),
+            updateSaved(savedTracks));
         console.log("Saved Tracks:", savedTracks); // Debug line
       });
       resultsElem.appendChild(resultElem);
@@ -96,8 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
       text.appendChild(title);
       text.appendChild(artist);
       resultElem.appendChild(text);
-      
+
       savedElem.appendChild(resultElem);
     });
   }
 });
+
