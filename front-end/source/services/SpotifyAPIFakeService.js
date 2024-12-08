@@ -21,18 +21,24 @@ export default class SpotifyAPIFakeService extends Service {
 
   /**
    * @param {string} query
+   * @param {string} username
    */
-  async searchSongs(query) {
-    // TODO: Something is not working when I try importing fetch. Rather than wasting time
-    // trying to figure this out, let's just use the fetch function directly in MS4.
-    // const response = await fetch("http://localhost:3000/search_song", {
-    //   method: "POST",
-    //   body: JSON.stringify(query),
-    // });
-    // const data = await response.json();
-    if (!this.hips) {
-      await this.loadHips()
-    }
+  async searchSongs(query, username) {
+
+    const url = new URL('http://localhost:8888/spotify/search');
+    const params = new URLSearchParams();
+    params.append('query_type', 'track');
+    params.append('query_literal', query); // Add another parameter
+    params.append('user_name', username); // Add another parameter
+
+    url.search = params.toString();
+
+    this.hips = await fetch(url)
+        .then(response => response.json())
+        .catch(error => console.error('Error:', error));
+
+     console.log("JSON >>> "+this.hips);
+
     return this.hips
   }
 
