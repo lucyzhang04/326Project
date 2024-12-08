@@ -1,12 +1,12 @@
 // import { Sequelize, DataTypes } from "sequelize";
-const { Sequelize, DataTypes, Op } = require("sequelize");
-const fetch = require("node-fetch");
+const { Sequelize, DataTypes, Op } = require("sequelize")
+const fetch = require("node-fetch")
 
 // Initialize a new Sequelize instance with SQLite
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: "database.sqlite",
-});
+})
 
 // Define User table
 const User = sequelize.define("User", {
@@ -24,7 +24,7 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
+})
 
 // Define the Submissions table
 const Submission = sequelize.define("Submission", {
@@ -54,13 +54,13 @@ const Submission = sequelize.define("Submission", {
     type: DataTypes.STRING,
     allowNull: false,
     references: {
-      model: User, 
-      key: 'username',
+      model: User,
+      key: "username",
     },
     onDelete: 'CASCADE', // Cascade delete: when a User is deleted, the associated Submissions are also deleted
     onUpdate: 'CASCADE', // Cascade update: if the username is updated, the associated Submissions are updated
   }
-});
+})
 
 // Define the Quotes table
 const Quote = sequelize.define("Quote", {
@@ -80,97 +80,93 @@ const Quote = sequelize.define("Quote", {
   quoteDate: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: Sequelize.NOW, 
+    defaultValue: Sequelize.NOW,
   },
-});
+})
 
 // Define relationships
-User.hasMany(Submission, { foreignKey: 'user_name' }); // A User can have many Submissions
-Submission.belongsTo(User, { foreignKey: 'user_name' }); // A Submission belongs to a User
-
+User.hasMany(Submission, { foreignKey: "user_name" }) // A User can have many Submissions
+Submission.belongsTo(User, { foreignKey: "user_name" }) // A Submission belongs to a User
 
 class _SQLiteModel {
-  constructor() {}
+  constructor() { }
 
   async init(fresh = false) {
     try {
-      await sequelize.authenticate();
-      await sequelize.sync({force: fresh }); 
+      await sequelize.authenticate()
+      await sequelize.sync({ force: fresh })
       if (fresh) {
-        await this.delete();
-        console.log("Database initialized with a fresh start (tables dropped).");
+        await this.delete()
+        console.log(
+          "Database initialized with a fresh start (tables dropped).",
+        )
       } else {
-        console.log("Database initialized without dropping existing tables.");
+        console.log("Database initialized without dropping existing tables.")
       }
     } catch (error) {
-      console.error("Error during database initialization:", error);
-      throw error; // Propagate the error for further handling
+      console.error("Error during database initialization:", error)
+      throw error // Propagate the error for further handling
     }
   }
 
   // SUBMISSION
   async createSubmission(submission) {
-    return await Submission.create(submission);
+    return await Submission.create(submission)
   }
 
   async readSubmission(id = null) {
     if (id) {
-      return await Submission.findByPk(id);
+      return await Submission.findByPk(id)
     }
 
-    return await Submission.findAll();
+    return await Submission.findAll()
   }
 
   async updateSubmission(submission) {
-    const submissionu = await Submission.findByPk(submission.submissionid);
+    const submissionu = await Submission.findByPk(submission.submissionid)
     if (!submission) {
-      return null;
+      return null
     }
 
-    await submissionu.update(submission);
-    return submissionu;
+    await submissionu.update(submission)
+    return submissionu
   }
 
   async deleteSubmission(submission = null) {
     if (submission === null) {
-      await Submission.destroy({ truncate: true });
-      return;
+      await Submission.destroy({ truncate: true })
+      return
     }
 
     await Submission.destroy({
       where: { submissionid: submission.submissionid },
-    });
-    return task;
+    })
+    return task
   }
 
-  async getSubsToday(){
-    const today = new Date(); 
-    today.setHours(0, 0, 0, 0); 
-    try{
+  async getSubsToday() {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    try {
       const songsToday = await Submission.findAll({
-        attributes: [
-          "title", 
-          "artist",
-          "imageURL"
-        ],
+        attributes: ["title", "artist", "imageURL"],
         where: {
           submissionDate: {
-            [Op.gte]: today
-          }
-        }
-      });
+            [Op.gte]: today,
+          },
+        },
+      })
 
       const query = songsToday.map((sub) => ({
-        title: sub.title, 
-        artist: sub.artist, 
-        imageURL: sub.imageURL 
-      })); 
-      console.log(query); 
-      return songsToday; 
-    }
-    catch(e){
-      console.log(e);
-      console.log("Unable to fetch today's songs."); 
+        title: sub.title,
+        artist: sub.artist,
+        imageURL: sub.imageURL,
+      }))
+      console.log(query)
+      return songsToday
+    } catch (e) {
+      console.log(e)
+      console.log("Unable to fetch today's songs.")
     }
   }
 
@@ -178,43 +174,41 @@ class _SQLiteModel {
   and returns the top 5 shared entries for a given day (will filter submission table by current day)
   with info such as artist, name, and freq. 
   */
-  async getTrending(){
-
+  async getTrending() {
     //TO-DO: MODIFY SO THAT THE QUERIES FILTER BASED ON CURRENT DAY --> DONE
 
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
+    const currentDate = new Date()
+    currentDate.setHours(0, 0, 0, 0)
 
-    try{
-
+    try {
       const topSongs = await Submission.findAll({
         //the attributes value essentially determine the freq. count for each song title
         attributes: [
-          'title',
-          'artist',
-          [Sequelize.fn('COUNT', Sequelize.col('title')), 'songFrequency']
-        ], 
-        //filters out only entries that were submitted at most a week ago. 
+          "title",
+          "artist",
+          [Sequelize.fn("COUNT", Sequelize.col("title")), "songFrequency"],
+        ],
+        //filters out only entries that were submitted at most a week ago.
         where: {
           submissionDate: {
             [Op.gte]: currentDate,
           },
         },
         //this aggregates the frequency by group
-        group: ['title'],
+        group: ["title"],
         //sort in desc. order and limit to top 5.
-        order: [[Sequelize.literal('songFrequency'), 'DESC']],
-        limit: 5
-      });
+        order: [[Sequelize.literal("songFrequency"), "DESC"]],
+        limit: 5,
+      })
 
       //map each entry to {title, artist, freq}
-      return topSongs.map(entry => ({
+      return topSongs.map((entry) => ({
         title: entry.title,
         artist: entry.artist,
-        frequency: entry.getDataValue('songFrequency'),
-      }));
-    }catch(e){
-      console.log(e);
+        frequency: entry.getDataValue("songFrequency"),
+      }))
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -225,67 +219,65 @@ class _SQLiteModel {
   3 users with the most contributions over the past week. 
   */
 
-  async getTopContributors(){
-
+  async getTopContributors() {
     //TO-DO: MODIFY SO THAT THE QUERIES FILTER OUT ENTRIES THAT ARE OLDER THAN A WEEK --> DONE
-    const currentDate = new Date();
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(currentDate.getDate() - 7);
+    const currentDate = new Date()
+    const oneWeekAgo = new Date()
+    oneWeekAgo.setDate(currentDate.getDate() - 7)
 
-    try{
+    try {
       const topContributors = await Submission.findAll({
         attributes: [
-          'user_name',
-          [Sequelize.fn('COUNT', Sequelize.col('user_name')), 'userFrequency']
+          "user_name",
+          [Sequelize.fn("COUNT", Sequelize.col("user_name")), "userFrequency"],
         ],
         where: {
-          submissionDate : {
+          submissionDate: {
             [Op.gte]: oneWeekAgo,
           },
         },
-        group: ['user_name'],
-        order: [[Sequelize.literal('userFrequency'), 'DESC']],
-        limit: 3
-      });
+        group: ["user_name"],
+        order: [[Sequelize.literal("userFrequency"), "DESC"]],
+        limit: 3,
+      })
 
       //for now, since the users database isn't set up yet, the userID will be returned
       //ultimately, will need to join the submission/user databases using userID to associate username with the freq.
-      return topContributors.map(user => ({
+      return topContributors.map((user) => ({
         user: user.user_name,
-        frequency: user.getDataValue('userFrequency'),
-      }));
-    }catch(e){
-      console.log(e);
+        frequency: user.getDataValue("userFrequency"),
+      }))
+    } catch (e) {
+      console.log(e)
     }
   }
 
-  async getUserContributionTime(user_name){
-    try{
+  async getUserContributionTime(user_name) {
+    try {
       const totalContributionTime = await Submission.sum({
         where: {
           user_name: user_name,
-        }
-      });
+        },
+      })
 
-      return totalContributionTime;
-    }catch(e){
+      return totalContributionTime
+    } catch (e) {
       //unable to fetch user's contributions from submission table
-      console.log(e);
+      console.log(e)
     }
   }
 
-  async getUserTotalContributions(user_name){
-    try{ 
+  async getUserTotalContributions(user_name) {
+    try {
       const totalContributions = await Submission.count({
         where: {
           user_name: user_name,
         },
-      });
+      })
 
-      return totalContributions;
-
-    }catch(e){
-      console.log(e);
+      return totalContributions
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -336,9 +328,9 @@ class _SQLiteModel {
 
   async getYourSubmissions(username) {
     if (!username) {
-      throw new Error("Username filter is required.");
+      throw new Error("Username filter is required.")
     }
-  
+
     try {
       const submissions = await Submission.findAll({
         attributes: ["title", "artist"],
@@ -349,8 +341,8 @@ class _SQLiteModel {
             where: { username }, 
           },
         ],
-      });
-  
+      })
+
       return submissions.map((submission) => ({
         username: submission.User.username,
         title: submission.title,
@@ -383,113 +375,108 @@ class _SQLiteModel {
         username: submission.User.username, 
         title: submission.title,
         artist: submission.artist,
-      }));
+      }))
     } catch (error) {
-      console.error("Error fetching submissions with user details:", error);
-      throw error;
+      console.error("Error fetching submissions with user details:", error)
+      throw error
     }
   }
 
   // USER
   async readUser(id = null) {
     if (id) {
-      return await User.findByPk(id);
+      return await User.findByPk(id)
     }
-    return await User.findAll();
+    return await User.findAll()
   }
 
   async findUser(user) {
     return await User.findOne({
       where: {
         username: user.username,
-     //   spotify_refresh_token: user.spotify_refresh_token,
+        //   spotify_refresh_token: user.spotify_refresh_token,
       },
-    });
+    })
   }
 
   async createUser(user) {
-    return await User.create(user);
+    return await User.create(user)
   }
 
   async updateUser(user) {
-    const useru = await User.findByPk(user.userid);
+    const useru = await User.findByPk(user.userid)
     if (!useru) {
-      return null;
+      return null
     }
-    await useru.update(user);
-    return useru;
+    await useru.update(user)
+    return useru
   }
 
   async deleteUser(user = null) {
     if (user === null) {
-      await User.destroy({ truncate: true });
-      return;
+      await User.destroy({ truncate: true })
+      return
     }
     await User.destroy({
       where: { userid: user.userid },
-    });
-    return user;
+    })
+    return user
   }
 
-  async getSubsToday(){
-    const today = new Date(); 
-    today.setHours(0, 0, 0, 0); 
-    try{
+  async getSubsToday() {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    try {
       const songsToday = await Submission.findAll({
-        attributes: [
-          "title", 
-          "artist",
-          "imageURL"
-        ],
+        attributes: ["title", "artist", "imageURL"],
         where: {
           submissionDate: {
-            [Op.gte]: today
-          }
-        }
-      });
+            [Op.gte]: today,
+          },
+        },
+      })
 
       const query = songsToday.map((sub) => ({
-        title: sub.title, 
-        artist: sub.artist, 
-        imageURL: sub.imageURL 
-      })); 
-      console.log(query); 
-      return songsToday; 
-    }
-    catch(e){
-      console.log(e);
-      console.log("Unable to fetch today's songs."); 
+        title: sub.title,
+        artist: sub.artist,
+        imageURL: sub.imageURL,
+      }))
+      console.log(query)
+      return songsToday
+    } catch (e) {
+      console.log(e)
+      console.log("Unable to fetch today's songs.")
     }
   }
 
   // QUOTES
   async createQuote(quote) {
-    return await Quote.create(quote);
+    return await Quote.create(quote)
   }
 
   async readQuote(id = null) {
     if (id) {
-      return await Quote.findByPk(id);
+      return await Quote.findByPk(id)
     }
-    return await Quote.findAll();
+    return await Quote.findAll()
   }
 
   async deleteQuote(quote = null) {
     if (quote === null) {
-      await Quote.destroy({ truncate: true });
-      return;
+      await Quote.destroy({ truncate: true })
+      return
     }
 
     await Quote.destroy({
-      where: {quoteid: quote.quoteid},
-    });
-    return quote;
+      where: { quoteid: quote.quoteid },
+    })
+    return quote
   }
 
   // QUOTES
   async getQuote() {
-    let currDay = new Date();
-    currDay.setHours(0, 0, 0, 0);
+    let currDay = new Date()
+    currDay.setHours(0, 0, 0, 0)
 
     try {
       let currQuote = await Quote.findOne({
@@ -498,36 +485,36 @@ class _SQLiteModel {
             [Op.eq]: currDay
           }
         }
-      });
+      })
 
       if (!currQuote) {
         try {
-          const response = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
-          const quoteData = await response.json();
+          const response = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random")
+          const quoteData = await response.json()
 
           currQuote = await this.createQuote({
-            quote: quoteData[0].q, 
-            person: quoteData[0].a, 
+            quote: quoteData[0].q,
+            person: quoteData[0].a,
             quoteDate: currDay
-          });
+          })
         } catch (error) {
-          console.error("Error:", error);
+          console.error("Error:", error)
           currQuote = await this.createQuote({
-            quote: "326! Yay!", 
-            person: "Tim Richards", 
+            quote: "326! Yay!",
+            person: "Tim Richards",
             quoteDate: currDay
-          });
+          })
         }
       }
-      return currQuote;
+      return currQuote
     } catch (error) {
-      console.error("Error:", error);
-      throw error;
+      console.error("Error:", error)
+      throw error
     }
   }
 }
 
-const SQLiteModel = new _SQLiteModel();
+const SQLiteModel = new _SQLiteModel()
 
 // export default SQLiteModel;
-module.exports = SQLiteModel;
+module.exports = SQLiteModel
