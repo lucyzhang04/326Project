@@ -289,6 +289,51 @@ class _SQLiteModel {
     }
   }
 
+  async getLongestStreak(){
+    const submissions = await Submission.findAll({
+      attributes: ['user_name', 'submissionDate'],
+      order: [
+        ['user_name', 'ASC'],
+        ['submissionDate', 'ASC']
+      ]
+    });
+
+    let longestStreakUser = null;
+    let longestStreak = 0;
+    let currentUser = null;
+    let currentStreak = 0;
+    let previousDate = null;
+
+    submissions.forEach(submission => {
+      const userID = submission.user_name;
+      const submissionDate = submission.submissionDate
+
+      if (userID !== currentUser) {
+        // New user: reset streak
+        currentUser = userID;
+        currentStreak = 1;
+        previousDate = submissionDate;
+      } else {
+        // Same user: check if submission is consecutive
+        const diffDays = (submissionDate - previousDate) / (1000 * 60 * 60 * 24);
+        if (diffDays === 1) {
+          currentStreak++; // Increment streak if consecutive
+        } else if (diffDays > 1) {
+          currentStreak = 1; // Reset streak if not consecutive
+        }
+        previousDate = submissionDate;
+      }
+
+      // Update longest streak
+      if (currentStreak > longestStreak) {
+        longestStreak = currentStreak;
+        longestStreakUser = currentUser;
+      }
+    });
+
+    return { userID: longestStreakUser, streak: longestStreak };
+  }
+
   async getYourSubmissions(username) {
     if (!username) {
       throw new Error("Username filter is required.");
@@ -296,18 +341,46 @@ class _SQLiteModel {
   
     try {
       const submissions = await Submission.findAll({
-        attributes: ["title", "artist"], // Extract title and artist from Submission table
+        attributes: ["title", "artist"],
         include: [
           {
             model: User,
-            attributes: ["username"], // Extract username from the User table
-            where: { username }, // Mandatory filter on username
+            attributes: ["username"], 
+            where: { username }, 
           },
         ],
       });
   
       return submissions.map((submission) => ({
-        username: submission.User.username, // Access the associated User's username
+        username: submission.User.username,
+        title: submission.title,
+        artist: submission.artist,
+      }));
+    } catch (error) {
+      console.error("Error fetching submissions with user details:", error);
+      throw error;
+    }
+  }
+
+  async getYourSubmissions(username) {
+    if (!username) {
+      throw new Error("Username filter is required.");
+    }
+  
+    try {
+      const submissions = await Submission.findAll({
+        attributes: ["title", "artist"], 
+        include: [
+          {
+            model: User,
+            attributes: ["username"], 
+            where: { username }, 
+          },
+        ],
+      });
+  
+      return submissions.map((submission) => ({
+        username: submission.User.username, 
         title: submission.title,
         artist: submission.artist,
       }));
