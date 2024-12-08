@@ -46,6 +46,8 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script type="module">
       import { EventHub } from "./source/eventhub/EventHub.js";
       import { Events } from "./source/eventhub/Events.js";
@@ -71,43 +73,17 @@
       let db = new TaskDatabase("quotesDB");
 
       // Modified loadQuote() function to utilize an API, as opposed to prior implementation with mocked quote data
-      async function loadQuote() { 
-        let currentDay = new Date().toLocaleDateString();
-        await db.openDatabase();
-        let dbTasks = await db.getTasks();
-
-        // Added logic to ensure daily quote persistence (the same quote should be displayed for a given day).
-        let prevUpdate = dbTasks.find(task => task.id === "prevUpdate") || { value: null };
-        let currQuote = dbTasks.find(task => task.id === "dailyQuote") || { value: null };
-        
+      async function loadQuote() {
         try {
-          if (currentDay !== prevUpdate.value) {
-            // Utilized the following API endpoint (https://zenquotes.io/api/random) to generate random quotes. 
-            // Needed to resolved CORS issues by setting up CORS middleware
-            let quotes = await fetch("https://api.allorigins.win/raw?url=https://zenquotes.io/api/random");
-
-            let quoteData = await quotes.json();
-            console.log(quoteData);
-            if (quoteData && quoteData.length > 0) {
-              let quoteSpecific = {quote: quoteData[0].q, person: quoteData[0].a};
-              await db.addTask({id: "prevUpdate", value: currentDay});
-              await db.addTask({id: "dailyQuote", value: JSON.stringify(quoteSpecific)});
-              renderQuote(quoteSpecific);
-            } else {
-              throw new Error("No quote data available");
-            }
-          }
-          else if (currQuote.value) {
-            let quoteSpecific = JSON.parse(currQuote.value);
-            renderQuote(quoteSpecific);
-          } else {
-            throw new Error("No previous quote data available");
-          }
+          let currQuote = await axios.get('http://localhost:8888/api/quotes/daily-quote');
+          let quoteData = await currQuote.data;
+          renderQuote(quoteData);  
         } catch (error) {
           console.error("Error loading quote:", error);
-          renderQuote({quote: "Keep pushing forward!", person: "Unknown"});
+          renderQuote({ quote: "326 is the key to happiness.", person: "Tim Richards" });
         }
       }
+
 
       function renderQuote(data) {
         let quoteDisplay = document.createElement("div");
@@ -148,8 +124,8 @@
 
         //added part such that when the time ends, other views will clear pages.
         setTimeout(async () => {
-          publishResetEvent();
           await loadQuote();
+          publishResetEvent();
           dailyUpdate();
         }, remainingTime);
       }
@@ -165,41 +141,3 @@
     </script>
   </body>
 </html>
-
-
-<!-- previous loadQuote function (with mocked quote data)
-async function loadQuote() {
-  let currentDay = new Date().toLocaleDateString();
-  await db.openDatabase();
-  let dbTasks = await db.getTasks();
-
-  let quoteIndex = 0;
-  let prevUpdate = null;
-
-  for (let i = 0; i < dbTasks.length; i++) {
-    if (dbTasks[i].id === "prevUpdate") {
-      prevUpdate = dbTasks[i].value;
-    }
-    if (dbTasks[i].id === "index") {
-      quoteIndex = dbTasks[i].value;
-    }
-  }
-
-  try {
-    let quotes = await fetch("quotes.json").then((res) => res.json());
-
-    if (currentDay !== prevUpdate) {
-      if (quoteIndex === null || quoteIndex >= quotes.length - 1) {
-        await db.addTask({ id: "index", value: 0 });
-        quoteIndex = 0;
-      } else {
-        quoteIndex++;
-        await db.addTask({ id: "index", value: quoteIndex });
-      }
-      await db.addTask({ id: "prevUpdate", value: currentDay });
-    }
-    renderQuote(quotes[quoteIndex]);
-  } catch (error) {
-    console.error("Error loading quote:", error);
-  }
-} -->
