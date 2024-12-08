@@ -44,7 +44,41 @@ async function loadHistory() {
       const data = await response.json();
       console.log(data);
       console.log(data["yourSubmissions"])
-      render(data["yourSubmissions"]);
+
+    // For each submission, fetch the quote by date
+    const submissionsWithQuotes = await Promise.all(data["yourSubmissions"].map(async (submission) => {
+        const date = new Date(submission.submissiondate); 
+        const quoteUrl = `http://localhost:8888/api/quotes/quote-by-date?date=${encodeURIComponent(date.toISOString())}`;
+
+        try {
+        const quoteResponse = await fetch(quoteUrl, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+            "Content-Type": "application/json",
+            },
+        });
+
+        if (quoteResponse.ok) {
+            const quoteData = await quoteResponse.json();
+            submission.quote = quoteData.quote;
+            submission.person = quoteData.person;
+        } else {
+            submission.quote = "No quote found for this date";
+            submission.person = "Unknown";
+        }
+        } catch (quoteError) {
+        console.log("Error fetching quote:", quoteError);
+        submission.quote = "Error fetching quote";
+        submission.person = "Unknown";
+        }
+        return submission;
+    }));
+
+    console.log(submissionsWithQuotes);
+  
+      render(submissionsWithQuotes);
+    //   render(data["yourSubmissions"]);
   } catch (error) {
       console.log(error.message);
   }
@@ -68,8 +102,13 @@ function render(data){
         songArtist.classList.add("song-artist");
         songArtist.textContent = song.artist;
 
+        const songQuote = document.createElement('span');
+        songQuote.classList.add("song-artist");
+        songQuote.textContent = song.quote;
+
         songElem.appendChild(songTitle);
         songElem.appendChild(songArtist);
+        songElem.appendChild(songQuote);
         histElem.appendChild(songElem);
     }
 

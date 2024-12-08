@@ -43,5 +43,40 @@ router.delete("/clear_quotes", async (req, res) => {
     }
   });
 
+// Route for getting a quote by date
+router.get("/quote-by-date", async (req, res) => {
+  try {
+    // Extract the date from the query parameters (assuming it's passed as `date`)
+    const { date } = req.query;
+
+    // Validate that a date was provided
+    if (!date) {
+      return res.status(400).json({ error: "Date parameter is required." });
+    }
+
+    // Get the quote for the provided date
+    let currQuote = await SQLiteModel.getQuoteByDate(date);
+
+    if (!currQuote || !currQuote.dataValues) {
+      throw new Error("Quote not found in the database for the provided date.");
+    }
+
+    // Extract the quote and person to send back in the response
+    const quoteToSend = { quote: currQuote.dataValues.quote, person: currQuote.dataValues.person };
+
+    // Send the quote as a response
+    res.json(quoteToSend);
+  } catch (error) {
+    console.error("Error loading quote:", error);
+    
+    // Fallback response in case of an error
+    res.status(500).json({ 
+      quote: "326 is the key to happiness", 
+      person: "Tim Richards" 
+    });
+  }
+});
+
+
 //exporting so endpoints can be imported in index.js
 module.exports = router;
