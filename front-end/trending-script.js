@@ -148,10 +148,65 @@ function renderTrending(data) {
     likeBtn.classList.add("like-btn");
     likeBtn.textContent = "Like";
 
-    likeBtn.addEventListener("click", () => {
+    likeBtn.addEventListener("click", async () => {
       const st = getSongDB();
       st.addSong(trendingItem);
       alert(`${trendingItem.title} has been added to your liked items!`);
+      //LOGIC FOR ADDING TO DEMO PLAYLIST HERE
+      //IN THE FUTURE DISPLAY PLAYLISTS AND ALLOW USER TO CHOOSE 
+      try {
+        const demoPlaylistId = "2RfxXju5zGsu5Gnz4k5Qk4"; // Replace with your actual demo playlist ID
+        const songTitle = trendingItem.title; // Assuming title is the song name
+        const songArtist = trendingItem.artist; // Assuming artist is the artist name
+    
+        // Search for the track ID on Spotify
+        const searchResponse = await fetch(
+          `http://localhost:8888/spotify/search-track?title=${encodeURIComponent(songTitle)}&artist=${encodeURIComponent(songArtist)}`
+        );
+    
+        if (!searchResponse.ok) {
+          console.error("Error searching for the track:", await searchResponse.json());
+          alert("Failed to find the song on Spotify. Please try again.");
+          return;
+        }
+    
+        const searchResult = await searchResponse.json();
+    
+        if (!searchResult || !searchResult.id) {
+          alert("No matching song found on Spotify.");
+          return;
+        }
+    
+        const trackId = searchResult.id;
+    
+        // Add the track to the demo playlist
+        const addResponse = await fetch("http://localhost:8888/spotify/add-to-playlist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            trackId: trackId,
+            playlistId: demoPlaylistId,
+          }),
+        });
+    
+        if (addResponse.ok) {
+          alert(`${songTitle} by ${songArtist} has been added to your demo playlist!`);
+        } else {
+          console.error("Error adding the song to the playlist:", await addResponse.json());
+          alert("Failed to add the song to your demo playlist. Please try again.");
+        }
+      } catch (error) {
+        console.error("An error occurred while adding the song:", error);
+        alert("An error occurred while adding the song. Please check the console for details.");
+      }
+    
+      // Placeholder for future functionality
+      // Display a modal or dropdown to allow the user to select from their playlists.
+      // Example: load user playlists from Spotify and let the user choose:
+      // const userPlaylists = await fetchPlaylists();
+      // displayPlaylistModal(userPlaylists);
     });
 
     trendingElem.appendChild(songTitle);
