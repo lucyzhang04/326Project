@@ -155,9 +155,9 @@ function renderTrending(data) {
       //LOGIC FOR ADDING TO DEMO PLAYLIST HERE
       //IN THE FUTURE DISPLAY PLAYLISTS AND ALLOW USER TO CHOOSE 
       try {
-        const demoPlaylistId = "2RfxXju5zGsu5Gnz4k5Qk4"; // Replace with your actual demo playlist ID
-        const songTitle = trendingItem.title; // Assuming title is the song name
-        const songArtist = trendingItem.artist; // Assuming artist is the artist name
+        const demoPlaylistId = "2RfxXju5zGsu5Gnz4k5Qk4"; //Demo playlist id for now
+        const songTitle = trendingItem.title; 
+        const songArtist = trendingItem.artist; 
     
         // Search for the track ID on Spotify
         const searchResponse = await fetch(
@@ -203,10 +203,8 @@ function renderTrending(data) {
       }
     
       // Placeholder for future functionality
-      // Display a modal or dropdown to allow the user to select from their playlists.
-      // Example: load user playlists from Spotify and let the user choose:
-      // const userPlaylists = await fetchPlaylists();
-      // displayPlaylistModal(userPlaylists);
+      // Display a modal or dropdown to allow the user to select from their playlists
+
     });
 
     trendingElem.appendChild(songTitle);
