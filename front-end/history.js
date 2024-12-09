@@ -1,117 +1,122 @@
-function loadBaseLayout(){
-    console.log("Loading base layout of history page");
-    fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-            
-            const navLinkEls = document.querySelectorAll('.nav__link');
-            const windowPathname = window.location.pathname;
+import SpotifyLogin from "./SpotifyLogin.js";
+SpotifyLogin();
 
-            navLinkEls.forEach(navLinkEl => {
-                if (navLinkEl.href.includes(windowPathname)) {
-                    navLinkEl.classList.add('active');
-                }
-            })
-          })
-          .then(() => {
-            console.log("About to load history data");
-            loadHistory();
-          })
-          .catch(error => console.error('Error loading navbar:', error));
+function loadBaseLayout() {
+  console.log("Loading base layout of history page");
+  fetch("navbar.html")
+    .then((response) => response.text())
+    .then((data) => {
+      document.getElementById("navbar").innerHTML = data;
+
+      const navLinkEls = document.querySelectorAll(".nav__link");
+      const windowPathname = window.location.pathname;
+
+      navLinkEls.forEach((navLinkEl) => {
+        if (navLinkEl.href.includes(windowPathname)) {
+          navLinkEl.classList.add("active");
+        }
+      });
+    })
+    .then(() => {
+      document.dispatchEvent(new CustomEvent("readyForHydration"));
+    })
+    .then(() => {
+      console.log("About to load history data");
+      loadHistory();
+    })
+    .catch((error) => console.error("Error loading navbar:", error));
 }
 
 async function loadHistory() {
   console.log("In loadHistory() function");
   let username = localStorage.getItem("username");
-  console.log(username)
+  console.log(username);
   try {
-      // Append the user_id as a query parameter
-      const url = `http://localhost:8888/history/get-history?user_name=${encodeURIComponent(username)}`;
-      
-      const response = await fetch(url, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-              "Content-Type": "application/json",
-          },
-      });
+    // Append the user_id as a query parameter
+    const url = `http://localhost:8888/history/get-history?user_name=${encodeURIComponent(username)}`;
 
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-      }
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      const data = await response.json();
-      console.log(data);
-      console.log(data["yourSubmissions"])
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    console.log(data["yourSubmissions"]);
 
     // For each submission, fetch the quote by date
-    const submissionsWithQuotes = await Promise.all(data["yourSubmissions"].map(async (submission) => {
-        const date = new Date(submission.submissiondate); 
+    const submissionsWithQuotes = await Promise.all(
+      data["yourSubmissions"].map(async (submission) => {
+        const date = new Date(submission.submissiondate);
         const quoteUrl = `http://localhost:8888/api/quotes/quote-by-date?date=${encodeURIComponent(date.toISOString())}`;
 
         try {
-        const quoteResponse = await fetch(quoteUrl, {
+          const quoteResponse = await fetch(quoteUrl, {
             method: "GET",
             credentials: "include",
             headers: {
-            "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-        });
+          });
 
-        if (quoteResponse.ok) {
+          if (quoteResponse.ok) {
             const quoteData = await quoteResponse.json();
             submission.quote = quoteData.quote;
             submission.person = quoteData.person;
-        } else {
+          } else {
             submission.quote = "No quote found for this date";
             submission.person = "Unknown";
-        }
+          }
         } catch (quoteError) {
-        console.log("Error fetching quote:", quoteError);
-        submission.quote = "Error fetching quote";
-        submission.person = "Unknown";
+          console.log("Error fetching quote:", quoteError);
+          submission.quote = "Error fetching quote";
+          submission.person = "Unknown";
         }
         return submission;
-    }));
+      }),
+    );
 
     console.log(submissionsWithQuotes);
-  
-      render(submissionsWithQuotes);
+
+    render(submissionsWithQuotes);
     //   render(data["yourSubmissions"]);
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
 }
 
+function render(data) {
+  let histElem = document.getElementById("history-list");
+  histElem.innerHTML = "";
 
-function render(data){
+  for (const song of data) {
+    const songElem = document.createElement("div");
+    songElem.classList.add("trending-song");
 
-    let histElem = document.getElementById("history-list");
-    histElem.innerHTML = "";
+    const songTitle = document.createElement("span");
+    songTitle.classList.add("song-title");
+    songTitle.textContent = song.title;
 
-    for(const song of data){
-        const songElem = document.createElement('div');
-        songElem.classList.add("trending-song");
+    const songArtist = document.createElement("span");
+    songArtist.classList.add("song-artist");
+    songArtist.textContent = song.artist;
 
-        const songTitle = document.createElement('span');
-        songTitle.classList.add("song-title");
-        songTitle.textContent = song.title;
+    const songQuote = document.createElement("span");
+    songQuote.classList.add("song-artist");
+    songQuote.textContent = song.quote;
 
-        const songArtist = document.createElement('span');
-        songArtist.classList.add("song-artist");
-        songArtist.textContent = song.artist;
-
-        const songQuote = document.createElement('span');
-        songQuote.classList.add("song-artist");
-        songQuote.textContent = song.quote;
-
-        songElem.appendChild(songTitle);
-        songElem.appendChild(songArtist);
-        songElem.appendChild(songQuote);
-        histElem.appendChild(songElem);
-    }
-
+    songElem.appendChild(songTitle);
+    songElem.appendChild(songArtist);
+    songElem.appendChild(songQuote);
+    histElem.appendChild(songElem);
+  }
 }
 
 loadBaseLayout();
