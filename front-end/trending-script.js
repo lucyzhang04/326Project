@@ -113,6 +113,18 @@ function loadTrendingData() {
       console.log(data.longestStreak);
       renderLongestStreak(data.longestStreak);
     });
+
+  fetch("http://localhost:8888/trending/get-top-artists", {
+    headers: { 
+      user_name: localStorage.getItem("username") 
+    },
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    renderTopArtists(data);
+  });
+  
 }
 
 function noSubs() {
@@ -252,6 +264,32 @@ function renderCurUserContributionNum(data) {
   cnt.classList.add("your-cnt");
 
   sumStat.appendChild(cnt);
+}
+
+function renderTopArtists(artists){
+  const topArtists = document.getElementById("top-artists"); 
+  topArtists.innerHTML = "";
+
+  const header = document.createElement("div");
+  header.innerText = "Your Top Artists";
+  topArtists.appendChild(header);
+  header.classList.add("stat-header");
+
+  for (const artistEntry of artists) {
+    console.log(artistEntry);
+    const person = document.createElement("div");
+    person.classList.add("stat-line");
+    const name = document.createElement("span");
+    name.innerText = artistEntry.artist + " ";
+    const freq = document.createElement("span");
+    freq.innerText = artistEntry.count + " submissions";
+
+    person.appendChild(name);
+    person.appendChild(freq);
+    topArtists.appendChild(person);
+    
+  }
+
 }
 
 function resetPage() {

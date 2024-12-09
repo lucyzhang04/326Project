@@ -1,6 +1,7 @@
 // import { Sequelize, DataTypes } from "sequelize";
 const { Sequelize, DataTypes, Op } = require("sequelize");
 const fetch = require("node-fetch");
+const { all } = require("../query-spotify/spotify-routes");
 
 // Initialize a new Sequelize instance with SQLite
 const sequelize = new Sequelize({
@@ -216,6 +217,38 @@ class _SQLiteModel {
       }));
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  //method to retrieve a given user's top artist 
+  async getYourTopArtists(user_name){
+    try{
+      /*retrieving all submissions that the user has submitted, and counting the frequency of each artist that
+      appears in their entries.
+      */
+      const allArtists = await Submission.findAll({
+        attributes: [
+          "artist",
+          [Sequelize.fn("COUNT", Sequelize.col("artist")), "artistCount"],  //using count function to get frequencies
+        ],
+        where: {
+          user_name: user_name  //filtering by username
+        },
+        group:["artist"],
+        order:[[Sequelize.literal("artistCount"), "DESC"]], //ordering them in descending order to get top artists 
+        limit: 3
+      }); 
+      //mapping objects to contain relevant information
+      return allArtists.map((artistEntry => {
+        return ({
+        artist: artistEntry.artist,
+        count: artistEntry.getDataValue("artistCount")
+      })}))
+    }
+    catch(e){
+      //Printing message in case of error.
+      console.log("Error: Unable to fetch your top artists.");
+      console.log(e); 
     }
   }
 

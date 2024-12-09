@@ -58,6 +58,13 @@ class SubmissionController {
     return res.json(await this.model.getSubsToday());
   }
 
+  async getYourTopArtists(req, res){
+    if (!req.headers || !req.headers.user_name) {
+      return res.status(400).json({ error: "user_name is required." });
+    } 
+    return res.json(await this.model.getYourTopArtists(req.headers.user_name));
+  }
+
   //calls database method to retrieve 5 most-shared songs/podcasts for the given day.
   async getTopFive(req, res) {
     const trending = await this.model.getTrending();
