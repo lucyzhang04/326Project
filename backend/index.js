@@ -11,6 +11,7 @@ const app = express();
 const spotifyRoutes = require("./query-spotify/spotify-routes.js");
 const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
+// const { addSongsToLiked } = require('./query-spotify/add-song');
 
 app.use(cors());
 
@@ -81,3 +82,16 @@ app.listen(PORT, (error) => {
     console.log("Error occurred, server can't start", error);
   }
 });
+
+// // Example of calling addSongsToLiked within an endpoint
+// app.post('/add-songs', async (req, res) => {
+//   const selectedSongs = req.body.selectedSongs; // Assuming selectedSongs is passed in the request body
+//   try {
+//     await addSongsToLiked(selectedSongs);
+//     res.status(200).send('Songs added to Liked Songs!');
+//   } catch (error) {
+//     console.error('Error adding songs:', error);
+//     res.status(500).send('Failed to add songs.');
+//   }
+// });
+
