@@ -144,10 +144,14 @@ class _SQLiteModel {
     return task;
   }
 
+  //Method to retrieve submissions from the current day, so user only see's recent submissions.
   async getSubsToday() {
+    //creating Date object that holds midnight of current day for database lookup
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     try {
+      //find all songs where submissionDate attribute is greater than or equal to today at midnight
+      //(finds everything submitted on or after midnight "today")
       const songsToday = await Submission.findAll({
         attributes: ["title", "artist", "imageURL"],
         where: {
@@ -157,14 +161,17 @@ class _SQLiteModel {
         },
       });
 
+      //mapping all entry objects received from query to objects w/ format that frontend expects
       const query = songsToday.map((sub) => ({
         title: sub.title,
         artist: sub.artist,
         imageURL: sub.imageURL,
       }));
       console.log(query);
+      //returning retrieved results.
       return songsToday;
     } catch (e) {
+      //In case of error -- printing out error and informing that something went wrong during retrieval. 
       console.log(e);
       console.log("Unable to fetch today's songs.");
     }

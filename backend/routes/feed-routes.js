@@ -12,8 +12,10 @@ router.get("/get_all_subs", async (req, res) => {
     res.end(); 
 })
 
+//Route for getting submissions from the current day
 router.get("/get_today_subs", async (req, res) => {
     console.log("Reached get todays subs endpoint");
+    //Using controller to call getSubsToday() and retrieve correct submissions.
     await db.getSubsToday(req, res); 
     res.end(); 
 })

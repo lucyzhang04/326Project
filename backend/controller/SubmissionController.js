@@ -53,6 +53,7 @@ class SubmissionController {
     res.json(await this.model.readSubmission());
   }
 
+  //retrieves submissions from the current day only.
   async getSubsToday(req, res) {
     return res.json(await this.model.getSubsToday());
   }
