@@ -43,7 +43,13 @@ router.use(
 
 router.get("/login", cors(),(req, res) => {
   console.log("=> /login");
-  const scopes = "user-read-private user-read-email";
+  const scopes = [
+    "user-read-private user-read-email",
+    "playlist-read-private",
+    "playlist-modify-public",
+    "playlist-modify-private",
+    "user-library-modify"
+  ];
   const state = generateRandomString(16);
 
   //session cookies to store type & literal
