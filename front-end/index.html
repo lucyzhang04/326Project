@@ -17,13 +17,8 @@
       <div class="song-input-header">
         Share a song or podcast that makes you think of today's quote!
       </div>
-      <div class="input-area">
+      <div class="input-area" id="logged-in" style="display: none">
         <form id="user-form">
-          <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required />
-          </div>
-          <br />
           <div>
             <label for="podcast-song">Podcast/Song:</label>
             <input type="text" id="podcast-song" name="podcast-song" required />
@@ -44,6 +39,10 @@
         </div>
         <script type="module" src="search-song.js"></script>
       </div>
+      <div id="logged-out">
+        Please <strong><a href="/spotify/login">log in</a></strong> to submit a
+        song or podcast!
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -53,6 +52,18 @@
       import { Events } from "./source/eventhub/Events.js";
       import { TaskDatabase } from "./originalDatabase.js";
       import SpotifyLogin from "./SpotifyLogin.js";
+      SpotifyLogin();
+
+      // add submission elements when user logs in:
+      document.addEventListener("login", () => {
+        document.getElementById("logged-in").style.display = "flex";
+        document.getElementById("logged-out").style.display = "none";
+      });
+
+      document.addEventListener("logout", () => {
+        document.getElementById("logged-in").style.display = "none";
+        document.getElementById("logged-out").style.display = "block";
+      });
 
       fetch("navbar.html")
         .then((response) => response.text())
@@ -68,6 +79,9 @@
             }
           });
         })
+        .then(() => {
+          document.dispatchEvent(new CustomEvent("readyForHydration"));
+        })
         .catch((error) => console.error("Error loading navbar:", error));
 
       let db = new TaskDatabase("quotesDB");
@@ -75,15 +89,19 @@
       // Modified loadQuote() function to utilize an API, as opposed to prior implementation with mocked quote data
       async function loadQuote() {
         try {
-          let currQuote = await axios.get('http://localhost:8888/api/quotes/daily-quote');
+          let currQuote = await axios.get(
+            "http://localhost:8888/api/quotes/daily-quote",
+          );
           let quoteData = await currQuote.data;
-          renderQuote(quoteData);  
+          renderQuote(quoteData);
         } catch (error) {
           console.error("Error loading quote:", error);
-          renderQuote({ quote: "326 is the key to happiness.", person: "Tim Richards" });
+          renderQuote({
+            quote: "326 is the key to happiness.",
+            person: "Tim Richards",
+          });
         }
       }
-
 
       function renderQuote(data) {
         let quoteDisplay = document.createElement("div");
@@ -133,11 +151,22 @@
       async function start() {
         await loadQuote();
         dailyUpdate();
+        SpotifyLogin();
+      }
+
+      if (localStorage.getItem("username") === null) {
+        // Hide the user input section if the user is not logged in
+        // and provide a link to the login page
+
+        document.getElementById("user-form").style.display = "none";
+        document.getElementById("results").style.display = "none";
+        document.getElementById("saved").style.display = "none";
+
+        document.getElementById("input-area").innerHTML =
+          "<p>Please log in to use this feature! <a href='/spotify/login'>Log in</a></p>";
       }
 
       start();
-
-      SpotifyLogin();
     </script>
   </body>
 </html>
