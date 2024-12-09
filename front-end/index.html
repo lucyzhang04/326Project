@@ -154,18 +154,6 @@
         SpotifyLogin();
       }
 
-      if (localStorage.getItem("username") === null) {
-        // Hide the user input section if the user is not logged in
-        // and provide a link to the login page
-
-        document.getElementById("user-form").style.display = "none";
-        document.getElementById("results").style.display = "none";
-        document.getElementById("saved").style.display = "none";
-
-        document.getElementById("input-area").innerHTML =
-          "<p>Please log in to use this feature! <a href='/spotify/login'>Log in</a></p>";
-      }
-
       start();
     </script>
   </body>

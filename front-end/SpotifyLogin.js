@@ -25,7 +25,7 @@ export default function HandleSpotifyLogin() {
       handleAuthCallback();
     }
     if (getLocalStorageItem("spotify_refresh_token")) {
-      if (getLocalStorageItem("spotify_username")) {
+      if (getLocalStorageItem("username")) {
         const profilePicture = getLocalStorageItem("spotify_profileURL");
         const name = getLocalStorageItem("spotify_displayName");
         updateUI(profilePicture, name);
@@ -38,7 +38,7 @@ export default function HandleSpotifyLogin() {
 
           updateUI(profilePicture, displayName);
 
-          setLocalStorageItem("spotify_username", username);
+          setLocalStorageItem("username", username);
           setLocalStorageItem("spotify_profileURL", profilePicture);
           setLocalStorageItem("spotify_displayName", displayName);
         });
@@ -143,7 +143,7 @@ export default function HandleSpotifyLogin() {
     document.dispatchEvent(new CustomEvent("logout"));
     // Clear localStorage items
     localStorage.removeItem("spotify_access_token");
-    localStorage.removeItem("spotify_username");
+    localStorage.removeItem("username");
     localStorage.removeItem("spotify_refresh_token");
     localStorage.removeItem("spotify_displayName");
     localStorage.removeItem("spotify_profileURL");
