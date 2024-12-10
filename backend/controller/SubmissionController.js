@@ -122,13 +122,17 @@ class SubmissionController {
     return res.json({ longestStreak });
   }
 
+  //this function gets all submissions associated with a particular username
+  //username is passed as a query parameter in the request object
   async getYourSubmissions(req, res) {
     console.log(req.query);
+    //checks that username exists
     if (!req.query || !req.query.user_name) {
       console.log("in unwanted case");
       return res.status(400).json({ error: "user_name is required." });
     }
     const user_name = req.query.user_name;
+    //invokes getYourSubmissions from SQLiteModel.js
     const yourSubmissions = await this.model.getYourSubmissions(user_name);
     return res.json({ yourSubmissions });
   }

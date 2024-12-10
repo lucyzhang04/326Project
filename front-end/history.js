@@ -27,6 +27,10 @@ function loadBaseLayout() {
     .catch((error) => console.error("Error loading navbar:", error));
 }
 
+//This function invokes two routes: the first route it invokes is /history/get-history, which gets all submissions associated with
+//a particular username. The second route extracts the submission date from each submission and finds the quote for that particular submission
+//date by invoking the /api/quotes/quote-by-date endpoint. It sends an array of objects to the render function, where each object consists of 
+//a retrived submission along with the retrieved quote for that date.
 async function loadHistory() {
   console.log("In loadHistory() function");
   let username = localStorage.getItem("username");
@@ -92,6 +96,8 @@ async function loadHistory() {
   }
 }
 
+//This implements the table in the frontend that displays each past submission (title and artist) along with its associated quote.
+//It's invoked in loadHistory.
 function render(data) {
   let histElem = document.getElementById("history-list");
   histElem.innerHTML = "";
