@@ -38,8 +38,14 @@ app.use("/trending", summaryStatRoutes);
 const historyRoute = require("./routes/history-routes.js");
 app.use("/history", historyRoute);
 
+//Creating websocket to send real-time updates to active clients. 
+//Opening socket
 const socket = new WebSocket.Server({ port: 9000 });
 
+/*
+When a connection is received, we want to subscribe a function that listens for the newSub event, so that when a 
+new submission is added, we can send it to the client via the socket.  
+*/
 socket.on("connection", (s) => {
   console.log("A client has connected.");
   //message to show that connection has been correctly established.
@@ -50,6 +56,7 @@ socket.on("connection", (s) => {
   eventHub.subscribe(Events.NewSub, (sub) => {
     console.log("Sending: ");
     console.log(sub);
+    //sending the new submission to the client.
     s.send(JSON.stringify(sub));
   });
 });

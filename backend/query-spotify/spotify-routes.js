@@ -56,7 +56,6 @@ router.get("/login", cors(),(req, res) => {
     "user-follow-read",
     "user-follow-modify",
   ];
-
   const state = generateRandomString(16);
 
   //session cookies to store type & literal

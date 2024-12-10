@@ -56,6 +56,7 @@ export function loadBaseLayout() {
 //and ensure that there's updates propagated.
 let v0 = true;
 
+//calls the respective methods to load the UI for summary statistics/trending songs as well as calling the respective endpoints to determine necessary values. 
 function loadTrendingData() {
   /*fetch('trendingData.json')
         .then(response => response.json())
@@ -113,8 +114,21 @@ function loadTrendingData() {
       console.log(data.longestStreak);
       renderLongestStreak(data.longestStreak);
     });
+
+  fetch("http://localhost:8888/trending/get-top-artists", {
+    headers: { 
+      user_name: localStorage.getItem("username") 
+    },
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    renderTopArtists(data);
+  });
+  
 }
 
+//default screen to be shown when there are no submissions
 function noSubs() {
   const text = document.createTextNode("Currently no submissions...");
   noSubWindow = document.getElementById("no-sub-screen");
@@ -122,6 +136,7 @@ function noSubs() {
   noSubWindow.classList.add("no-sub-msg");
   noSubWindow.style.display = "block";
 }
+
 
 async function fetchUserPlaylists() {
   try {
@@ -135,9 +150,9 @@ async function fetchUserPlaylists() {
   }
 }
 
+//displays the trending songs
 async function renderTrending(data) {
   const playlists = await fetchUserPlaylists();
-
   let trendingContElem = document.getElementById("trending-list");
   trendingContElem.innerHTML = "";
 
@@ -240,6 +255,7 @@ async function renderTrending(data) {
   }
 }
 
+//for testing purposes
 function renderTest(data) {
   const sumStat = document.getElementById("your-contrib-num");
   sumStat.innerHTML = "";
@@ -264,6 +280,7 @@ function renderTest(data) {
   }
 }
 
+//displays the top contributors over the past week 
 function renderTopContributors(data) {
   const sumStat = document.getElementById("top-contrib");
   sumStat.innerHTML = "";
@@ -287,6 +304,7 @@ function renderTopContributors(data) {
   }
 }
 
+//displays the user with longest streak and the length. 
 function renderLongestStreak(data) {
   const sumStat = document.getElementById("longest-streak");
   sumStat.innerHTML = "";
@@ -329,6 +347,35 @@ function renderCurUserContributionNum(data) {
   sumStat.appendChild(cnt);
 }
 
+
+//displays the user's top artists. 
+function renderTopArtists(artists){
+  const topArtists = document.getElementById("top-artists"); 
+  topArtists.innerHTML = "";
+
+  const header = document.createElement("div");
+  header.innerText = "Your Top Artists";
+  topArtists.appendChild(header);
+  header.classList.add("stat-header");
+
+  for (const artistEntry of artists) {
+    console.log(artistEntry);
+    const person = document.createElement("div");
+    person.classList.add("stat-line");
+    const name = document.createElement("span");
+    name.innerText = artistEntry.artist + " ";
+    const freq = document.createElement("span");
+    freq.innerText = artistEntry.count + " submissions";
+
+    person.appendChild(name);
+    person.appendChild(freq);
+    topArtists.appendChild(person);
+    
+  }
+
+}
+
+//resets the page when the 24-hr window resets and clears the entire page. 
 function resetPage() {
   let trendingContElem = document.getElementById("trending-list");
 

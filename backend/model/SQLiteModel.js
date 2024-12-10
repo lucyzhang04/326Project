@@ -1,6 +1,7 @@
 // import { Sequelize, DataTypes } from "sequelize";
 const { Sequelize, DataTypes, Op } = require("sequelize");
 const fetch = require("node-fetch");
+const { all } = require("../query-spotify/spotify-routes");
 
 // Initialize a new Sequelize instance with SQLite
 const sequelize = new Sequelize({
@@ -144,10 +145,14 @@ class _SQLiteModel {
     return task;
   }
 
+  //Method to retrieve submissions from the current day, so user only see's recent submissions.
   async getSubsToday() {
+    //creating Date object that holds midnight of current day for database lookup
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     try {
+      //find all songs where submissionDate attribute is greater than or equal to today at midnight
+      //(finds everything submitted on or after midnight "today")
       const songsToday = await Submission.findAll({
         attributes: ["title", "artist", "imageURL"],
         where: {
@@ -157,14 +162,17 @@ class _SQLiteModel {
         },
       });
 
+      //mapping all entry objects received from query to objects w/ format that frontend expects
       const query = songsToday.map((sub) => ({
         title: sub.title,
         artist: sub.artist,
         imageURL: sub.imageURL,
       }));
       console.log(query);
+      //returning retrieved results.
       return songsToday;
     } catch (e) {
+      //In case of error -- printing out error and informing that something went wrong during retrieval. 
       console.log(e);
       console.log("Unable to fetch today's songs.");
     }
@@ -212,6 +220,38 @@ class _SQLiteModel {
     }
   }
 
+  //method to retrieve a given user's top artist 
+  async getYourTopArtists(user_name){
+    try{
+      /*retrieving all submissions that the user has submitted, and counting the frequency of each artist that
+      appears in their entries.
+      */
+      const allArtists = await Submission.findAll({
+        attributes: [
+          "artist",
+          [Sequelize.fn("COUNT", Sequelize.col("artist")), "artistCount"],  //using count function to get frequencies
+        ],
+        where: {
+          user_name: user_name  //filtering by username
+        },
+        group:["artist"],
+        order:[[Sequelize.literal("artistCount"), "DESC"]], //ordering them in descending order to get top artists 
+        limit: 3
+      }); 
+      //mapping objects to contain relevant information
+      return allArtists.map((artistEntry => {
+        return ({
+        artist: artistEntry.artist,
+        count: artistEntry.getDataValue("artistCount")
+      })}))
+    }
+    catch(e){
+      //Printing message in case of error.
+      console.log("Error: Unable to fetch your top artists.");
+      console.log(e); 
+    }
+  }
+
   /*method determines the top 3 contributors for the past week (will filter by past 7 days in submission table)
   by querying into the submission table to find the # of contributions of each user and then 
   joins results with the user table on userID to ultimately return a result
@@ -241,8 +281,6 @@ class _SQLiteModel {
         limit: 3,
       });
 
-      //for now, since the users database isn't set up yet, the userID will be returned
-      //ultimately, will need to join the submission/user databases using userID to associate username with the freq.
       return topContributors.map((user) => ({
         user: user.user_name,
         frequency: user.getDataValue("userFrequency"),
@@ -252,6 +290,7 @@ class _SQLiteModel {
     }
   }
 
+  //determines the # of minutes that a given user has contributed over all time (ie: sum of all song/podcast they've shared)
   async getUserContributionTime(user_name) {
     try {
       const totalContributionTime = await Submission.sum({
@@ -267,6 +306,7 @@ class _SQLiteModel {
     }
   }
 
+  //determines # of contributions a user has made. 
   async getUserTotalContributions(user_name) {
     try {
       const totalContributions = await Submission.count({
@@ -281,6 +321,7 @@ class _SQLiteModel {
     }
   }
 
+  //detemrines the user with the longest streak and the streak length. 
   async getLongestStreak() {
     const submissions = await Submission.findAll({
       attributes: ["user_name", "submissionDate"],

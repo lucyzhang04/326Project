@@ -39,4 +39,11 @@ router.get("/get-longest-streak", async(req, res) => {
     await db.getLongestStreak(req, res);
 })
 
+//Route for getting the user's top artist s
+router.get("/get-top-artists", async(req, res) => {
+    console.log("Reached top-artists endpoint.");
+    await db.getYourTopArtists(req, res);
+})
+
+
 module.exports = router;
