@@ -25,6 +25,33 @@
 - **Commit**: [Commit to features.md](https://github.com/lucyzhang04/326Project/commit/2ac5a9a9016f1bf49c3d169333ae94c4787e178b)
 - **Commit**: [Commit to roles.md](https://github.com/lucyzhang04/326Project/commit/966fc374946b08eb07eb00986775b059ef73a997)
 
+### November 27, 2024 
+- **Task(s)**: Integrating Query Routes
+- **Details**: 
+- **Commit**: [Commit for Query Integration](https://github.com/lucyzhang04/326Project/commit/ce16d4e94d46dd9994106a585ab3a75f62602a99)
+##
+- **Task(s)**: Passing Parameters with Session Cookies
+- **Details**: 
+- **Commit**: [Commit for Session Cookies](https://github.com/lucyzhang04/326Project/commit/4116ca1a50d09661daf9f3e698c97cb340173b5c)
+
+### December 3, 2024
+- **Task(s)**: Storing Authentication token with Session Cookies
+- **Details**: 
+- **Commit**: [Commit for Storing Token](https://github.com/lucyzhang04/326Project/commit/a706f621fbd9a0466781e66ae3e3c11064dd4eea)
+
+### December 4, 2024
+- **Task(s)**: Storing user submissions in database
+- **Details**: 
+- **Commit**: [Commit for Song Storage](https://github.com/lucyzhang04/326Project/commit/e2123fbb518d1584533d1d12742f53751882bd73)
+
+### December 7, 2024
+- **Task(s)**: Connecting Query to Frontend Search
+- **Details**: 
+- **Commit**: [Commit for Search Integration](https://github.com/lucyzhang04/326Project/commit/c3642534c19c77be447b55de9c6116366da83c8a)
+
+##
+**Notes**: I will not be documenting when I made issues, merged pull requests, or reviewed other's code. This file will document the actual code I've implemented.
+
  
 
 
