@@ -144,6 +144,14 @@ function renderTrending(data) {
     //songShares.textContent = `${trendingItem.shares} shares`;
     songShares.textContent = `${trendingItem.frequency} shares`;
 
+    const dropdown = document.createElement("select");
+    dropdown.classList.add("playlist-dropdown");
+    dropdown.innerHTML = `
+      <option value="">Select Playlist</option>
+      <option value="demoPlaylist1">Demo Playlist 1</option>
+      <option value="demoPlaylist2">Demo Playlist 2</option>
+    `;
+
     const likeBtn = document.createElement("button");
     likeBtn.classList.add("like-btn");
     likeBtn.textContent = "Like";
@@ -204,12 +212,15 @@ function renderTrending(data) {
     
       // Placeholder for future functionality
       // Display a modal or dropdown to allow the user to select from their playlists
-
+      // Example: load user playlists from Spotify and let the user choose:
+      // const userPlaylists = await fetchPlaylists();
+      // displayPlaylistModal(userPlaylists);
     });
 
     trendingElem.appendChild(songTitle);
     trendingElem.appendChild(songArtist);
     trendingElem.appendChild(songShares);
+    trendingElem.appendChild(dropdown);
     trendingElem.appendChild(likeBtn);
 
     trendingContElem.appendChild(trendingElem);
@@ -322,3 +333,4 @@ function resetPage() {
     username = val;
     console.log("done");
 }*/
+
