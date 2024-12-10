@@ -11,6 +11,7 @@ const app = express();
 const spotifyRoutes = require("./query-spotify/spotify-routes.js");
 const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
+// const { addSongsToLiked } = require('./query-spotify/add-song');
 
 app.use(cors());
 
@@ -88,3 +89,5 @@ app.listen(PORT, (error) => {
     console.log("Error occurred, server can't start", error);
   }
 });
+
+

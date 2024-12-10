@@ -46,9 +46,15 @@ router.get("/login", cors(),(req, res) => {
   const scopes = [
     "user-read-private user-read-email",
     "playlist-read-private",
+    "playlist-read-collaborative",
     "playlist-modify-public",
     "playlist-modify-private",
-    "user-library-modify"
+    "user-library-modify",
+    "user-library-read",
+    "user-top-read",
+    "user-read-recently-played",
+    "user-follow-read",
+    "user-follow-modify",
   ];
   const state = generateRandomString(16);
 
@@ -260,6 +266,135 @@ router.get("/search", async (req, res) => {
 
   return res;
 
+});
+
+//http://localhost:8888/spotify/get-user-playlists
+
+router.get("/get-user-playlists", async (req, res) => {
+  const accessToken = req.session.access_token;
+  if (!accessToken) {
+    return res.status(401).json({ 
+      error: "Access token invalid in get-user-playlists"
+    });
+  }
+
+  try {
+    const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Spotify API error: ${response.statusText}`);
+    }
+    const data = await response.json();
+    // Filters out invalid / null entries 
+    const playlists = (data.items || [])
+      .filter((playlist) => playlist && playlist.id && playlist.name) // Ensures playlist has valid id and valid name
+      .map((playlist) => ({ // Retain only name and id of playlist
+        id: playlist.id,
+        name: playlist.name,
+      }));
+
+    res.status(200).json(playlists);
+  } catch (error) {
+    console.error("Error fetching user playlists");
+    res.status(500).json({ 
+      error: "Failed fetching user playlists" 
+    });
+  }
+});
+
+router.get("/search-track", async (req, res) => {
+  const title = req.query.title;
+  const artist = req.query.artist;
+
+  if (!title || !artist) {
+    return res.status(400).json({ 
+      error: "Title and artist not found" 
+    });
+  }
+
+  try {
+    const searchUrl =
+      "https://api.spotify.com/v1/search?" +
+      new URLSearchParams({
+        q: `track:${title} artist:${artist}`,
+        type: "track",
+        limit: 1,
+      });
+
+    const accessToken = req.session.access_token;
+    const response = await fetch(searchUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.tracks && data.tracks.items.length > 0) {
+      const track = data.tracks.items[0];
+      res.json({ id: track.id, name: track.name, artist: track.artists[0].name });
+    } else {
+      res.status(404).json({ 
+        error: "Track not found" 
+      });
+    }
+  } catch (error) {
+    console.error("Error searching for track");
+    res.status(500).json({ 
+      error: "Failed while searching for track" 
+    });
+  }
+});
+
+async function addSongToPlaylist(req, trackId, playlistId) {
+  const accessToken = req.session.access_token;
+
+  if (!accessToken) {
+    console.error("Access token not available :(");
+    return { error: "Access token not available :'(" };
+  }
+
+  const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      uris: [`spotify:track:${trackId}`],
+    }),
+  });
+
+  if (response.ok) {
+    console.log("Song added to playlist yay!");
+    return { success: true };
+  } else {
+    const errorText = await response.text();
+    console.error("Error adding song to playlist");
+    return { error: errorText };
+  }
+}
+
+// Adds songs to a specific playlist
+router.post("/add-to-playlist", async (req, res) => {
+  const { trackId, playlistId } = req.body;
+
+  try {
+    const result = await addSongToPlaylist(req, trackId, playlistId);
+    if (result.error) {
+      return res.status(400).json(result);
+    }
+    res.status(200).json({ message: "Song added successfully :)" });
+  } catch (err) {
+    console.error("Error adding song to playlist");
+    res.status(500).send({ 
+      error: "Error adding song to playlist" 
+    });
+  }
 });
 
 module.exports = router;

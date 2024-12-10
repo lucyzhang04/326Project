@@ -166,9 +166,7 @@ body {
 
 .trending-song {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
-
-  /*flex: 1 1 calc(100% - 20px);*/
+  grid-template-columns: 1fr 1fr 1fr auto auto; /* Add space for dropdown and button */
   align-items: center;
   background-color: #d3d3d3;
   padding: 15px;
@@ -182,6 +180,16 @@ body {
 
 .trending-song:nth-child(even) {
   background-color: #ffffff;
+}
+
+.playlist-dropdown {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 16px;
+  text-align: left;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .song-title {

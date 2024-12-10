@@ -137,8 +137,22 @@ function noSubs() {
   noSubWindow.style.display = "block";
 }
 
+
+async function fetchUserPlaylists() {
+  try {
+    const response = await fetch("http://localhost:8888/spotify/get-user-playlists");
+    if (!response.ok) throw new Error("Failed to fetch playlists");
+    const playlists = await response.json();
+    return playlists;
+  } catch (error) {
+    console.error("Error fetching playlists");
+    return [];
+  }
+}
+
 //displays the trending songs
-function renderTrending(data) {
+async function renderTrending(data) {
+  const playlists = await fetchUserPlaylists();
   let trendingContElem = document.getElementById("trending-list");
   trendingContElem.innerHTML = "";
 
@@ -159,19 +173,80 @@ function renderTrending(data) {
     //songShares.textContent = `${trendingItem.shares} shares`;
     songShares.textContent = `${trendingItem.frequency} shares`;
 
+    const dropdown = document.createElement("select");
+    dropdown.classList.add("playlist-dropdown");
+    dropdown.innerHTML = `<option value="">Select Playlist</option>`;
+    playlists.forEach((playlist) => {
+      const option = document.createElement("option");
+      option.value = playlist.id;
+      option.textContent = playlist.name;
+      dropdown.appendChild(option);
+    });
+
     const likeBtn = document.createElement("button");
     likeBtn.classList.add("like-btn");
     likeBtn.textContent = "Like";
 
-    likeBtn.addEventListener("click", () => {
+    likeBtn.addEventListener("click", async () => {
       const st = getSongDB();
       st.addSong(trendingItem);
       alert(`${trendingItem.title} has been added to your liked items!`);
+      
+      // Following code is for adding the song to a playlist
+      const selectedPlaylistId = dropdown.value; // Get selected playlist ID
+      if (!selectedPlaylistId) {
+        console.error("No playlist selected"); // debug line
+      }
+
+      try {
+        const songTitle = trendingItem.title;
+        const songArtist = trendingItem.artist;
+
+        // Search for the track ID
+        const searchResponse = await fetch(
+          `http://localhost:8888/spotify/search-track?title=${encodeURIComponent(songTitle)}&artist=${encodeURIComponent(songArtist)}`
+        );
+
+        if (!searchResponse.ok) {
+          alert("Failed to find the song on Spotify. Consider logging out and back in to refresh your Spotify session.");
+          return;
+        }
+
+        const searchResult = await searchResponse.json();
+        if (!searchResult.id) {
+          alert("No matching song found on Spotify. Consider logging out and back in to refresh your Spotify session.");
+          return;
+        }
+
+        const trackId = searchResult.id;
+
+        // Adds the track to the selected playlist
+        const addResponse = await fetch("http://localhost:8888/spotify/add-to-playlist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            trackId: trackId,
+            playlistId: selectedPlaylistId,
+          }),
+        });
+
+        if (addResponse.ok) {
+          alert(`${songTitle} by ${songArtist} has been added to your playlist!`);
+        } else {
+          alert("Failed to add the song to the playlist :(");
+        }
+      } catch (error) {
+        console.error(error);
+        alert(error, "An error occurred while adding song");
+      }
     });
 
     trendingElem.appendChild(songTitle);
     trendingElem.appendChild(songArtist);
     trendingElem.appendChild(songShares);
+    trendingElem.appendChild(dropdown);
     trendingElem.appendChild(likeBtn);
 
     trendingContElem.appendChild(trendingElem);
@@ -316,3 +391,4 @@ function resetPage() {
     username = val;
     console.log("done");
 }*/
+
