@@ -269,38 +269,14 @@ router.get("/search", async (req, res) => {
 
 });
 
-// router.get("/get-user-playlists", async (req, res) => {
-//   const accessToken = req.session.access_token;
-
-//   if (!accessToken) {
-//     return res.status(401).json({ error: "Access token is missing or invalid." });
-//   }
-
-//   try {
-//     const response = await fetch("https://api.spotify.com/v1/me/playlists", {
-//       headers: {
-//         Authorization: `Bearer ${accessToken}`,
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`Spotify API error: ${response.statusText}`);
-//     }
-
-//     const data = await response.json();
-//     res.status(200).json(data);
-//   } catch (error) {
-//     console.error("Error fetching user playlists:", error);
-//     res.status(500).json({ error: "Failed to fetch user playlists." });
-//   }
-// });
-
 //http://localhost:8888/spotify/get-user-playlists
+
 router.get("/get-user-playlists", async (req, res) => {
   const accessToken = req.session.access_token;
-
   if (!accessToken) {
-    return res.status(401).json({ error: "Access token is missing or invalid." });
+    return res.status(401).json({ 
+      error: "Access token invalid in get-user-playlists"
+    });
   }
 
   try {
@@ -313,21 +289,21 @@ router.get("/get-user-playlists", async (req, res) => {
     if (!response.ok) {
       throw new Error(`Spotify API error: ${response.statusText}`);
     }
-
     const data = await response.json();
-
     // Filters out invalid / null entries 
     const playlists = (data.items || [])
       .filter((playlist) => playlist && playlist.id && playlist.name) // Ensures playlist has valid id and valid name
-      .map((playlist) => ({ // retain only name and id of playlist
+      .map((playlist) => ({ // Retain only name and id of playlist
         id: playlist.id,
         name: playlist.name,
       }));
 
     res.status(200).json(playlists);
   } catch (error) {
-    console.error("Error fetching user playlists:", error);
-    res.status(500).json({ error: "Failed to fetch user playlists." });
+    console.error("Error fetching user playlists");
+    res.status(500).json({ 
+      error: "Failed fetching user playlists" 
+    });
   }
 });
 
@@ -336,7 +312,9 @@ router.get("/search-track", async (req, res) => {
   const artist = req.query.artist;
 
   if (!title || !artist) {
-    return res.status(400).json({ error: "Title and artist are required." });
+    return res.status(400).json({ 
+      error: "Title and artist not found" 
+    });
   }
 
   try {
@@ -361,21 +339,24 @@ router.get("/search-track", async (req, res) => {
       const track = data.tracks.items[0];
       res.json({ id: track.id, name: track.name, artist: track.artists[0].name });
     } else {
-      res.status(404).json({ error: "Track not found." });
+      res.status(404).json({ 
+        error: "Track not found" 
+      });
     }
   } catch (error) {
-    console.error("Error searching for track:", error);
-    res.status(500).json({ error: "Failed to search for the track." });
+    console.error("Error searching for track");
+    res.status(500).json({ 
+      error: "Failed while searching for track" 
+    });
   }
 });
-
 
 async function addSongToPlaylist(req, trackId, playlistId) {
   const accessToken = req.session.access_token;
 
   if (!accessToken) {
-    console.error("Access token not available!");
-    return { error: "Access token not available!" };
+    console.error("Access token not available :(");
+    return { error: "Access token not available :'(" };
   }
 
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
@@ -390,11 +371,11 @@ async function addSongToPlaylist(req, trackId, playlistId) {
   });
 
   if (response.ok) {
-    console.log("Song added to playlist!");
+    console.log("Song added to playlist yay!");
     return { success: true };
   } else {
     const errorText = await response.text();
-    console.error("Error adding song to playlist:", errorText);
+    console.error("Error adding song to playlist");
     return { error: errorText };
   }
 }
@@ -408,10 +389,12 @@ router.post("/add-to-playlist", async (req, res) => {
     if (result.error) {
       return res.status(400).json(result);
     }
-    res.status(200).json({ message: "Song added successfully!" });
+    res.status(200).json({ message: "Song added successfully :)" });
   } catch (err) {
-    console.error("An error occurred:", err);
-    res.status(500).send({ error: "Internal server error" });
+    console.error("Error adding song to playlist");
+    res.status(500).send({ 
+      error: "Error adding song to playlist" 
+    });
   }
 });
 
