@@ -32,13 +32,6 @@ function loadBaseLayout() {
     .catch((error) => console.error("Error loading navbar:", error));
 }
 
-// async function loadLiked() {
-//   const st = getSongDB();
-//   const liked_songs = await st.getSong();
-//   console.log(liked_songs);
-//   render(liked_songs);
-// }
-
 async function loadLiked() {
   const st = getSongDB();
   const liked_songs = await st.getSong();
