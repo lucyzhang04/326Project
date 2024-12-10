@@ -34,28 +34,30 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Select at least one song please.");
       } else {
         console.log("creating submission");
-        console.log(savedTracks[0]);
-        fetch("/feed/add_sub", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_name: username,
-            title: savedTracks[0].name,
-            artist: savedTracks[0].artists[0].name,
-            imageURL: savedTracks[0]?.album?.images[0]?.url || null,
-          }),
-        }).then((response) => {
-          console.log(response);
-          if (response.status === 201) {
-            window.location.href = "feed.html";
-          } else {
-            alert("Failed to create submission");
-          }
+        console.log(savedTracks);
+        savedTracks.forEach((track) => {
+          console.log(track);
+          fetch("/feed/add_sub", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_name: username,
+              title: track.name,
+              artist: track.artists[0].name,
+              imageURL: track?.album?.images[0]?.url || null,
+            }),
+          }).then((response) => {
+            console.log(response);
+            if (response.status !== 201) {
+              alert("Failed to create submission");
+            }
+          });
         });
+        window.location.href = "feed.html";
       }
-    });
+    });    
 
   function renderResults(results) {
     console.log(results);
