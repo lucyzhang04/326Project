@@ -107,5 +107,77 @@
 - **Details** Documented all features created in milestone 3
 - **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/commit/7a64ae0ec5533455d52f86d8b9c17a2742e32aa8)
 
+---
 
+### December 4, 2024 
+- **Task**: Set up API for Fetching Quotes
+- **Details** Modified loadQuote() function. Purpose is to utilize API for quote generation, as opposed to prior implementation with mocked data.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/95/commits/811ad247249fc692812c2f374fb67c757329f479)
 
+---
+
+- **Task**: Set up CORS Middleware
+- **Details** Modified loadQuote(). Fetch wasn't executing properly, so proxy server was needed.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/95/commits/ebab01d1737ba6fe92b99e93af5baf09f01b5741)
+
+---
+
+- **Task**: Daily Quote Persistance
+- **Details** Modified loadQuote(). Needed to ensure the daily quote stays the same for any given day (despite page refresh).
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/95/commits/a043f4550c64cb410bd156de5c5ea4605f68212a)
+
+---
+
+- **Task**: Quotes API Integration Comments
+- **Details** Provided comments for code changes associated with Quotes API Integration.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/101/commits/dc3c698371be8cb4fe9b4f1b0852a18a436b5afc)
+
+------
+
+### December 7, 2024
+- **Task**: Set up quotes schema
+- **Details** Set up quotes table so quote, author, and the associated date will all be tracked.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/130/commits/a1fca9e2fdb0239dd1120b620281fbee7985d43b)
+
+---
+
+- **Task**: Added CRUD operations for quotes table
+- **Details** Added method for the quotes table in SQLiteModel.js. Needed CRUD Operations for Quotes table.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/130/commits/53f43ab3d339f87ee974704dd73618b04a672bdd)
+
+---
+
+- **Task**: Created QuotesController.js
+- **Details** Has methods to get all quotes, add a new quote, and clear quotes.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/130/commits/5d20b30907f0b8bc11590a838c4d26b527e61f1c)
+
+---
+
+### December 8, 2024
+- **Task**: Debugging initial quote generation issue
+- **Details** Quote is not generated initially if user has never opened application. Needed to account for when there is no "previous update."
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/108/commits/ef67ca05ad8203f7e4823cf8d7dbfd10fabee234)
+
+---
+
+- **Task**: Debugged quote generation error
+- **Details** Quote generation wasn't working on other people's devices, so debugged on Mai's computer.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/110/commits/11ac35f48fdc972d02ad4396bf43a84c478f3f84)
+
+---
+
+- **Task**: Full Database Integration for Quotes
+- **Details** Built upon existing SQL database integration for quote-related functionality, debugging issues and making modifications to SQLiteModel.js, QuotesController.js, quote-routes.js, index.html, and index.js.. The focus of these changes being to the quote retrieval functionality. The overall goal is that the same quote should be displayed for all users on a given day.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/135/commits/1617a56b1ac785d548bbf9b053b4e832ce097626)
+
+---
+
+### December 10, 2024
+- **Task**: Added comments to explain quote-related code
+- **Details** Needed for milestone 4.
+- **Commit** [Commit to log entry](https://github.com/lucyzhang04/326Project/pull/162/commits/cbc581ed0f93e8eabbeb260b62ce13e342e68ad3)
+
+---
+
+- **Task**: Updated reports.md
+- **Details** Needed for milestone 4.
