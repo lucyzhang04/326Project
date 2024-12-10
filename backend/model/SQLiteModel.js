@@ -281,8 +281,6 @@ class _SQLiteModel {
         limit: 3,
       });
 
-      //for now, since the users database isn't set up yet, the userID will be returned
-      //ultimately, will need to join the submission/user databases using userID to associate username with the freq.
       return topContributors.map((user) => ({
         user: user.user_name,
         frequency: user.getDataValue("userFrequency"),
@@ -292,6 +290,7 @@ class _SQLiteModel {
     }
   }
 
+  //determines the # of minutes that a given user has contributed over all time (ie: sum of all song/podcast they've shared)
   async getUserContributionTime(user_name) {
     try {
       const totalContributionTime = await Submission.sum({
@@ -307,6 +306,7 @@ class _SQLiteModel {
     }
   }
 
+  //determines # of contributions a user has made. 
   async getUserTotalContributions(user_name) {
     try {
       const totalContributions = await Submission.count({
@@ -321,6 +321,7 @@ class _SQLiteModel {
     }
   }
 
+  //detemrines the user with the longest streak and the streak length. 
   async getLongestStreak() {
     const submissions = await Submission.findAll({
       attributes: ["user_name", "submissionDate"],
