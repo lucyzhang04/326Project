@@ -29,6 +29,7 @@ app.use("/user", userRoutes);
 //app.use('/feed', songRoutes);
 //app.use('/spotify', spotifyRoute
 
+// QUOTES
 const quoteRoutes = require('./routes/quote-routes');
 app.use('/api/quotes', quoteRoutes);
 

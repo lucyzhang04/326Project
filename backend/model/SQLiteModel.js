@@ -63,7 +63,7 @@ const Submission = sequelize.define("Submission", {
   },
 });
 
-// Define the Quotes table
+// Define the Quotes table (quoteid, quote, person/author, and the date the quote was added)
 const Quote = sequelize.define("Quote", {
   quoteid: {
     type: DataTypes.UUID,
@@ -460,11 +460,13 @@ class _SQLiteModel {
     }
   }
 
-  // QUOTES
+  // QUOTES methods
+  // method to create quote
   async createQuote(quote) {
     return await Quote.create(quote);
   }
 
+  // method to read quote
   async readQuote(id = null) {
     if (id) {
       return await Quote.findByPk(id);
@@ -472,19 +474,19 @@ class _SQLiteModel {
     return await Quote.findAll();
   }
 
+  // method to delete quote
   async deleteQuote(quote = null) {
     if (quote === null) {
       await Quote.destroy({ truncate: true });
       return;
     }
-
     await Quote.destroy({
       where: { quoteid: quote.quoteid },
     });
     return quote;
   }
 
-  // QUOTES
+  // method to get quote (if a quote currently is stored, use that, otherwise, generate a quote for the new day)
   async getQuote() {
     let currDay = new Date();
     currDay.setHours(0, 0, 0, 0);
@@ -526,13 +528,13 @@ class _SQLiteModel {
     }
   }
 
+  // method to get quote by the provided date
   async getQuoteByDate(date) {
-    // Normalize the provided date to the start of the day (set hours to 00:00:00)
     let currDay = new Date(date);
     currDay.setHours(0, 0, 0, 0);
 
     try {
-      // Attempt to find a quote for the given date
+      // See if there is a pre-existing quote for the given date
       let currQuote = await Quote.findOne({
         where: {
           quoteDate: {
@@ -541,37 +543,33 @@ class _SQLiteModel {
         },
       });
 
-      // If no quote exists for the provided date
+      // If a quote hasn't been generated for the day
       if (!currQuote) {
         try {
-          // Fetch a random quote from an external API
+          // Fetch a quote from the Zen Quotes API
           const response = await fetch(
             "https://api.allorigins.win/raw?url=https://zenquotes.io/api/random",
           );
           const quoteData = await response.json();
 
-          // Create a new quote record for the provided date
+          // Store information about the newly generated quote
           currQuote = await this.createQuote({
             quote: quoteData[0].q,
             person: quoteData[0].a,
             quoteDate: currDay,
           });
         } catch (error) {
-          console.error("Error fetching quote:", error);
-
-          // If fetching the API quote fails, create a fallback quote
+          console.error("Fetching error:", error);
           currQuote = await this.createQuote({
-            quote: "Default quote due to error.",
-            person: "Unknown",
+            quote: "326! Yay! Something is wrong with the code!.",
+            person: "Tim Richards",
             quoteDate: currDay,
           });
         }
       }
-
-      // Return the quote (either from the DB or newly created)
       return currQuote;
     } catch (error) {
-      console.error("Error in getQuoteByDate:", error);
+      console.error("Error:", error);
       throw error;
     }
   }

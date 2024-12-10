@@ -6,7 +6,7 @@ const router = express.Router();
 const SQLiteModel = require("../model/SQLiteModel");
 const { Op } = require("sequelize");
 
-
+// route for getting all quotes
 router.get("/get_all_quotes", async (req, res) => {
     console.log("Reached get all quotes endpoint");
     await db.getAllQuotes(req, res);  
@@ -28,16 +28,23 @@ router.delete("/clear_quotes", async (req, res) => {
 //Route for getting daily quote
   router.get("/daily-quote", async (req, res) => {
     try {
+      // utilizes getQuote() which pulls the existing quote or generates a new one if needed
       let currQuote = await SQLiteModel.getQuote();
+
+      // if unsuccessful, error message is displayed
       if (!currQuote || !currQuote.dataValues) {
         throw new Error("Quote not in database");
       }
+
+      // quote data is pulled here 
       const quoteToSend = {quote: currQuote.dataValues.quote, person: currQuote.dataValues.person};
       res.json(quoteToSend);
     } catch (error) {
       console.error("Error loading quote:", error);
+
+      // default quote in case of error
       res.status(500).json({ 
-        quote: "326 is the key to happiness", 
+        quote: "326 is the key to happiness. Something is wrong with your code.", 
         person: "Tim Richards" 
       });
     }
@@ -46,30 +53,29 @@ router.delete("/clear_quotes", async (req, res) => {
 // Route for getting a quote by date
 router.get("/quote-by-date", async (req, res) => {
   try {
-    // Extract the date from the query parameters (assuming it's passed as `date`)
+    // identify the date
     const { date } = req.query;
 
-    // Validate that a date was provided
+    // make sure a valid date is given
     if (!date) {
-      return res.status(400).json({ error: "Date parameter is required." });
+      return res.status(400).json({ error: "Date needed." });
     }
 
-    // Get the quote for the provided date
+    // retrieve the quote using the getQuoteByDate method
     let currQuote = await SQLiteModel.getQuoteByDate(date);
 
+    // error message if there is no quote for the provided date
     if (!currQuote || !currQuote.dataValues) {
-      throw new Error("Quote not found in the database for the provided date.");
+      throw new Error("Quote not in database.");
     }
 
-    // Extract the quote and person to send back in the response
+    // quote data is pulled here
     const quoteToSend = { quote: currQuote.dataValues.quote, person: currQuote.dataValues.person };
-
-    // Send the quote as a response
     res.json(quoteToSend);
   } catch (error) {
     console.error("Error loading quote:", error);
     
-    // Fallback response in case of an error
+    // default quote in case of error
     res.status(500).json({ 
       quote: "326 is the key to happiness", 
       person: "Tim Richards" 
@@ -78,5 +84,4 @@ router.get("/quote-by-date", async (req, res) => {
 });
 
 
-//exporting so endpoints can be imported in index.js
 module.exports = router;
