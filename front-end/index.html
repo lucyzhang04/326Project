@@ -84,18 +84,22 @@
         })
         .catch((error) => console.error("Error loading navbar:", error));
 
+      // quotes database to store quote information (date added, etc.)
       let db = new TaskDatabase("quotesDB");
 
       // Modified loadQuote() function to utilize an API, as opposed to prior implementation with mocked quote data
       async function loadQuote() {
         try {
+          // get quote from the Zen Quotes API
           let currQuote = await axios.get(
             "http://localhost:8888/api/quotes/daily-quote",
           );
           let quoteData = await currQuote.data;
+          // render the quote to the screen
           renderQuote(quoteData);
         } catch (error) {
           console.error("Error loading quote:", error);
+          // default quote in case of error
           renderQuote({
             quote: "326 is the key to happiness.",
             person: "Tim Richards",
@@ -103,13 +107,16 @@
         }
       }
 
+      // method to render the quote to the screen
       function renderQuote(data) {
         let quoteDisplay = document.createElement("div");
 
+        // quote text to display on screen
         let dailyQuote = document.createElement("p");
         dailyQuote.classList.add("quote");
         dailyQuote.textContent = `"${data.quote}"`;
 
+        // author/person associated with quote to display on screen
         let quoter = document.createElement("p");
         quoter.classList.add("person");
         quoter.textContent = data.person;
@@ -117,6 +124,7 @@
         quoteDisplay.appendChild(dailyQuote);
         quoteDisplay.appendChild(quoter);
 
+        // box to compartmentalize quote & author on screen
         let quoteBox = document.getElementById("quote-box");
         quoteBox.innerHTML = "";
         quoteBox.appendChild(quoteDisplay);
@@ -128,6 +136,7 @@
         hub.publish(Events.Reset);
       }
 
+      // method to reset quote and other aspects of the app daily
       function dailyUpdate() {
         let currDay = new Date();
         let nextDay = new Date(
