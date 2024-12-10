@@ -80,7 +80,7 @@ class SubmissionController {
     return res.json({ topContributors });
   }
 
-  //calls database to calculate the total sum of
+  //calls query function to calculate the total minutes a given user has shared over all their submissions over time. 
   async getUserContributionTime(req, res) {
     console.log(req);
 
@@ -96,6 +96,7 @@ class SubmissionController {
     return res.json({ userContributionTime });
   }
 
+  //calls queyr function to determine the # of submissions a given user has made over time. 
   async getUserTotalContributions(req, res) {
     /*if(!req.body || !req.body.user_name){
       return res.status(400).json({ error: "UserID is required." });
@@ -113,6 +114,8 @@ class SubmissionController {
     return res.json({ userTotalContributions });
   }
 
+
+  //calls query function to determine the user with the longest streak and the duration of the streak. 
   async getLongestStreak(req, res) {
     const longestStreak = await this.model.getLongestStreak();
 
