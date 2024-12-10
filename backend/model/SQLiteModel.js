@@ -367,20 +367,21 @@ class _SQLiteModel {
 
     return { userID: longestStreakUser, streak: longestStreak };
   }
-
+  //function to get submissions associated with particular username
   async getYourSubmissions(username) {
+    //requires username to be passed in as an argument
     if (!username) {
       throw new Error("Username filter is required.");
     }
-
     try {
+      //this is equivalent to SELECT title, artist, username, submissionDate FROM Submission WHERE user_name = username
       const submissions = await Submission.findAll({
         attributes: ["title", "artist", "user_name", "submissionDate"], // Extract title and artist from Submission table
         where: {
           user_name: username,
         },
       });
-
+      //returning an array of JSON objects (which correspond to submissions)
       return submissions.map((submission) => ({
         username: submission.user_name,
         title: submission.title,
@@ -558,6 +559,7 @@ class _SQLiteModel {
             person: quoteData[0].a,
             quoteDate: currDay,
           });
+          //in the event of an error, supply a default quote
         } catch (error) {
           console.error("Fetching error:", error);
           currQuote = await this.createQuote({
