@@ -29,8 +29,15 @@ const buildWidget = (submission) => {
         img.src = submission["image"];
      * 
      */
-  nameText.innerText = submission["title"];
-  hostText.innerText = submission["artist"];
+  if(submission["title"].length >= 22){
+    nameText.innerText = submission["title"].substring(0,22) + "...";
+  }
+  else nameText.innerText = submission["title"];
+  //nameText.innerText = submission["title"];
+  if(submission["artist"].length > 15){
+    hostText.innerText = submission["artist"].substring(0,17) + "...";
+  }
+  else hostText.innerText = submission["artist"];
   if (!submission["imageURL"] || submission["image"] === "fake link") {
     img.src = "https://ichef.bbci.co.uk/images/ic/1424x801/p0d0mjrz.jpg.webp";
   } else img.src = submission["imageURL"];
@@ -53,11 +60,12 @@ const buildWidget = (submission) => {
         artist: submission["artist"],
       })
       .then((response) => {
-        alert(`${nameText.innerText} has been saved to liked songs!`);
+        //alert(`${nameText.innerText} has been saved to liked songs!`);
+        alert(`${submission["title"]} has been saved to liked songs!`);
         console.log("Success");
       })
       .catch((error) => {
-        alert(`You've already saved that song!`);
+        alert(`You've already saved ${submission["title"]}!`);
         console.log(`Errors: ${error}`);
       });
   });
@@ -92,6 +100,7 @@ const render = () => {
     }); 
     */
 
+  //fetching today's subs from backend
   fetch("http://localhost:8888/feed/get_today_subs")
     .then(async (data) => {
       console.log(data);
@@ -100,19 +109,22 @@ const render = () => {
         : Promise.reject("There was an error fetching submissions.");
     })
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       const submissions = data.submissions;
       console.log(submissions);
       if (data.length === 0) {
-        console.log("here in correct block");
+        //console.log("here in correct block");
+        //no submissions --> display no submission popup to user
         reset = false;
         noSubs();
       } else {
+        //else --> hide no submission message, and render each submission.
         noSubWindow.style.display = "none";
         data.forEach((sub) => buildWidget(sub));
       }
     })
     .catch((error) => {
+      //error handling
       console.log(error);
       alert(
         "There was an error fetching submissions -- please try again later!",
@@ -144,16 +156,21 @@ hub.subscribe(Events.Reset, (data) => {
   clearSubs();
 });
 
-console.log("executing");
+//console.log("executing");
+
+//opening socket for live connection
 const socket = new WebSocket("ws://localhost:9000");
 socket.onopen = (event) => {
   console.log("Socket has successfully opened");
 };
 socket.onmessage = (message) => {
-  //only thing you should receive is a submission --> can do checks later
+  //socket will only ever receive submissions.
   console.log("Its working!");
+  //hiding no submission window, since a submission has been received
   noSubWindow.style.display = "none";
+  //parsing message for data
   const newSub = JSON.parse(message.data);
-  console.log(newSub);
+  //console.log(newSub);
+  //build the new submission and render it on screen
   buildWidget(newSub);
 };
