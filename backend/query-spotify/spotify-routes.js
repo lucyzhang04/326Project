@@ -46,10 +46,17 @@ router.get("/login", cors(),(req, res) => {
   const scopes = [
     "user-read-private user-read-email",
     "playlist-read-private",
+    "playlist-read-collaborative",
     "playlist-modify-public",
     "playlist-modify-private",
-    "user-library-modify"
+    "user-library-modify",
+    "user-library-read",
+    "user-top-read",
+    "user-read-recently-played",
+    "user-follow-read",
+    "user-follow-modify",
   ];
+
   const state = generateRandomString(16);
 
   //session cookies to store type & literal
@@ -262,85 +269,150 @@ router.get("/search", async (req, res) => {
 
 });
 
+// router.get("/get-user-playlists", async (req, res) => {
+//   const accessToken = req.session.access_token;
 
-async function addSongsToLiked(req, selectedSongs) {
+//   if (!accessToken) {
+//     return res.status(401).json({ error: "Access token is missing or invalid." });
+//   }
+
+//   try {
+//     const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`Spotify API error: ${response.statusText}`);
+//     }
+
+//     const data = await response.json();
+//     res.status(200).json(data);
+//   } catch (error) {
+//     console.error("Error fetching user playlists:", error);
+//     res.status(500).json({ error: "Failed to fetch user playlists." });
+//   }
+// });
+
+//http://localhost:8888/spotify/get-user-playlists
+router.get("/get-user-playlists", async (req, res) => {
+  const accessToken = req.session.access_token;
+
+  if (!accessToken) {
+    return res.status(401).json({ error: "Access token is missing or invalid." });
+  }
+
+  try {
+    const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Spotify API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    // Filters out invalid / null entries 
+    const playlists = (data.items || [])
+      .filter((playlist) => playlist && playlist.id && playlist.name) // Ensures playlist has valid id and valid name
+      .map((playlist) => ({ // retain only name and id of playlist
+        id: playlist.id,
+        name: playlist.name,
+      }));
+
+    res.status(200).json(playlists);
+  } catch (error) {
+    console.error("Error fetching user playlists:", error);
+    res.status(500).json({ error: "Failed to fetch user playlists." });
+  }
+});
+
+router.get("/search-track", async (req, res) => {
+  const title = req.query.title;
+  const artist = req.query.artist;
+
+  if (!title || !artist) {
+    return res.status(400).json({ error: "Title and artist are required." });
+  }
+
+  try {
+    const searchUrl =
+      "https://api.spotify.com/v1/search?" +
+      new URLSearchParams({
+        q: `track:${title} artist:${artist}`,
+        type: "track",
+        limit: 1,
+      });
+
+    const accessToken = req.session.access_token;
+    const response = await fetch(searchUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.tracks && data.tracks.items.length > 0) {
+      const track = data.tracks.items[0];
+      res.json({ id: track.id, name: track.name, artist: track.artists[0].name });
+    } else {
+      res.status(404).json({ error: "Track not found." });
+    }
+  } catch (error) {
+    console.error("Error searching for track:", error);
+    res.status(500).json({ error: "Failed to search for the track." });
+  }
+});
+
+
+async function addSongToPlaylist(req, trackId, playlistId) {
   const accessToken = req.session.access_token;
 
   if (!accessToken) {
     console.error("Access token not available!");
-    return;
+    return { error: "Access token not available!" };
   }
 
-  const response = await fetch("https://api.spotify.com/v1/me/tracks", {
-    method: "PUT",
+  const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ids: selectedSongs.map((song) => song.id) }),
+    body: JSON.stringify({
+      uris: [`spotify:track:${trackId}`],
+    }),
   });
 
   if (response.ok) {
-    console.log("Songs added to Liked Songs!");
+    console.log("Song added to playlist!");
+    return { success: true };
   } else {
-    console.error("Error adding songs:", response.statusText);
+    const errorText = await response.text();
+    console.error("Error adding song to playlist:", errorText);
+    return { error: errorText };
   }
 }
 
-const selectedSongs = [
-  { id: "1l0wPhFZP1kWkZNQrrYrGy", name: "RUNNING" },
-  { id: "698ItKASDavgwZ3WjaWjtz", name: "Faded" },
-];
+// Adds songs to a specific playlist
+router.post("/add-to-playlist", async (req, res) => {
+  const { trackId, playlistId } = req.body;
 
-// Call the function
-router.get("/add-songs", async (req, res) => {
   try {
-    await addSongsToLiked(req, selectedSongs);
-    res.send("Songs added successfully!");
+    const result = await addSongToPlaylist(req, trackId, playlistId);
+    if (result.error) {
+      return res.status(400).json(result);
+    }
+    res.status(200).json({ message: "Song added successfully!" });
   } catch (err) {
     console.error("An error occurred:", err);
-    res.status(500).send("An error occurred");
+    res.status(500).send({ error: "Internal server error" });
   }
 });
 
 module.exports = router;
-
-async function addSongsToLiked(selectedSongs) {
-  const accessToken = () => req.session.access_token;
-
-  if (!accessToken) {
-      console.error("Access token not available!");
-      return;
-  }
-
-  const response = await fetch("https://api.spotify.com/v1/me/tracks", {
-      method: "PUT",
-      headers: {
-          "Authorization": `Bearer ${accessToken}`,
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ ids: selectedSongs.map(song => song.id) })
-  });
-
-  if (response.ok) {
-      console.log("Songs added to Liked Songs!");
-  } else {
-      console.error("Error adding songs:", response.statusText);
-  }
-}
-
-// const selectedSongs = [
-//   { id: "1l0wPhFZP1kWkZNQrrYrGy", name: "RUNNING" },
-//   { id: "698ItKASDavgwZ3WjaWjtz", name: "Faded" }
-// ];
-
-// Call the function
-addSongsToLiked(selectedSongs).then(() => {
-  console.log("Songs added successfully!");
-}).catch(err => {
-  console.error("An error occurred:", err);
-});
-
-// module.exports = { addSongsToLiked };
-
-
