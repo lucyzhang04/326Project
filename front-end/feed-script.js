@@ -23,17 +23,10 @@ const buildWidget = (submission) => {
   const hostText = document.createElement("li");
 
   //filling out text Nodes and image info
-  /**
-     * nameText.innerText = submission["name"];
-        hostText.innerText = submission["host"];
-        img.src = submission["image"];
-     * 
-     */
   if(submission["title"].length >= 22){
     nameText.innerText = submission["title"].substring(0,22) + "...";
   }
   else nameText.innerText = submission["title"];
-  //nameText.innerText = submission["title"];
   if(submission["artist"].length > 15){
     hostText.innerText = submission["artist"].substring(0,17) + "...";
   }
@@ -60,7 +53,6 @@ const buildWidget = (submission) => {
         artist: submission["artist"],
       })
       .then((response) => {
-        //alert(`${nameText.innerText} has been saved to liked songs!`);
         alert(`${submission["title"]} has been saved to liked songs!`);
         console.log("Success");
       })
@@ -92,15 +84,6 @@ const clearSubs = () => {
 };
 
 const render = () => {
-  /*
-    const db = new DatabaseFakeService();
-    db.getSubmissions(dataSet).then(submissions => submissions.forEach(sub => buildWidget(sub))).catch(error => {
-        console.log(error);
-        alert("There was an error fetching submissions -- please try again later!");
-    }); 
-    */
-
-  //fetching today's subs from backend
   fetch("http://localhost:8888/feed/get_today_subs")
     .then(async (data) => {
       console.log(data);
@@ -109,11 +92,9 @@ const render = () => {
         : Promise.reject("There was an error fetching submissions.");
     })
     .then((data) => {
-      //console.log(data);
       const submissions = data.submissions;
       console.log(submissions);
       if (data.length === 0) {
-        //console.log("here in correct block");
         //no submissions --> display no submission popup to user
         reset = false;
         noSubs();
@@ -132,31 +113,14 @@ const render = () => {
     });
 };
 render();
-/*
-if(!reset){
-    noSubWindow.style.display = "none";
-    render();
-    dataSet = false;
-    /*
-    setInterval(() => {
-        render();
-    }, 4000);
-    
-    
-}
-else{
-    noSubWindow.style.display = "block";
-    reset = false; 
-    noSubs(); 
-}
-*/
+
 const hub = EventHub.getInstance();
 hub.subscribe(Events.Reset, (data) => {
   reset = true;
   clearSubs();
 });
 
-//console.log("executing");
+
 
 //opening socket for live connection
 const socket = new WebSocket("ws://localhost:9000");
@@ -170,7 +134,6 @@ socket.onmessage = (message) => {
   noSubWindow.style.display = "none";
   //parsing message for data
   const newSub = JSON.parse(message.data);
-  //console.log(newSub);
   //build the new submission and render it on screen
   buildWidget(newSub);
 };

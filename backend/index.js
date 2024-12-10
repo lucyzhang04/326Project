@@ -11,23 +11,17 @@ const app = express();
 const spotifyRoutes = require("./query-spotify/spotify-routes.js");
 const userRoutes = require("./routes/user-routes.js");
 const PORT = 8888;
-// const { addSongsToLiked } = require('./query-spotify/add-song');
+
 
 app.use(cors());
 
-//app.use(cors());
+
 app.use(express.json());
 const songRoutes = require("./routes/feed-routes.js");
 app.use("/feed", songRoutes);
 app.use("/spotify", spotifyRoutes);
 app.use("/user", userRoutes);
-//app.use("/user", userRoutes);
 
-
-//app.use(express.json());
-//const songRoutes = require('./routes/feed-routes.js');
-//app.use('/feed', songRoutes);
-//app.use('/spotify', spotifyRoute
 
 // QUOTES
 const quoteRoutes = require('./routes/quote-routes');
