@@ -269,7 +269,7 @@ router.get("/search", async (req, res) => {
 });
 
 //http://localhost:8888/spotify/get-user-playlists
-
+// Create endpoint to get user playlists using Spotify API
 router.get("/get-user-playlists", async (req, res) => {
   const accessToken = req.session.access_token;
   if (!accessToken) {
@@ -277,28 +277,30 @@ router.get("/get-user-playlists", async (req, res) => {
       error: "Access token invalid in get-user-playlists"
     });
   }
-
   try {
     const response = await fetch("https://api.spotify.com/v1/me/playlists", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
     if (!response.ok) {
       throw new Error(`Spotify API error: ${response.statusText}`);
     }
+    // Converts response to JSON
+    // data is an object containing playlist items & data.items is an array of playlist items
     const data = await response.json();
     // Filters out invalid / null entries 
     const playlists = (data.items || [])
-      .filter((playlist) => playlist && playlist.id && playlist.name) // Ensures playlist has valid id and valid name
-      .map((playlist) => ({ // Retain only name and id of playlist
+    // Ensures playlist has valid id and valid name
+      .filter((playlist) => playlist && playlist.id && playlist.name) 
+      // Retain only name and id of playlist
+      .map((playlist) => ({ 
         id: playlist.id,
         name: playlist.name,
       }));
-
+    // Returns the filtered playlists
     res.status(200).json(playlists);
-  } catch (error) {
+  } catch (error) { // Error handling
     console.error("Error fetching user playlists");
     res.status(500).json({ 
       error: "Failed fetching user playlists" 
@@ -306,16 +308,15 @@ router.get("/get-user-playlists", async (req, res) => {
   }
 });
 
+// Create endpoint to search for a track id with just artist and song name using Spotify API
 router.get("/search-track", async (req, res) => {
   const title = req.query.title;
   const artist = req.query.artist;
-
   if (!title || !artist) {
     return res.status(400).json({ 
       error: "Title and artist not found" 
     });
   }
-
   try {
     const searchUrl =
       "https://api.spotify.com/v1/search?" +
@@ -324,16 +325,14 @@ router.get("/search-track", async (req, res) => {
         type: "track",
         limit: 1,
       });
-
     const accessToken = req.session.access_token;
     const response = await fetch(searchUrl, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
     const data = await response.json();
-
+    // Get first track id matching artist and song name
     if (data.tracks && data.tracks.items.length > 0) {
       const track = data.tracks.items[0];
       res.json({ id: track.id, name: track.name, artist: track.artists[0].name });
@@ -342,7 +341,7 @@ router.get("/search-track", async (req, res) => {
         error: "Track not found" 
       });
     }
-  } catch (error) {
+  } catch (error) { // Error handling
     console.error("Error searching for track");
     res.status(500).json({ 
       error: "Failed while searching for track" 
@@ -350,14 +349,13 @@ router.get("/search-track", async (req, res) => {
   }
 });
 
+// Helper function to add a song to a Spotify playlist using Spotify API
 async function addSongToPlaylist(req, trackId, playlistId) {
   const accessToken = req.session.access_token;
-
   if (!accessToken) {
     console.error("Access token not available :(");
     return { error: "Access token not available :'(" };
   }
-
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
     method: "POST",
     headers: {
@@ -368,7 +366,6 @@ async function addSongToPlaylist(req, trackId, playlistId) {
       uris: [`spotify:track:${trackId}`],
     }),
   });
-
   if (response.ok) {
     console.log("Song added to playlist yay!");
     return { success: true };
@@ -379,17 +376,17 @@ async function addSongToPlaylist(req, trackId, playlistId) {
   }
 }
 
-// Adds songs to a specific playlist
+// Adds songs to a specific Spotify playlist
+// Create endpoint to add a song to a Spotify playlist using Spotify API
 router.post("/add-to-playlist", async (req, res) => {
   const { trackId, playlistId } = req.body;
-
-  try {
+  try { // Call helper function to add song to playlist
     const result = await addSongToPlaylist(req, trackId, playlistId);
     if (result.error) {
       return res.status(400).json(result);
     }
     res.status(200).json({ message: "Song added successfully :)" });
-  } catch (err) {
+  } catch (err) { // Error handling
     console.error("Error adding song to playlist");
     res.status(500).send({ 
       error: "Error adding song to playlist" 
