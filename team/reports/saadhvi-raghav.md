@@ -152,7 +152,18 @@
 - **Details**: Modified render() function to query the database using the defined endpoint above, to only display the current day's submissions.
 - **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/dc70884c6ac648f03c4421ef229522aaa357565a)
 
+### December 9, 2024
+- **Task**: Added get top 3 artists summary statistic to application. 
+- **Details**: Added sequelize method to retrieve a user's top 3 artists from past submissions. Added route and modified trending UI as well.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/1f404997a67603634533b12b823f38b153a96ef1)
+[Commit](https://github.com/lucyzhang04/326Project/commit/e51a821a921421bb7fc37c64ddfda2007c3194bd)
+[Commit](https://github.com/lucyzhang04/326Project/commit/934cdb695ee5275775c80d512e73a05ec3fe68f2)
 
+
+### December 10, 2024
+- **Task**: Fix bug on feed-screen UI
+- **Details**: Changed processing/rendering of submissions to accommodate title and artist text of any length.
+- **Commit(s)**: [Commit](https://github.com/lucyzhang04/326Project/commit/f43f7171c32e24b5e61718fa5f765c392f7aa049)
 
 
 
