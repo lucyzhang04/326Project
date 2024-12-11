@@ -41,6 +41,7 @@ async function loadLiked() {
   render(liked_songs, playlists);
 }
 
+// Fetch user's Spotify playlists
 async function fetchUserPlaylists() {
   try {
     const response = await fetch("http://localhost:8888/spotify/get-user-playlists");
@@ -68,48 +69,48 @@ async function render(data, playlists) {
     const songArtist = document.createElement("span");
     songArtist.classList.add("song-artist");
     songArtist.textContent = likedSong.artist;
-
+    
+    // Create dropdown for playlists and populate with user's Spotify playlists
     const dropdown = document.createElement("select");
     dropdown.classList.add("playlist-dropdown");
-    dropdown.innerHTML = `<option value="">Select Playlist</option>`;
+    dropdown.innerHTML = `<option value="">Select Playlist</option>`; // Default value
     playlists.forEach((playlist) => {
       const option = document.createElement("option");
       option.value = playlist.id;
       option.textContent = playlist.name;
       dropdown.appendChild(option);
     });
-
+    // Create add to playlist button
     const addToPlaylistBtn = document.createElement("button");
     addToPlaylistBtn.classList.add("like-btn");
     addToPlaylistBtn.textContent = "Add to Playlist";
+    // When the button is clicked, song is added to selected playlist
     addToPlaylistBtn.addEventListener("click", async () => {
       const selectedPlaylistId = dropdown.value; 
-      if (!selectedPlaylistId) {
+      if (!selectedPlaylistId) { // No playlist selected
         alert("Please select a playlist");
         return;
       }
-
       try {
         const songTitle = likedSong.title;
         const songArtist = likedSong.artist;
-
+        // Search for the track id on Spotify based on the artist and song title
         const searchResponse = await fetch(
           `http://localhost:8888/spotify/search-track?title=${encodeURIComponent(songTitle)}&artist=${encodeURIComponent(songArtist)}`
         );
-
+        // Error handling
         if (!searchResponse.ok) {
           alert("Failed to find the song on Spotify");
           return;
         }
-
+        // Get object with the track id
         const searchResult = await searchResponse.json();
         if (!searchResult.id) {
           alert("No matching song found on Spotify");
           return;
         }
-
+        // Get the track id
         const trackId = searchResult.id;
-
         // Add track to selected playlist
         const addResponse = await fetch("http://localhost:8888/spotify/add-to-playlist", {
           method: "POST",
@@ -121,13 +122,13 @@ async function render(data, playlists) {
             playlistId: selectedPlaylistId,
           }),
         });
-
+        // Notify user of adding a song to the playlist using an alert
         if (addResponse.ok) {
           alert(`${songTitle} by ${songArtist} has been added to your playlist!`);
         } else {
           alert("Failed to add the song to the playlist.");
         }
-      } catch (error) {
+      } catch (error) { // Error handling
         console.error(error);
         alert("An error occurred while adding the song");
       }
