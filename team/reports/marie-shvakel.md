@@ -27,26 +27,26 @@
 
 ### November 27, 2024 
 - **Task(s)**: Integrating Query Routes
-- **Details**: 
+- **Details**: Generalized the API allowing for multiple different types of inputs, specifically we allow inputs that are tracks, shows, or episodes. This also means ensuring that we check for valid inputs & add error handling. 
 - **Commit**: [Commit for Query Integration](https://github.com/lucyzhang04/326Project/commit/ce16d4e94d46dd9994106a585ab3a75f62602a99)
 ##
 - **Task(s)**: Passing Parameters with Session Cookies
-- **Details**: 
+- **Details**: Using session cookies to store the user's name and song/podcast inputs during their time on the application, so their activity doesn't get lost
 - **Commit**: [Commit for Session Cookies](https://github.com/lucyzhang04/326Project/commit/4116ca1a50d09661daf9f3e698c97cb340173b5c)
 
 ### December 3, 2024
 - **Task(s)**: Storing Authentication token with Session Cookies
-- **Details**: 
+- **Details**: Using session cookies to store the user's name and song/podcast inputs during their time on the application, so their activity doesn't get lost
 - **Commit**: [Commit for Storing Token](https://github.com/lucyzhang04/326Project/commit/a706f621fbd9a0466781e66ae3e3c11064dd4eea)
 
 ### December 4, 2024
 - **Task(s)**: Storing user submissions in database
-- **Details**: 
+- **Details**: Storingthe user submission data (i.e. title, artist) in a database.
 - **Commit**: [Commit for Song Storage](https://github.com/lucyzhang04/326Project/commit/e2123fbb518d1584533d1d12742f53751882bd73)
 
 ### December 7, 2024
 - **Task(s)**: Connecting Query to Frontend Search
-- **Details**: 
+- **Details**: The query routes were set up for the Spotify Web API, but the endpoint wasn't implemented in the frontend for the song/podcast search feature, so I implemented the functionality.
 - **Commit**: [Commit for Search Integration](https://github.com/lucyzhang04/326Project/commit/c3642534c19c77be447b55de9c6116366da83c8a)
 
 ##
