@@ -51,10 +51,6 @@ router.get("/login", cors(),(req, res) => {
     "playlist-modify-private",
     "user-library-modify",
     "user-library-read",
-    "user-top-read",
-    "user-read-recently-played",
-    "user-follow-read",
-    "user-follow-modify",
   ];
   const state = generateRandomString(16);
 
